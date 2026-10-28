@@ -1,0 +1,5 @@
+# path mode uid gid
+/srv/headscale/config 0755 0 0
+/srv/headscale/config/config.yaml 0644 0 0
+/srv/headscale/data 0755 0 0
+/srv/headscale/data/db.sqlite 0644 0 0

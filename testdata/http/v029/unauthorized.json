@@ -1,0 +1,14 @@
+{
+  "name": "unauthorized",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/user"
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "text/plain; charset=utf-8"
+    },
+    "body": "Unauthorized"
+  }
+}

@@ -1,0 +1,10 @@
+# path mode uid gid -- ownership overlay for detect tests (git cannot store owners).
+# Entries may describe files that are not in the tree (the socket).
+/etc/headscale 0755 0 0
+/etc/headscale/config.yaml 0644 0 0
+/etc/headscale/policy.hujson 0664 0 998
+/etc/headscale/extra-records.json 0640 998 998
+/var/lib/headscale 0750 998 998
+/var/lib/headscale/db.sqlite 0640 998 998
+/var/run/headscale 0770 998 998
+/var/run/headscale/headscale.sock 0770 998 998

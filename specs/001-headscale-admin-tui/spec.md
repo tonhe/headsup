@@ -118,8 +118,9 @@ re-tag three in bulk, and delete one. The backend sees exactly those calls.
 
 This mirrors the console's "Add device" button. A **pending approvals** queue lists devices
 waiting on interactive login (the web-auth flow), each with an approve or reject action. In
-host mode the queue fills itself from the server's registration cache. In remote mode, entries
-come from what the admin pastes. The admin can also add a device in one of two ways:
+host mode the app shows how many devices headscale is waiting on. headscale's debug cache counts
+pending logins but does not list them, so in both modes the entries themselves come from what
+the admin pastes. The admin can also add a device in one of two ways:
 
 - **Registers** a pending machine by pasting the registration key or URL that the client
   printed, and picking the owner; or

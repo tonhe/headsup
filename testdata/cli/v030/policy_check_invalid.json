@@ -1,0 +1,14 @@
+{
+  "name": "policy_check_invalid",
+  "args": [
+    "policy",
+    "check",
+    "-f",
+    "<tmp>",
+    "-o",
+    "json"
+  ],
+  "exit": 1,
+  "stdout": "",
+  "stderr": "{\n\t\"error\": \"checking policy: 400 Bad Request: parsing policy: hujson: line 3, column 37: invalid character ',' looking for beginning of value\"\n}\n"
+}

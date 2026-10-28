@@ -1,0 +1,24 @@
+{
+  "name": "version",
+  "request": {
+    "method": "GET",
+    "path": "/version"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "version": "v0.30.0",
+      "commit": "f00dfeed",
+      "buildTime": "2026-09-01T00:00:00Z",
+      "go": {
+        "version": "go1.26.0",
+        "os": "linux",
+        "arch": "amd64"
+      },
+      "dirty": false
+    }
+  }
+}

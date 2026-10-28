@@ -1,0 +1,21 @@
+{
+  "name": "create_user_conflict",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/user",
+    "body": {
+      "name": "alice"
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/problem+json"
+    },
+    "body": {
+      "title": "Conflict",
+      "status": 409,
+      "detail": "user already exists"
+    }
+  }
+}

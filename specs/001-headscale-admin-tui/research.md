@@ -94,8 +94,10 @@ Each entry records a decision, why it was made, and what else was considered.
 - **Decision**:
   - TOML in `$XDG_CONFIG_HOME/fathom/config.toml`, read with go-toml/v2 (the same library as
     viaduct).
-  - `[[profile]]` tables hold `name`, `url`, `api_key` | `api_key_cmd` | `api_key_env` |
-    `keyring = true`, `insecure_skip_verify`, `read_only`, and `ca_file`.
+  - `[[profile]]` tables hold `name`, `url`, `api_key_env` | `api_key_file` | `api_key_cmd` |
+    `keyring = true`, `insecure`, `read_only`, and `ca_file`. A plaintext `api_key` in the
+    config is deliberately not supported, and `api_key_file` must not be group- or
+    world-readable.
   - Keyring support uses `github.com/zalando/go-keyring`.
   - The `api_key_cmd` option supports `pass`, `op read`, and similar tools.
   - Environment variables: `HEADSCALE_URL` and `HEADSCALE_API_KEY`. `HEADSCALE_CLI_ADDRESS`
@@ -270,7 +272,7 @@ Fathom uses these debug endpoints:
 
 | Endpoint | Used for |
 |---|---|
-| `/debug/registration-cache` | auto-filled pending queue (US3) |
+| `/debug/registration-cache` | pending-login count (US3). Verified in 0.29.6 and main: only counters, no entries |
 | `/debug/routes` | primary and HA state (US6) |
 | `/debug/filter` | compiled packet filter (US5) |
 | `/debug/derp` | live DERP map (US15) |

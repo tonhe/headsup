@@ -1,0 +1,19 @@
+# build output
+/bin/
+/dist/
+*.exe
+*.test
+*.out
+coverage.out
+vendor/
+
+# editors / OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# local session notes
+claude-session-notes.md

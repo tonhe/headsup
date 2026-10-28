@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # Keeps SHA-pinned actions (e.g. goreleaser-action) current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly

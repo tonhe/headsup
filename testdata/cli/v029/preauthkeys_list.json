@@ -1,0 +1,12 @@
+{
+  "name": "preauthkeys_list",
+  "args": [
+    "preauthkeys",
+    "list",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "[\n\t{\n\t\t\"user\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"alice\"\n\t\t},\n\t\t\"id\": 1,\n\t\t\"key\": \"hskey-auth-0a1b2c3d4e5f-00112233445566778899aabbccddeeff\",\n\t\t\"expiration\": {\n\t\t\t\"seconds\": 1800000000\n\t\t},\n\t\t\"created_at\": {\n\t\t\t\"seconds\": 1780000000\n\t\t}\n\t},\n\t{\n\t\t\"user\": {\n\t\t\t\"id\": 4,\n\t\t\t\"name\": \"ops\"\n\t\t},\n\t\t\"id\": 4,\n\t\t\"key\": \"hskey-auth-5f4e3d2c1b0a-ffeeddccbbaa99887766554433221100\",\n\t\t\"reusable\": true,\n\t\t\"used\": true,\n\t\t\"expiration\": {\n\t\t\t\"seconds\": 1800000000\n\t\t},\n\t\t\"created_at\": {\n\t\t\t\"seconds\": 1780000000\n\t\t},\n\t\t\"acl_tags\": [\n\t\t\t\"tag:server\"\n\t\t]\n\t}\n]\n",
+  "stderr": ""
+}

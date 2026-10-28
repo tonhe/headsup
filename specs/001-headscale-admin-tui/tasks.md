@@ -16,16 +16,16 @@ dependencies.
 
 ## Phase 1: Setup
 
-- [ ] T001 Initialise the Go module `github.com/tonhe/fathom` with Go 1.25 in go.mod, and add deps from plan.md
-- [ ] T002 [P] Create the directory skeleton from plan.md under cmd/ and internal/ with doc.go package comments
-- [ ] T003 [P] Create a Makefile with build, install, test, test-race, test-all, test-tui, golden-update, coverage-gate, test-integration, release-dry-run, and demo, using ldflags into internal/version (copy viaduct's pattern)
-- [ ] T004 [P] Add internal/version/version.go with Version, Build, and Commit variables
-- [ ] T005 [P] Add .goreleaser.yml (v2): CGO off, darwin/linux/windows on amd64/arm64, archives, checksums, nfpms (deb/rpm/apk), a Homebrew tap, and a Scoop bucket
-- [ ] T006 [P] Add .github/workflows/test.yml, a matrix of ubuntu, macos, and windows running build, race, and the coverage gate
-- [ ] T007 [P] Add .github/workflows/release.yml (tag to goreleaser) and .github/workflows/integration.yml (docker headscale 0.29.6 plus a main-branch image)
-- [ ] T008 [P] Add scripts/check-coverage.sh with per-package floors in scripts/coverage-floors.txt
-- [ ] T009 [P] Add LICENSE (MIT, 2026 Tony Mattke), CLAUDE.md working rules, .gitignore, and a CHANGELOG.md stub
-- [ ] T010 [P] Add a lint test in internal/theme/nocolor_test.go that fails if `lipgloss.Color(` or a hex literal appears outside internal/theme
+- [X] T001 Initialise the Go module `github.com/tonhe/fathom` with Go 1.25 in go.mod, and add deps from plan.md
+- [X] T002 [P] Create the directory skeleton from plan.md under cmd/ and internal/ with doc.go package comments
+- [X] T003 [P] Create a Makefile with build, install, test, test-race, test-all, test-tui, golden-update, coverage-gate, test-integration, release-dry-run, and demo, using ldflags into internal/version (copy viaduct's pattern)
+- [X] T004 [P] Add internal/version/version.go with Version, Build, and Commit variables
+- [X] T005 [P] Add .goreleaser.yml (v2): CGO off, darwin/linux/windows on amd64/arm64, archives, checksums, nfpms (deb/rpm/apk), a Homebrew tap, and a Scoop bucket
+- [X] T006 [P] Add .github/workflows/test.yml, a matrix of ubuntu, macos, and windows running build, race, and the coverage gate
+- [X] T007 [P] Add .github/workflows/release.yml (tag to goreleaser) and .github/workflows/integration.yml (docker headscale 0.29.6 plus a main-branch image)
+- [X] T008 [P] Add scripts/check-coverage.sh with per-package floors in scripts/coverage-floors.txt
+- [X] T009 [P] Add LICENSE (MIT, 2026 Tony Mattke), CLAUDE.md working rules, .gitignore, and a CHANGELOG.md stub
+- [X] T010 [P] Add a lint test in internal/theme/nocolor_test.go that fails if `lipgloss.Color(` or a hex literal appears outside internal/theme
 
 ---
 
@@ -33,63 +33,63 @@ dependencies.
 
 ### Domain and backend
 
-- [ ] T011 Define domain types Node, User, PreAuthKey, APIKey, Policy, Capabilities, and Secret in internal/api/types.go, following data-model.md. Include the derived fields IsExitNode, PendingRoutes, Expired, ExpiresSoon, and Status.
-- [ ] T012 [P] Write table tests for the Node derived fields (exit node requires both `0.0.0.0/0` and `::/0`, and Idle means last seen under 24h ago) in internal/api/types_test.go
-- [ ] T013 Define the `api.Error` kinds (Unreachable, Unauthorized, NotFound, Conflict, Unsupported, Invalid, Server) with Hint, Line, and Col in internal/api/errors.go
-- [ ] T014 Define the Backend interface exactly as in contracts/backend.md in internal/api/backend.go
-- [ ] T015 [P] Write a shared Backend contract suite, `RunContract(t, newBackend)`, in internal/api/apitest/contract.go
-- [ ] T016 Implement the in-memory fake.Backend with seed loading, `WithLatency`, and `FailNext` in internal/api/fake/fake.go, and make it pass the contract suite
-- [ ] T017 [P] Create a seed dataset of 51 nodes, 4 users, pending routes, an exit node, expiring keys, and a sample policy in testdata/seed/*.json
-- [ ] T018 [P] Record HTTP fixtures for 0.29.6 (grpc-gateway errors) and 0.30 (problem+json) in testdata/http/{v029,v030}/
-- [ ] T019 Implement the httpapi client: bearer auth, timeouts, TLS/CA/insecure options, uint64-as-string JSON, and normalisation of both error formats, in internal/api/httpapi/client.go
-- [ ] T020 Implement every Backend method in internal/api/httpapi/{nodes,users,keys,policy,auth}.go, following the endpoint matrix
-- [ ] T021 Implement capability detection in Connect (health, version, probing) in internal/api/httpapi/caps.go
-- [ ] T022 [P] Run the httpapi contract tests against httptest servers replaying the v029 and v030 fixtures in internal/api/httpapi/client_test.go
-- [ ] T023 [P] Add a unix-socket dialer option (`httpapi.WithUnixSocket`) for 0.30 local trust, and run the contract suite over a socket, in internal/api/httpapi/socket.go
-- [ ] T024 [P] Build the execcli backend: run `headscale <cmd> -o json` (directly or through `docker|podman exec`), and map both the 0.29 protobuf JSON and the 0.30 JSON shapes, in internal/api/execcli/execcli.go
-- [ ] T025 [P] Run the execcli contract tests against recorded CLI output in testdata/cli/{v029,v030}/ in internal/api/execcli/execcli_test.go
+- [X] T011 Define domain types Node, User, PreAuthKey, APIKey, Policy, Capabilities, and Secret in internal/api/types.go, following data-model.md. Include the derived fields IsExitNode, PendingRoutes, Expired, ExpiresSoon, and Status.
+- [X] T012 [P] Write table tests for the Node derived fields (exit node requires both `0.0.0.0/0` and `::/0`, and Idle means last seen under 24h ago) in internal/api/types_test.go
+- [X] T013 Define the `api.Error` kinds (Unreachable, Unauthorized, NotFound, Conflict, Unsupported, Invalid, Server) with Hint, Line, and Col in internal/api/errors.go
+- [X] T014 Define the Backend interface exactly as in contracts/backend.md in internal/api/backend.go
+- [X] T015 [P] Write a shared Backend contract suite, `RunContract(t, newBackend)`, in internal/api/apitest/contract.go
+- [X] T016 Implement the in-memory fake.Backend with seed loading, `WithLatency`, and `FailNext` in internal/api/fake/fake.go, and make it pass the contract suite
+- [X] T017 [P] Create a seed dataset of 51 nodes, 4 users, pending routes, an exit node, expiring keys, and a sample policy in testdata/seed/*.json
+- [X] T018 [P] Record HTTP fixtures for 0.29.6 (grpc-gateway errors) and 0.30 (problem+json) in testdata/http/{v029,v030}/
+- [X] T019 Implement the httpapi client: bearer auth, timeouts, TLS/CA/insecure options, uint64-as-string JSON, and normalisation of both error formats, in internal/api/httpapi/client.go
+- [X] T020 Implement every Backend method in internal/api/httpapi/{nodes,users,keys,policy,auth}.go, following the endpoint matrix
+- [X] T021 Implement capability detection in Connect (health, version, probing) in internal/api/httpapi/caps.go
+- [X] T022 [P] Run the httpapi contract tests against httptest servers replaying the v029 and v030 fixtures in internal/api/httpapi/client_test.go
+- [X] T023 [P] Add a unix-socket dialer option (`httpapi.WithUnixSocket`) for 0.30 local trust, and run the contract suite over a socket, in internal/api/httpapi/socket.go
+- [X] T024 [P] Build the execcli backend: run `headscale <cmd> -o json` (directly or through `docker|podman exec`), and map both the 0.29 protobuf JSON and the 0.30 JSON shapes, in internal/api/execcli/execcli.go
+- [X] T025 [P] Run the execcli contract tests against recorded CLI output in testdata/cli/{v029,v030}/ in internal/api/execcli/execcli_test.go
 
 ### Config and platform
 
-- [ ] T026 Implement XDG paths for config, state, and themes (with an APPDATA fallback) in internal/config/paths.go
-- [ ] T027 Implement the config schema, defaults, load and save, and precedence (flags > env > profile > defaults) per contracts/config.md in internal/config/config.go
-- [ ] T028 [P] Implement secret resolution from env, `api_key_file`, `api_key_cmd`, and the keyring, never logging the value, in internal/config/secret.go
-- [ ] T029 [P] Write table tests for precedence, env aliases (HEADSCALE_CLI_*), and that secrets never appear in `fmt` output, in internal/config/config_test.go
-- [ ] T030 [P] Implement clipboard with an OSC52 fallback when SSH_TTY is set in internal/clip/clip.go
-- [ ] T031 [P] Implement unicode, nerd, and ascii icon sets in internal/icons/icons.go
+- [X] T026 Implement XDG paths for config, state, and themes (with an APPDATA fallback) in internal/config/paths.go
+- [X] T027 Implement the config schema, defaults, load and save, and precedence (flags > env > profile > defaults) per contracts/config.md in internal/config/config.go
+- [X] T028 [P] Implement secret resolution from env, `api_key_file`, `api_key_cmd`, and the keyring, never logging the value, in internal/config/secret.go
+- [X] T029 [P] Write table tests for precedence, env aliases (HEADSCALE_CLI_*), and that secrets never appear in `fmt` output, in internal/config/config_test.go
+- [X] T030 [P] Implement clipboard with an OSC52 fallback when SSH_TTY is set in internal/clip/clip.go
+- [X] T031 [P] Implement unicode, nerd, and ascii icon sets in internal/icons/icons.go
 
 ### Theme engine
 
-- [ ] T032 Port viaduct's internal/theme (61 themes, Slug, Light, Set, ByName, All, SparkGradient) to internal/theme/{theme,themes}.go
-- [ ] T033 Add the Roles derivation and colour-depth fallback (truecolor, 256, 16, NO_COLOR) to internal/theme/roles.go
-- [ ] T034 [P] Add a user theme loader for TOML and Base16 YAML, with validation and the 4.5:1 contrast warning, per contracts/theme-file.md, in internal/theme/user.go
-- [ ] T035 [P] Write tests for the loader: valid file, missing key, bad hex, YAML scheme, and role override, in internal/theme/user_test.go
-- [ ] T036 Build `styles.Styles` from Roles, and rebuild it on theme change, in internal/ui/styles/styles.go
+- [X] T032 Port viaduct's internal/theme (61 themes, Slug, Light, Set, ByName, All, SparkGradient) to internal/theme/{theme,themes}.go
+- [X] T033 Add the Roles derivation and colour-depth fallback (truecolor, 256, 16, NO_COLOR) to internal/theme/roles.go
+- [X] T034 [P] Add a user theme loader for TOML and Base16 YAML, with validation and the 4.5:1 contrast warning, per contracts/theme-file.md, in internal/theme/user.go
+- [X] T035 [P] Write tests for the loader: valid file, missing key, bad hex, YAML scheme, and role override, in internal/theme/user_test.go
+- [X] T036 Build `styles.Styles` from Roles, and rebuild it on theme change, in internal/ui/styles/styles.go
 
 ### UI primitives
 
-- [ ] T037 [P] Pane with a labelled rounded border and focus state (port of viaduct's helper) in internal/ui/pane/pane.go
-- [ ] T038 [P] Virtualised table with column priority, sort, multi-select, cursor stability across refreshes, and ellipsis truncation in internal/ui/table/table.go
-- [ ] T039 [P] Table tests: 10k rows render only the visible ones, the cursor stays on the same ID after a refresh, and columns drop by priority at narrow widths, in internal/ui/table/table_test.go
-- [ ] T040 [P] Filter query parser: free text, `tag:`, `user:`, `is:online|offline|expired|exit|pending`, `-negation`, and fuzzy mode, in internal/ui/filter/parse.go, plus a fuzz test in parse_fuzz_test.go
-- [ ] T041 [P] Form component with text, toggle, select, duration, and tag-list fields and validation messages in internal/ui/form/form.go
-- [ ] T042 [P] Confirm modal with three Danger levels; Critical requires typing the target name. In internal/ui/confirm/confirm.go
-- [ ] T043 [P] Toast stack (info, success, warn, error, with auto-dismiss) in internal/ui/toast/toast.go
-- [ ] T044 [P] Header, statusbar (key hints from Actions), sidebar (badges), tabs, and help overlay in internal/ui/{header,statusbar,sidebar,tabs,help}/
-- [ ] T045 [P] kv list, badge/chip, spinner, empty-state, and sparkline components in internal/ui/{kv,badge,spinner,empty,sparkline}/
+- [X] T037 [P] Pane with a labelled rounded border and focus state (port of viaduct's helper) in internal/ui/pane/pane.go
+- [X] T038 [P] Virtualised table with column priority, sort, multi-select, cursor stability across refreshes, and ellipsis truncation in internal/ui/table/table.go
+- [X] T039 [P] Table tests: 10k rows render only the visible ones, the cursor stays on the same ID after a refresh, and columns drop by priority at narrow widths, in internal/ui/table/table_test.go
+- [X] T040 [P] Filter query parser: free text, `tag:`, `user:`, `is:online|offline|expired|exit|pending`, `-negation`, and fuzzy mode, in internal/ui/filter/parse.go, plus a fuzz test in parse_fuzz_test.go
+- [X] T041 [P] Form component with text, toggle, select, duration, and tag-list fields and validation messages in internal/ui/form/form.go
+- [X] T042 [P] Confirm modal with three Danger levels; Critical requires typing the target name. In internal/ui/confirm/confirm.go
+- [X] T043 [P] Toast stack (info, success, warn, error, with auto-dismiss) in internal/ui/toast/toast.go
+- [X] T044 [P] Header, statusbar (key hints from Actions), sidebar (badges), tabs, and help overlay in internal/ui/{header,statusbar,sidebar,tabs,help}/
+- [X] T045 [P] kv list, badge/chip, spinner, empty-state, and sparkline components in internal/ui/{kv,badge,spinner,empty,sparkline}/
 
 ### App shell and modularity
 
-- [ ] T046 Module, Action, Context, Danger, Scope, Modes, and Needs types per contracts/module.md in internal/module/module.go
-- [ ] T047 Registry with Register, All, ordering, and config-disabled modules in internal/modules/registry/registry.go, plus the blank-import aggregator internal/modules/all/all.go
-- [ ] T048 Store holding a cached snapshot, a polling refresh loop with active and idle intervals, and targeted invalidation, in internal/app/store.go
-- [ ] T049 Action pipeline (enabled, then read-only, then cap gate, then params form, then confirm, then run, then toast, activity, and refresh) in internal/app/actions.go
-- [ ] T050 [P] Pipeline tests proving that every Mutating action with Danger≥Confirm cannot run without confirmation, and that read-only blocks every Mutating action, in internal/app/actions_test.go (SC-005)
-- [ ] T051 Root model: layout (sidebar or tabs breakpoints, detail split), modal stack, global keys, resize handling, and a "resize me" notice below 80x24, in internal/app/app.go
-- [ ] T052 [P] Keymap that merges `[keys]` overrides and detects conflicts, in internal/keys/keys.go
-- [ ] T053 [P] Activity logger writing redacted JSONL to $XDG_STATE_HOME/fathom/activity.jsonl in internal/activity/activity.go
-- [ ] T054 Entry point cmd/fathom/main.go: parse flags, dispatch to cli.Run or the TUI, and wire up `--demo` to fake.Backend
-- [ ] T055 [P] Golden test harness: render each module at 80x24 and 120x40 with tokyo-night, solarized-light, and an ascii/16-colour profile, in internal/app/golden_test.go. Also add an all-themes smoke test in internal/app/themes_smoke_test.go: render every module in every bundled theme at 80x24 and assert no panic, no unset role, and no line wider than the terminal (SC-006).
+- [X] T046 Module, Action, Context, Danger, Scope, Modes, and Needs types per contracts/module.md in internal/module/module.go
+- [X] T047 Registry with Register, All, ordering, and config-disabled modules in internal/modules/registry/registry.go, plus the blank-import aggregator internal/modules/all/all.go
+- [X] T048 Store holding a cached snapshot, a polling refresh loop with active and idle intervals, and targeted invalidation, in internal/app/store.go
+- [X] T049 Action pipeline (enabled, then read-only, then cap gate, then params form, then confirm, then run, then toast, activity, and refresh) in internal/app/actions.go
+- [X] T050 [P] Pipeline tests proving that every Mutating action with Danger≥Confirm cannot run without confirmation, and that read-only blocks every Mutating action, in internal/app/actions_test.go (SC-005)
+- [X] T051 Root model: layout (sidebar or tabs breakpoints, detail split), modal stack, global keys, resize handling, and a "resize me" notice below 80x24, in internal/app/app.go
+- [X] T052 [P] Keymap that merges `[keys]` overrides and detects conflicts, in internal/keys/keys.go
+- [X] T053 [P] Activity logger writing redacted JSONL to $XDG_STATE_HOME/fathom/activity.jsonl in internal/activity/activity.go
+- [X] T054 Entry point cmd/fathom/main.go: parse flags, dispatch to cli.Run or the TUI, and wire up `--demo` to fake.Backend
+- [X] T055 [P] Golden test harness: render each module at 80x24 and 120x40 with tokyo-night, solarized-light, and an ascii/16-colour profile, in internal/app/golden_test.go. Also add an all-themes smoke test in internal/app/themes_smoke_test.go: render every module in every bundled theme at 80x24 and assert no panic, no unset role, and no line wider than the terminal (SC-006).
 
 **Checkpoint**: `fathom --demo` opens an empty shell with a working sidebar, theme, toasts, and
 quit.
@@ -98,36 +98,36 @@ quit.
 
 ## Phase 2H: Host Foundation (blocks host-mode stories; API-only stories may proceed without it)
 
-- [ ] T056 Define the Host interface and the Env, File, Change, Effect, Perms, and error types (ErrChangedOnDisk, ErrInvalid, ErrPermission{Need, FixCommand}, ErrUnsupportedShape) per contracts/host.md in internal/host/host.go
-- [ ] T057 [P] In-memory host/fake with injectable permission errors, changed-on-disk conflicts, configtest failures, and an unhealthy restart, in internal/host/fake/fake.go
-- [ ] T058 Detection: use headscale's config search order (flag, then HEADSCALE_CONFIG, then /etc/headscale, then $HOME/.headscale, then .), plus version, local transport choice, service manager, log source, database kind, debug address, policy mode, and per-capability Perms with fix commands. In internal/host/detect/detect.go.
-- [ ] T059 [P] Table tests for detection over fixture filesystems: deb install, root vs member of the `headscale` group vs an outsider, a docker bind mount, and no headscale. In internal/host/detect/detect_test.go.
-- [ ] T060 Managed-file pipeline in internal/host/files/files.go:
+- [X] T056 Define the Host interface and the Env, File, Change, Effect, Perms, and error types (ErrChangedOnDisk, ErrInvalid, ErrPermission{Need, FixCommand}, ErrUnsupportedShape) per contracts/host.md in internal/host/host.go
+- [X] T057 [P] In-memory host/fake with injectable permission errors, changed-on-disk conflicts, configtest failures, and an unhealthy restart, in internal/host/fake/fake.go
+- [X] T058 Detection: use headscale's config search order (flag, then HEADSCALE_CONFIG, then /etc/headscale, then $HOME/.headscale, then .), plus version, local transport choice, service manager, log source, database kind, debug address, policy mode, and per-capability Perms with fix commands. In internal/host/detect/detect.go.
+- [X] T059 [P] Table tests for detection over fixture filesystems: deb install, root vs member of the `headscale` group vs an outsider, a docker bind mount, and no headscale. In internal/host/detect/detect_test.go.
+- [X] T060 Managed-file pipeline in internal/host/files/files.go:
   - sha256 at open, re-checked before writing;
   - backup with manifest (path, sha256, uid, gid, mode);
   - temp copy, then validators, then diff;
   - atomic write keeping uid, gid, and mode, with fsync of the file and its directory;
   - rollback.
   Backups use mode 0700 directories and 0600 files, and an insecure backup root is refused (FR-064); this logic is shared with internal/host/backup.
-- [ ] T061 [P] Pipeline tests: a failed validation leaves the target byte-identical; changed-on-disk returns ErrChangedOnDisk; owner and mode are preserved; rollback restores the exact bytes. In internal/host/files/files_test.go (SC-010).
-- [ ] T062 hsconfig typed model over a yaml.v3 Node tree: get and set by dotted key, insertion next to related keys, and `unix_socket_permission` always written as a quoted string. In internal/host/hsconfig/model.go.
-- [ ] T063 [P] Golden round-trip tests: editing one key changes exactly one line and keeps every comment, over testdata/hsconfig/{v029-example,v030-example,hand-written}.yaml, in internal/host/hsconfig/model_test.go
-- [ ] T064 Versioned field catalog for 0.29 and 0.30, giving each key's section, type, default, effect, danger, help text, deprecation, and replacement (for example `tls_cert_path` → `tls.cert_path`), in internal/host/hsconfig/catalog.go
-- [ ] T065 Service adapters (systemd, OpenRC, docker/podman, bare process, none), each with Status, Start, Stop, Restart, Reload, and Configtest. No sudo: permission failures return a FixCommand. In internal/host/service/*.go.
-- [ ] T066 [P] Log sources (`journalctl -o json -f`, `docker|podman logs -f`, file tail) and a line parser for headscale JSON and zerolog text that extracts node references, in internal/host/logs/*.go, plus a fuzz test in parse_fuzz_test.go
-- [ ] T067 [P] Debug and metrics client for /debug/{registration-cache,routes,filter,derp,ping,overview,config} and /metrics (expfmt), parsing defensively into ErrUnsupportedShape, in internal/host/debug/debug.go. Tests replay fixtures in testdata/debug/{v029,v030}/. Record the fixtures from real servers with scripts/record-debug-fixtures.sh, which runs headscale 0.29.6 and main in docker with seeded nodes, routes, and a pending web-auth registration. Do not hand-write them.
-- [ ] T068 [P] Read-only database enrichment in internal/host/db/db.go:
+- [X] T061 [P] Pipeline tests: a failed validation leaves the target byte-identical; changed-on-disk returns ErrChangedOnDisk; owner and mode are preserved; rollback restores the exact bytes. In internal/host/files/files_test.go (SC-010).
+- [X] T062 hsconfig typed model over a yaml.v3 Node tree: get and set by dotted key, insertion next to related keys, and `unix_socket_permission` always written as a quoted string. In internal/host/hsconfig/model.go.
+- [X] T063 [P] Golden round-trip tests: editing one key changes exactly one line and keeps every comment, over testdata/hsconfig/{v029-example,v030-example,hand-written}.yaml, in internal/host/hsconfig/model_test.go
+- [X] T064 Versioned field catalog for 0.29 and 0.30, giving each key's section, type, default, effect, danger, help text, deprecation, and replacement (for example `tls_cert_path` → `tls.cert_path`), in internal/host/hsconfig/catalog.go
+- [X] T065 Service adapters (systemd, OpenRC, docker/podman, bare process, none), each with Status, Start, Stop, Restart, Reload, and Configtest. No sudo: permission failures return a FixCommand. In internal/host/service/*.go.
+- [X] T066 [P] Log sources (`journalctl -o json -f`, `docker|podman logs -f`, file tail) and a line parser for headscale JSON and zerolog text that extracts node references, in internal/host/logs/*.go, plus a fuzz test in parse_fuzz_test.go
+- [X] T067 [P] Debug and metrics client for /debug/{registration-cache,routes,filter,derp,ping,overview,config} and /metrics (expfmt), parsing defensively into ErrUnsupportedShape, in internal/host/debug/debug.go. Tests replay fixtures in testdata/debug/{v029,v030}/. Record the fixtures from real servers with scripts/record-debug-fixtures.sh, which runs headscale 0.29.6 and main in docker with seeded nodes, routes, and a pending web-auth registration. Do not hand-write them.
+- [X] T068 [P] Read-only database enrichment in internal/host/db/db.go:
   - SQLite via modernc with `mode=ro` and `query_only`, and Postgres via pgx with `default_transaction_read_only`.
   - Reads `nodes.host_info` and `nodes.endpoints` into NodeExtras.
   - A migration-ID guard turns the feature off when the schema is unknown.
-- [ ] T069 [P] Lint tests: forbid INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, and REPLACE in internal/host/db, and forbid running sudo, su, doas, or pkexec anywhere in internal/. In internal/host/lint_test.go.
-- [ ] T070 Store merge: attach NodeExtras, primary-route state, and registration-cache entries to the cached snapshot when a host is present, in internal/app/store.go
-- [ ] T071 App mode wiring in internal/app/modes.go:
+- [X] T069 [P] Lint tests: forbid INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, and REPLACE in internal/host/db, and forbid running sudo, su, doas, or pkexec anywhere in internal/. In internal/host/lint_test.go.
+- [X] T070 Store merge: attach NodeExtras, primary-route state, and registration-cache entries to the cached snapshot when a host is present, in internal/app/store.go
+- [X] T071 App mode wiring in internal/app/modes.go:
   - run Detect at startup and create a `host:<hostname>` profile automatically;
   - honour `--host`, `--remote`, and `[host].enabled`;
   - dim host-only modules in remote mode, with an explainer view;
   - add a `Needs` gate in the action pipeline that shows the FixCommand.
-- [ ] T072 [P] Test that every Action with Needs is disabled, with a FixCommand reason, when Perms lacks it, and that host modules render their explainer in remote mode, in internal/app/modes_test.go
+- [X] T072 [P] Test that every Action with Needs is disabled, with a FixCommand reason, when Perms lacks it, and that host modules render their explainer in remote mode, in internal/app/modes_test.go
 
 **Checkpoint**: `fathom --demo --host` shows host-mode chrome over host/fake, and on a real
 host Detect reports the environment correctly through `fathom host info`.
@@ -142,11 +142,11 @@ dashboard.
 **Independent Test**: The dashboard's counts match fake and live servers. A bad key gives a
 clear error and opens the connection editor.
 
-- [ ] T073 [P] [US1] teatest flow for start with an unauthorized key: an error toast appears and the connection editor opens, in internal/app/connect_test.go
-- [ ] T074 [P] [US1] Golden snapshots of the dashboard at both sizes in internal/modules/dashboard/testdata/
-- [ ] T075 [US1] Connection editor form (url, key source, CA, insecure warning, read-only) that saves to a profile, in internal/app/connect.go
-- [ ] T076 [US1] Profile switcher modal (`P`) that reconnects without restarting, in internal/app/profiles.go
-- [ ] T077 [US1] Dashboard module, made of cards:
+- [X] T073 [P] [US1] teatest flow for start with an unauthorized key: an error toast appears and the connection editor opens, in internal/app/connect_test.go
+- [X] T074 [P] [US1] Golden snapshots of the dashboard at both sizes in internal/modules/dashboard/testdata/
+- [X] T075 [US1] Connection editor form (url, key source, CA, insecure warning, read-only) that saves to a profile, in internal/app/connect.go
+- [X] T076 [US1] Profile switcher modal (`P`) that reconnects without restarting, in internal/app/profiles.go
+- [X] T077 [US1] Dashboard module, made of cards:
   - Machines online/total, with a 1h sparkline of the online count.
   - Users.
   - Pending routes.
@@ -156,10 +156,10 @@ clear error and opens the connection editor.
   - An "issues" list that jumps to targets.
 
   In internal/modules/dashboard/dashboard.go.
-- [ ] T078 [US1] Version support check: a warning banner for unsupported versions, in internal/app/connect.go
-- [ ] T079 [US1] Host-mode start: zero flags, connecting through the detected local transport with no key, a "host:<name>" header, and a permission explainer with fix commands plus a "use remote mode" option, in internal/app/connect.go
-- [ ] T080 [P] [US1] teatest flows for host start as a member of the headscale group, as an outsider (the explainer appears), and with `--remote`, over host/fake, in internal/app/hostconnect_test.go. Include a startup budget test: with host/fake simulating realistic subprocess and socket latency (Detect around 150ms, first list around 300ms), the first dashboard frame must render in under 3s, and the test fails over budget (SC-009). Run the same check on real hardware in the integration job.
-- [ ] T081 [US1] Live metric cards on the dashboard (nodes, map responses per second, memory) from ring-buffered Metrics samples, in internal/modules/dashboard/metrics.go
+- [X] T078 [US1] Version support check: a warning banner for unsupported versions, in internal/app/connect.go
+- [X] T079 [US1] Host-mode start: zero flags, connecting through the detected local transport with no key, a "host:<name>" header, and a permission explainer with fix commands plus a "use remote mode" option, in internal/app/connect.go
+- [X] T080 [P] [US1] teatest flows for host start as a member of the headscale group, as an outsider (the explainer appears), and with `--remote`, over host/fake, in internal/app/hostconnect_test.go. Include a startup budget test: with host/fake simulating realistic subprocess and socket latency (Detect around 150ms, first list around 300ms), the first dashboard frame must render in under 3s, and the test fails over budget (SC-009). Run the same check on real hardware in the integration job.
+- [X] T081 [US1] Live metric cards on the dashboard (nodes, map responses per second, memory) from ring-buffered Metrics samples, in internal/modules/dashboard/metrics.go
 
 ---
 
@@ -170,21 +170,21 @@ clear error and opens the connection editor.
 **Independent Test**: With 50 fake nodes, filter, rename, bulk re-tag three, and delete one.
 The fake records exactly those calls.
 
-- [ ] T082 [P] [US2] teatest flow covering the filter, rename, bulk tag, and delete scenario in internal/modules/machines/flow_test.go
-- [ ] T083 [P] [US2] Golden snapshots of the list, the detail split, and the narrow layout in internal/modules/machines/testdata/
-- [ ] T084 [US2] Machines list view with configurable columns (`[ui.columns].machines`), status dots, tag chips, relative times, and sort keys `s`/`S`, in internal/modules/machines/list.go
-- [ ] T085 [US2] Machine detail pane: IPs, tags, available, approved, and served routes, expiry, last seen, created, register method, user, pre-auth key, and short key fingerprints. In internal/modules/machines/detail.go.
-- [ ] T086 [US2] Actions in internal/modules/machines/actions.go:
+- [X] T082 [P] [US2] teatest flow covering the filter, rename, bulk tag, and delete scenario in internal/modules/machines/flow_test.go
+- [X] T083 [P] [US2] Golden snapshots of the list, the detail split, and the narrow layout in internal/modules/machines/testdata/
+- [X] T084 [US2] Machines list view with configurable columns (`[ui.columns].machines`), status dots, tag chips, relative times, and sort keys `s`/`S`, in internal/modules/machines/list.go
+- [X] T085 [US2] Machine detail pane: IPs, tags, available, approved, and served routes, expiry, last seen, created, register method, user, pre-auth key, and short key fingerprints. In internal/modules/machines/detail.go.
+- [X] T086 [US2] Actions in internal/modules/machines/actions.go:
   - Rename, validating "DNS label: lowercase, [a-z0-9-], 1–63 chars" and suggesting a sanitized name.
   - Tags, validating `^tag:[a-z0-9-]+$` and sending the full replacement list.
   - Expire, and disable expiry where `cap` allows.
   - Delete, at Danger=Critical.
   - Copy IP and copy name.
-- [ ] T087 [US2] Multi-select with space and ctrl+a, plus bulk tag (add or remove, merged per node), bulk expire, and bulk delete, with a confirm that lists the targets. In internal/modules/machines/bulk.go.
-- [ ] T088 [US2] Show "Change owner" in help as unsupported by headscale, rather than leaving it out silently, in internal/modules/machines/actions.go
-- [ ] T089 [US2] Keep the cursor and selection by node ID across auto-refresh, in internal/modules/machines/list.go
-- [ ] T090 [US2] Host columns (os, client, derp, endpoints) and a detail section from NodeExtras, hidden in remote mode, in internal/modules/machines/{list,detail}.go
-- [ ] T091 [US2] Ping action `p` through Debug().Ping, with Needs=DebugAccess, in internal/modules/machines/actions.go
+- [X] T087 [US2] Multi-select with space and ctrl+a, plus bulk tag (add or remove, merged per node), bulk expire, and bulk delete, with a confirm that lists the targets. In internal/modules/machines/bulk.go.
+- [X] T088 [US2] Show "Change owner" in help as unsupported by headscale, rather than leaving it out silently, in internal/modules/machines/actions.go
+- [X] T089 [US2] Keep the cursor and selection by node ID across auto-refresh, in internal/modules/machines/list.go
+- [X] T090 [US2] Host columns (os, client, derp, endpoints) and a detail section from NodeExtras, hidden in remote mode, in internal/modules/machines/{list,detail}.go
+- [X] T091 [US2] Ping action `p` through Debug().Ping, with Needs=DebugAccess, in internal/modules/machines/actions.go
 
 ---
 
@@ -196,12 +196,12 @@ command and a QR code.
 **Independent Test**: A reusable tagged key reaches the backend with the right options, and the
 command contains the right login server and key.
 
-- [ ] T092 [P] [US3] Table tests for extracting the registration key or auth ID from a pasted URL (`/register/<key>`, `/auth/<id>`, a bare key, and whitespace or newline noise) in internal/modules/pending/parse_test.go
-- [ ] T093 [P] [US3] teatest flow: create a pre-auth key, see it shown once, then see it masked in the list, in internal/modules/pending/flow_test.go
-- [ ] T094 [US3] Pending module: paste-to-queue, approve as a user, reject, and register by key, in internal/modules/pending/pending.go
-- [ ] T095 [US3] New pre-auth key form (user, reusable, ephemeral, expiration, tags) with a one-time reveal screen, the `tailscale up --login-server=<url> --authkey=<key>` command, copy, and QR. In internal/modules/pending/newkey.go.
-- [ ] T096 [P] [US3] Half-block QR renderer in internal/ui/qr/qr.go
-- [ ] T097 [US3] Fill the pending queue automatically from /debug/registration-cache in host mode, merged with pasted entries, in internal/modules/pending/pending.go
+- [X] T092 [P] [US3] Table tests for extracting the registration key or auth ID from a pasted URL (`/register/<key>`, `/auth/<id>`, a bare key, and whitespace or newline noise) in internal/modules/pending/parse_test.go
+- [X] T093 [P] [US3] teatest flow: create a pre-auth key, see it shown once, then see it masked in the list, in internal/modules/pending/flow_test.go
+- [X] T094 [US3] Pending module: paste-to-queue, approve as a user, reject, and register by key, in internal/modules/pending/pending.go
+- [X] T095 [US3] New pre-auth key form (user, reusable, ephemeral, expiration, tags) with a one-time reveal screen, the `tailscale up --login-server=<url> --authkey=<key>` command, copy, and QR. In internal/modules/pending/newkey.go.
+- [X] T096 [P] [US3] Half-block QR renderer in internal/ui/qr/qr.go
+- [X] T097 [US3] Fill the pending queue automatically from /debug/registration-cache in host mode, merged with pasted entries, in internal/modules/pending/pending.go. **Finding:** real headscale (0.29.6 and main) exposes only the cache size there, so host mode shows the count of waiting logins and keeps the entry merge for servers that list them
 
 **Checkpoint (MVP)**: US1, US2, and US3 work end to end on the fake backend and on headscale
 0.29.6.

@@ -1,0 +1,21 @@
+{
+  "name": "check_policy_invalid",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/policy/check",
+    "body": {
+      "policy": "{\n  \"acls\": [\n    {\"action\": \"accept\", \"src\": [,]}\n  ]\n}\n"
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/problem+json"
+    },
+    "body": {
+      "title": "Bad Request",
+      "status": 400,
+      "detail": "parsing policy: hujson: line 3, column 37: invalid character ',' looking for beginning of value"
+    }
+  }
+}

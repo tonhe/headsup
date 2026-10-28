@@ -1,0 +1,16 @@
+{
+  "name": "health",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/health"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "databaseConnectivity": true
+    }
+  }
+}

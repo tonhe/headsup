@@ -1,0 +1,87 @@
+{
+  "name": "list_nodes",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/node",
+    "query": {
+      "user": "ops"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "nodes": [
+        {
+          "id": "23",
+          "machineKey": "mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "nodeKey": "nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "discoKey": "discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "ipAddresses": [
+            "100.64.0.24",
+            "fd7a:115c:a1e0::17"
+          ],
+          "name": "exit-fra-1",
+          "user": {
+            "id": "4",
+            "name": "ops",
+            "createdAt": "2025-01-01T00:00:00Z"
+          },
+          "lastSeen": "2026-05-28T20:26:40Z",
+          "expiry": "2027-01-15T08:00:00Z",
+          "createdAt": "2025-02-19T21:20:00Z",
+          "registerMethod": "REGISTER_METHOD_AUTH_KEY",
+          "givenName": "exit-fra-1",
+          "online": true,
+          "approvedRoutes": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "availableRoutes": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "subnetRoutes": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "tags": [
+            "tag:exit"
+          ],
+          "preAuthKey": null
+        },
+        {
+          "id": "5",
+          "machineKey": "mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "nodeKey": "nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "discoKey": "discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "ipAddresses": [
+            "100.64.0.6",
+            "fd7a:115c:a1e0::5"
+          ],
+          "name": "homelab-alice",
+          "user": {
+            "id": "1",
+            "name": "alice",
+            "createdAt": "2025-01-01T00:00:00Z"
+          },
+          "lastSeen": "2026-05-28T20:26:40Z",
+          "expiry": "2027-01-15T08:00:00Z",
+          "createdAt": "2025-02-19T21:20:00Z",
+          "registerMethod": "REGISTER_METHOD_CLI",
+          "givenName": "homelab-alice",
+          "online": false,
+          "approvedRoutes": [],
+          "availableRoutes": [
+            "10.20.0.0/16"
+          ],
+          "subnetRoutes": [],
+          "tags": [],
+          "preAuthKey": null
+        }
+      ]
+    }
+  }
+}

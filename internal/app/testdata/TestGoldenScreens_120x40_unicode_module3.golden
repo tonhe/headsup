@@ -1,0 +1,40 @@
+ fathom ─ remote ─ headscale v0.30.0 ●                                                                   42 online / 51 
+  1 ◫ Dashboard     7 ╭ Waiting to join • 0 ───────────────────────────────────────────────────────────────────────────╮
+  2 ▣ Machines        │ No devices waiting.                                                                            │
+▸ 3 ◌ Add device      │                                                                                                │
+                      │ Press p to register a device by the URL or key it printed, or n for a pre-auth key.            │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ Pre-auth keys ─────────────────────────────────────────────────────────────────────────────────╮
+                      │ ⚿ hskey-auth-…6ac0       carol      ephemeral            active   expires in 6d                │
+                      │ ⚿ hskey-auth-…b84f       bob        reusable             active   expires in 3d                │
+                      │ ⚿ hskey-auth-…a1d5       alice                           active   expires in 24h               │
+                      │ ⚿ hskey-auth-…3ed7       alice                           expired  expires 24h ago              │
+                      │ ⚿ hskey-auth-…746a       bob                             used     expires in 2w                │
+                      │ ⚿ hskey-auth-…bb87       ops        reusable             active   expires in 12w tag:server    │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ n new pre-auth key  p paste key/URL  a approve  x reject  ? help  q quit                              updated 12:00:00 

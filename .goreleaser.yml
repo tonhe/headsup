@@ -1,0 +1,73 @@
+version: 2
+
+env:
+  - CGO_ENABLED=0
+
+builds:
+  - binary: fathom
+    main: ./cmd/fathom
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/tonhe/fathom/internal/version.Version={{.Version}}
+      - -X github.com/tonhe/fathom/internal/version.Commit={{.ShortCommit}}
+      - -X github.com/tonhe/fathom/internal/version.Build={{.Date}}
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE*
+      - README*
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude: ["^docs:", "^test:", "^ci:", "^Merge pull request"]
+
+nfpms:
+  - package_name: fathom
+    file_name_template: "{{ .ConventionalFileName }}"
+    vendor: tonhe
+    homepage: https://github.com/tonhe/fathom
+    maintainer: tonhe
+    description: Terminal UI for administering headscale
+    license: MIT
+    formats: [deb, rpm, apk]
+    bindir: /usr/bin
+
+brews:
+  - name: fathom
+    repository:
+      owner: tonhe
+      name: homebrew-tap
+    homepage: https://github.com/tonhe/fathom
+    description: Terminal UI for administering headscale
+    license: MIT
+
+scoops:
+  - name: fathom
+    repository:
+      owner: tonhe
+      name: scoop-bucket
+    homepage: https://github.com/tonhe/fathom
+    description: Terminal UI for administering headscale
+    license: MIT
+
+release:
+  github:
+    owner: tonhe
+    name: fathom
+  name_template: "v{{.Version}}"
+  draft: false
+  prerelease: auto

@@ -1,0 +1,11 @@
+{
+  "name": "health",
+  "args": [
+    "health",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "{\n\t\"databaseConnectivity\": true\n}\n",
+  "stderr": ""
+}

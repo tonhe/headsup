@@ -1,0 +1,14 @@
+{
+  "name": "nodes_list",
+  "args": [
+    "nodes",
+    "list",
+    "-u",
+    "ops",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "[\n\t{\n\t\t\"id\": \"23\",\n\t\t\"machineKey\": \"mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"nodeKey\": \"nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t\t\"discoKey\": \"discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\n\t\t\"ipAddresses\": [\n\t\t\t\"100.64.0.24\",\n\t\t\t\"fd7a:115c:a1e0::17\"\n\t\t],\n\t\t\"name\": \"exit-fra-1\",\n\t\t\"user\": {\n\t\t\t\"id\": \"4\",\n\t\t\t\"name\": \"ops\",\n\t\t\t\"createdAt\": \"2025-01-01T00:00:00Z\"\n\t\t},\n\t\t\"lastSeen\": \"2026-05-28T20:26:40Z\",\n\t\t\"expiry\": \"2027-01-15T08:00:00Z\",\n\t\t\"createdAt\": \"2025-02-19T21:20:00Z\",\n\t\t\"registerMethod\": \"REGISTER_METHOD_AUTH_KEY\",\n\t\t\"givenName\": \"exit-fra-1\",\n\t\t\"online\": true,\n\t\t\"approvedRoutes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"availableRoutes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"subnetRoutes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"tags\": [\n\t\t\t\"tag:exit\"\n\t\t],\n\t\t\"preAuthKey\": null\n\t},\n\t{\n\t\t\"id\": \"5\",\n\t\t\"machineKey\": \"mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"nodeKey\": \"nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t\t\"discoKey\": \"discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\n\t\t\"ipAddresses\": [\n\t\t\t\"100.64.0.6\",\n\t\t\t\"fd7a:115c:a1e0::5\"\n\t\t],\n\t\t\"name\": \"homelab-alice\",\n\t\t\"user\": {\n\t\t\t\"id\": \"1\",\n\t\t\t\"name\": \"alice\",\n\t\t\t\"createdAt\": \"2025-01-01T00:00:00Z\"\n\t\t},\n\t\t\"lastSeen\": \"2026-05-28T20:26:40Z\",\n\t\t\"expiry\": \"2027-01-15T08:00:00Z\",\n\t\t\"createdAt\": \"2025-02-19T21:20:00Z\",\n\t\t\"registerMethod\": \"REGISTER_METHOD_CLI\",\n\t\t\"givenName\": \"homelab-alice\",\n\t\t\"online\": false,\n\t\t\"approvedRoutes\": [],\n\t\t\"availableRoutes\": [\n\t\t\t\"10.20.0.0/16\"\n\t\t],\n\t\t\"subnetRoutes\": [],\n\t\t\"tags\": [],\n\t\t\"preAuthKey\": null\n\t}\n]\n",
+  "stderr": ""
+}

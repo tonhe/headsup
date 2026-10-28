@@ -1,0 +1,14 @@
+{
+  "name": "nodes_list",
+  "args": [
+    "nodes",
+    "list",
+    "-u",
+    "ops",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "[\n\t{\n\t\t\"id\": 23,\n\t\t\"machine_key\": \"mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"node_key\": \"nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t\t\"disco_key\": \"discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\n\t\t\"ip_addresses\": [\n\t\t\t\"100.64.0.24\",\n\t\t\t\"fd7a:115c:a1e0::17\"\n\t\t],\n\t\t\"name\": \"exit-fra-1\",\n\t\t\"user\": {\n\t\t\t\"id\": 4,\n\t\t\t\"name\": \"ops\",\n\t\t\t\"created_at\": {\n\t\t\t\t\"seconds\": 1735689600,\n\t\t\t\t\"nanos\": 0\n\t\t\t}\n\t\t},\n\t\t\"last_seen\": {\n\t\t\t\"seconds\": 1780000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"expiry\": {\n\t\t\t\"seconds\": 1800000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"created_at\": {\n\t\t\t\"seconds\": 1740000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"register_method\": 1,\n\t\t\"given_name\": \"exit-fra-1\",\n\t\t\"online\": true,\n\t\t\"approved_routes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"available_routes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"subnet_routes\": [\n\t\t\t\"0.0.0.0/0\",\n\t\t\t\"::/0\"\n\t\t],\n\t\t\"tags\": [\n\t\t\t\"tag:exit\"\n\t\t]\n\t},\n\t{\n\t\t\"id\": 5,\n\t\t\"machine_key\": \"mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"node_key\": \"nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t\t\"disco_key\": \"discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\n\t\t\"ip_addresses\": [\n\t\t\t\"100.64.0.6\",\n\t\t\t\"fd7a:115c:a1e0::5\"\n\t\t],\n\t\t\"name\": \"homelab-alice\",\n\t\t\"user\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"alice\",\n\t\t\t\"created_at\": {\n\t\t\t\t\"seconds\": 1735689600,\n\t\t\t\t\"nanos\": 0\n\t\t\t}\n\t\t},\n\t\t\"last_seen\": {\n\t\t\t\"seconds\": 1780000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"expiry\": {\n\t\t\t\"seconds\": 1800000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"created_at\": {\n\t\t\t\"seconds\": 1740000000,\n\t\t\t\"nanos\": 0\n\t\t},\n\t\t\"register_method\": 2,\n\t\t\"given_name\": \"homelab-alice\",\n\t\t\"available_routes\": [\n\t\t\t\"10.20.0.0/16\"\n\t\t]\n\t}\n]\n",
+  "stderr": ""
+}

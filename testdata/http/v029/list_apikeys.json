@@ -1,0 +1,24 @@
+{
+  "name": "list_apikeys",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apikey"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "apiKeys": [
+        {
+          "id": "1",
+          "prefix": "3f9c2a7b1d0e",
+          "expiration": "2027-01-15T08:00:00Z",
+          "createdAt": "2026-05-28T22:13:20Z",
+          "lastSeen": "2026-09-21T11:06:40Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "policy_get",
+  "args": [
+    "policy",
+    "get",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "// demo\n{\n  \"acls\": [\n    {\"action\": \"accept\", \"src\": [\"*\"], \"dst\": [\"*:*\"]},\n  ],\n}\n\n",
+  "stderr": ""
+}

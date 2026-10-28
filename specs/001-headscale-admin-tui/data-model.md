@@ -106,8 +106,9 @@ Derived: `IsSelf` is true when the prefix matches the key of the active profile.
 
 The queue has two sources, merged by AuthID:
 
-- **Host mode**: entries read from `/debug/registration-cache` on the server's local debug
-  address. The queue fills itself.
+- **Host mode**: `/debug/registration-cache` reports only counters (`current_len` and so on)
+  in 0.29.6 and in main, not the entries. Fathom shows that count ("headscale reports N
+  devices waiting") and uses the entries only if a future headscale exposes them.
 - **Remote mode**: headscale's API has no list endpoint, so entries come from registration keys
   or URLs the admin pastes in.
 

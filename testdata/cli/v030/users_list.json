@@ -1,0 +1,12 @@
+{
+  "name": "users_list",
+  "args": [
+    "users",
+    "list",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "[\n\t{\n\t\t\"id\": \"1\",\n\t\t\"name\": \"alice\",\n\t\t\"createdAt\": \"2025-01-01T00:00:00Z\",\n\t\t\"displayName\": \"Alice Liddell\",\n\t\t\"email\": \"alice@example.com\",\n\t\t\"providerId\": \"https://sso.example.com/a1f3\",\n\t\t\"provider\": \"oidc\",\n\t\t\"profilePicUrl\": \"\"\n\t},\n\t{\n\t\t\"id\": \"4\",\n\t\t\"name\": \"ops\",\n\t\t\"createdAt\": \"2025-01-01T00:00:00Z\",\n\t\t\"displayName\": \"\",\n\t\t\"email\": \"ops@example.com\",\n\t\t\"providerId\": \"\",\n\t\t\"provider\": \"\",\n\t\t\"profilePicUrl\": \"\"\n\t}\n]\n",
+  "stderr": ""
+}

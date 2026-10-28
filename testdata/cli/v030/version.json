@@ -1,0 +1,11 @@
+{
+  "name": "version",
+  "args": [
+    "version",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "{\n\t\"version\": \"v0.30.0\",\n\t\"commit\": \"f00dfeed\",\n\t\"buildTime\": \"2026-09-01T00:00:00Z\",\n\t\"go\": {\n\t\t\"version\": \"go1.26.0\",\n\t\t\"os\": \"linux\",\n\t\t\"arch\": \"amd64\"\n\t},\n\t\"dirty\": false\n}\n",
+  "stderr": ""
+}

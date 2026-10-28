@@ -57,7 +57,7 @@ fathom                              # zero flags
 | H1 | Launch with no flags | The header shows `host:<hostname>` and the dashboard has live metric sparklines (US1) |
 | H2 | Launch as a user outside the `headscale` group | A permission explainer, with the `usermod` fix command and a remote-mode option (US1) |
 | H3 | `2`, open a machine | OS, client version, DERP region and latency, and endpoints appear. `p` pings (US2) |
-| H4 | Start `tailscale up` on a new client (web login) | The pending queue (`5`) shows it without pasting anything (US3) |
+| H4 | Start `tailscale up` on a new client (web login) | Add device (`3`) shows "headscale reports 1 device waiting"; pasting its URL with `p` registers it (US3) |
 | H5 | `g d`, add record `nas.home.arpa A 100.64.0.3` | A diff and confirm; it resolves from a client with no restart (US13) |
 | H6 | `g s`, change `node.expiry` to an invalid value | Refused before writing. The file is byte-identical (US10, SC-010) |
 | H7 | Change it to a valid value and apply | Diff, then backup, then write, then restart offered. Health turns green, and `u` rolls back (US10) |

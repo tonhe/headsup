@@ -1,0 +1,18 @@
+{
+  "name": "get_node_not_found",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/node/999"
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "code": 5,
+      "message": "node not found",
+      "details": []
+    }
+  }
+}

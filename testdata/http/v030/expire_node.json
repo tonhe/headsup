@@ -1,0 +1,47 @@
+{
+  "name": "expire_node",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/node/5/expire",
+    "body": {
+      "disableExpiry": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "node": {
+        "id": "5",
+        "machineKey": "mkey:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nodeKey": "nodekey:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "discoKey": "discokey:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "ipAddresses": [
+          "100.64.0.6",
+          "fd7a:115c:a1e0::5"
+        ],
+        "name": "homelab-alice",
+        "user": {
+          "id": "1",
+          "name": "alice",
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        "lastSeen": "2026-05-28T20:26:40Z",
+        "expiry": null,
+        "createdAt": "2025-02-19T21:20:00Z",
+        "registerMethod": "REGISTER_METHOD_CLI",
+        "givenName": "homelab-alice",
+        "online": false,
+        "approvedRoutes": [],
+        "availableRoutes": [
+          "10.20.0.0/16"
+        ],
+        "subnetRoutes": [],
+        "tags": [],
+        "preAuthKey": null
+      }
+    }
+  }
+}

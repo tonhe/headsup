@@ -1,0 +1,7 @@
+root:x:0:
+adm:x:4:syslog
+systemd-journal:x:101:
+docker:x:999:
+headscale:x:998:alice
+alice:x:1000:
+bob:x:1001:

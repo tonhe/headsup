@@ -1,0 +1,79 @@
+# headscale for the lab tailnet -- maintained by hand, keep the comments!
+# Last reviewed: 2026-09-14 (rotated noise key)
+
+server_url: https://hs.lab.example.net   # public name, behind caddy
+listen_addr: 127.0.0.1:8080
+metrics_listen_addr: '127.0.0.1:9090'
+
+noise:
+  private_key_path: /var/lib/headscale/noise_private.key
+
+prefixes:
+  v4: 100.64.0.0/10
+  v6: fd7a:115c:a1e0::/48
+  allocation: sequential
+
+derp:
+  server:
+    enabled: true
+    region_id: 900
+    region_code: "lab"
+    region_name: "Lab Embedded DERP"
+    stun_listen_addr: "0.0.0.0:3478"
+    automatically_add_embedded_derp_region: true
+    ipv4: 203.0.113.7
+  urls: [https://controlplane.tailscale.com/derpmap/default]
+  paths:
+    - /etc/headscale/derp.yaml
+  auto_update_enabled: true
+  update_frequency: 24h
+
+
+node:
+  expiry: 180d
+  ephemeral:
+    inactivity_timeout: 30m
+
+database:
+  type: sqlite
+  sqlite:
+    path: /var/lib/headscale/db.sqlite
+    write_ahead_log: true
+
+# Let's Encrypt is handled by caddy, not headscale
+tls_cert_path: ""
+tls_key_path: ""
+
+log:
+  # bump to debug when chasing DERP issues
+  level: debug
+  format: text
+
+policy:
+  mode: file
+  path: /etc/headscale/policy.hujson
+
+dns:
+  magic_dns: true
+  base_domain: ts.lab.example.net
+  override_local_dns: true
+  nameservers:
+    global:
+      - 9.9.9.9
+      - 149.112.112.112
+    split:
+      corp.example.net:
+        - 10.20.0.53
+  search_domains: []
+  extra_records_path: /etc/headscale/extra-records.json
+
+unix_socket: /var/run/headscale/headscale.sock
+unix_socket_permission: "0770"
+
+# oidc:
+#   issuer: https://sso.example.net
+#   client_id: headscale
+
+logtail:
+  enabled: false
+randomize_client_port: false

@@ -1,0 +1,27 @@
+# High Contrast: pure black background with bright, saturated accents.
+# Intended for low-vision use and washed-out projectors. The slug is
+# derived from the name ("high-contrast").
+name  = "High Contrast"
+light = false
+
+base00 = "#000000"  # background
+base01 = "#121212"  # panels / sidebar
+base02 = "#303030"  # selection
+base03 = "#a8a8a8"  # muted / borders (kept bright on purpose)
+base04 = "#d0d0d0"
+base05 = "#ffffff"  # foreground
+base06 = "#ffffff"
+base07 = "#ffffff"
+base08 = "#ff5555"  # red
+base09 = "#ffaa00"  # orange
+base0A = "#ffff55"  # yellow
+base0B = "#55ff55"  # green
+base0C = "#55ffff"  # cyan
+base0D = "#5fafff"  # blue
+base0E = "#ff79ff"  # magenta
+base0F = "#d7af87"  # brown
+
+[roles]
+border       = "base04"
+border_focus = "base0A"
+selection    = "#1c3a5e"

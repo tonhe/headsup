@@ -1,0 +1,26 @@
+# Midnight Harbor: a deep navy dark theme.
+# Copy into the app's config themes/ directory to use it.
+name  = "Midnight Harbor"
+slug  = "midnight-harbor"
+light = false
+
+base00 = "#0b1020"  # background
+base01 = "#131a2e"  # panels / sidebar
+base02 = "#1e2742"  # selection
+base03 = "#4a5578"  # muted / borders
+base04 = "#8792b3"
+base05 = "#c8d0e8"  # foreground
+base06 = "#e1e6f5"
+base07 = "#ffffff"
+base08 = "#ff6b81"  # red     -> danger, offline
+base09 = "#ffa65c"  # orange  -> expiring
+base0A = "#ffd866"  # yellow  -> pending, warnings
+base0B = "#7bd88f"  # green   -> online, approved
+base0C = "#5ad4e6"  # cyan    -> IPs, links
+base0D = "#7aa2f7"  # blue    -> accent, focus
+base0E = "#c792ea"  # magenta -> tags
+base0F = "#b07a5b"  # brown   -> misc
+
+[roles]             # optional overrides; values are base keys or hex
+accent = "base0E"
+tag_bg = "#2a1f3d"

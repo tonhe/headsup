@@ -1,0 +1,7 @@
+{
+  "current_len": 2,
+  "expiration": "15m0s",
+  "max_entries": 1024,
+  "status": "active",
+  "type": "expirable-lru"
+}

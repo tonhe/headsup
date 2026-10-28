@@ -1,0 +1,12 @@
+{
+  "name": "unreachable",
+  "args": [
+    "users",
+    "list",
+    "-o",
+    "json"
+  ],
+  "exit": 1,
+  "stdout": "",
+  "stderr": "{\n\t\"error\": \"listing users: Get \\\"http://unix/api/v1/user\\\": dial unix /var/run/headscale/headscale.sock: connect: connection refused\"\n}\n"
+}

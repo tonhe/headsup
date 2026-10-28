@@ -1,0 +1,14 @@
+{
+  "name": "apikeys_create",
+  "args": [
+    "apikeys",
+    "create",
+    "-e",
+    "86400s",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "\"hskey-api-3f9c2a7b1d0e-0123456789abcdef0123456789abcdef\"\n",
+  "stderr": ""
+}

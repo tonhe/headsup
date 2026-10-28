@@ -1,0 +1,37 @@
+{
+  "name": "list_users",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/user"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "users": [
+        {
+          "id": "1",
+          "name": "alice",
+          "createdAt": "2025-01-01T00:00:00Z",
+          "displayName": "Alice Liddell",
+          "email": "alice@example.com",
+          "providerId": "https://sso.example.com/a1f3",
+          "provider": "oidc",
+          "profilePicUrl": ""
+        },
+        {
+          "id": "4",
+          "name": "ops",
+          "createdAt": "2025-01-01T00:00:00Z",
+          "displayName": "",
+          "email": "ops@example.com",
+          "providerId": "",
+          "provider": "",
+          "profilePicUrl": ""
+        }
+      ]
+    }
+  }
+}

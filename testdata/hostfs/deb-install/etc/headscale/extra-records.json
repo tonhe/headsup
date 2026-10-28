@@ -1,0 +1,3 @@
+[
+  {"name": "grafana.tail.example.net", "type": "A", "value": "100.64.0.5"}
+]

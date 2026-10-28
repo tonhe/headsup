@@ -1,0 +1,12 @@
+{
+  "name": "apikeys_list",
+  "args": [
+    "apikeys",
+    "list",
+    "-o",
+    "json"
+  ],
+  "exit": 0,
+  "stdout": "[\n\t{\n\t\t\"id\": \"1\",\n\t\t\"prefix\": \"3f9c2a7b1d0e\",\n\t\t\"expiration\": \"2027-01-15T08:00:00Z\",\n\t\t\"createdAt\": \"2026-05-28T22:13:20Z\",\n\t\t\"lastSeen\": \"2026-09-21T11:06:40Z\"\n\t}\n]\n",
+  "stderr": ""
+}

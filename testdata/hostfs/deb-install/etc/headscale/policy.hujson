@@ -1,0 +1,7 @@
+// Lab tailnet policy
+{
+  "groups": {"group:admins": ["alice@"]},
+  "acls": [
+    {"action": "accept", "src": ["group:admins"], "dst": ["*:*"]},
+  ],
+}

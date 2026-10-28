@@ -1,0 +1,15 @@
+{
+  "name": "rename_not_found",
+  "args": [
+    "nodes",
+    "rename",
+    "-i",
+    "999",
+    "new-name",
+    "-o",
+    "json"
+  ],
+  "exit": 1,
+  "stdout": "",
+  "stderr": "{\n\t\"error\": \"renaming node: rpc error: code = NotFound desc = node not found\"\n}\n"
+}

@@ -1,0 +1,17 @@
+# HELP go_goroutines Number of goroutines that currently exist.
+# TYPE go_goroutines gauge
+go_goroutines 87
+# HELP go_memstats_heap_inuse_bytes Number of heap bytes that are in use.
+# TYPE go_memstats_heap_inuse_bytes gauge
+go_memstats_heap_inuse_bytes 2.4502272e+07
+# HELP headscale_mapresponse_sent_total total count of mapresponses sent to clients
+# TYPE headscale_mapresponse_sent_total counter
+headscale_mapresponse_sent_total{status="ok",type="full"} 41
+headscale_mapresponse_sent_total{status="ok",type="patch"} 1290
+headscale_mapresponse_sent_total{status="error",type="full"} 3
+# HELP headscale_nodestore_nodes Current number of nodes in the NodeStore
+# TYPE headscale_nodestore_nodes gauge
+headscale_nodestore_nodes 6
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 6.1349888e+07
