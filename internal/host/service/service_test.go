@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 type call struct {
@@ -187,11 +187,11 @@ func TestConfigtest(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fr := &fakeRunner{reply: func(string, []string) Result { return Result{Stderr: []byte(tt.out), Exit: tt.exit} }}
-			issues, err := NewSystemd(fr.run, "").Configtest(context.Background(), "/etc/headscale/.config.fathom-check.yaml")
+			issues, err := NewSystemd(fr.run, "").Configtest(context.Background(), "/etc/headscale/.config.headsup-check.yaml")
 			if err != nil {
 				t.Fatal(err)
 			}
-			if fr.last() != "headscale configtest -c /etc/headscale/.config.fathom-check.yaml" {
+			if fr.last() != "headscale configtest -c /etc/headscale/.config.headsup-check.yaml" {
 				t.Errorf("ran %q", fr.last())
 			}
 			if len(issues) != len(tt.want) {

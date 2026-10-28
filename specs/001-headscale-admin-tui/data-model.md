@@ -1,4 +1,4 @@
-# Data Model: Fathom
+# Data Model: Headsup
 
 These are the domain types in `internal/api`. They do not depend on the wire format: the
 `httpapi` package maps JSON (camelCase, with uint64 encoded as strings) onto them.
@@ -107,7 +107,7 @@ Derived: `IsSelf` is true when the prefix matches the key of the active profile.
 The queue has two sources, merged by AuthID:
 
 - **Host mode**: `/debug/registration-cache` reports only counters (`current_len` and so on)
-  in 0.29.6 and in main, not the entries. Fathom shows that count ("headscale reports N
+  in 0.29.6 and in main, not the entries. Headsup shows that count ("headscale reports N
   devices waiting") and uses the entries only if a future headscale exposes them.
 - **Remote mode**: headscale's API has no list endpoint, so entries come from registration keys
   or URLs the admin pastes in.
@@ -148,7 +148,7 @@ PreAuthKeyDelete, APIKeyDelete, OAuthClients, ProblemJSON, TagOnlyKeys, Backfill
 - **Change**: see `contracts/host.md`. Changes always carry `Diff` and `Issues`.
 - **BackupManifest**: `ID` (timestamp), `Files` (path, sha256, uid, gid, mode), `DB` (kind,
   path, sha256, method `sqlite-backup-api` or `pg_dump-instructions`), `HeadscaleVersion`, and
-  `FathomVersion`.
+  `HeadsupVersion`.
 - **DNSConfig**: `MagicDNS` bool, `BaseDomain` string (must differ from the `server_url` host),
   `OverrideLocalDNS` bool, `Global` []string (IPs or DoH URLs), `Split` map[domain][]string,
   `SearchDomains` []string, and `ExtraRecords` []Record or `ExtraRecordsPath` (mutually

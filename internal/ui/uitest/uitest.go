@@ -7,8 +7,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/termenv"
 
-	"github.com/tonhe/fathom/internal/theme"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/theme"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // StyleFor returns styles built from the theme with the given slug, falling

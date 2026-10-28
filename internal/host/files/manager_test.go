@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 const original = "# comment\nlog:\n  level: info\nsecret: hunter2-sensitive\n"

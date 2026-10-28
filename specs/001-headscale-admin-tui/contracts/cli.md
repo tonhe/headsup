@@ -1,32 +1,32 @@
 # Contract: Non-interactive CLI
 
 ```text
-fathom                                  # launch TUI
-fathom nodes   ls [--user U] [--filter Q] [-o table|wide|json|yaml]
-fathom nodes   show ID|NAME
-fathom nodes   rename ID NEW
-fathom nodes   tags ID [--set a,b | --add a | --rm a]
-fathom nodes   expire ID [--disable]
-fathom nodes   delete ID [--yes]
-fathom nodes   register --user U KEY|URL
-fathom routes  ls [--pending]
-fathom routes  approve ID PREFIX... | revoke ID PREFIX...
-fathom users   ls | create NAME [--display-name --email] | rename ID NEW | delete ID [--yes]
-fathom keys    preauth ls|create|expire|delete  (create: --user --reusable --ephemeral --expiration 24h --tags a,b --qr)
-fathom keys    api ls|create|expire|delete      (create: --expiration 90d)
-fathom policy  get [-o raw|json] | check FILE | diff FILE | set FILE [--yes] | history | rollback N
-fathom auth    approve AUTH_ID [--user U] | reject AUTH_ID
-fathom server  info | caps | backfill-ips [--yes]
-fathom host    info | doctor | perms                        # environment, findings, fix commands
-fathom svc     status | start | stop | restart | reload | logs [-f] [--level warn] [--grep RE]
-fathom conf    get KEY | set KEY VALUE [--yes] [--no-restart] | diff | edit | migrate | rollback [N]
-fathom dns     show | records ls|add NAME TYPE VALUE|rm NAME | set KEY VALUE
-fathom derp    show | regions ls | map edit PATH
-fathom backup  create | ls | restore ID [--files-only]
-fathom upgrade check
-fathom themes  ls | preview SLUG | reload
-fathom config  path | theme SLUG | profile add|ls|rm|default
-fathom version
+headsup                                  # launch TUI
+headsup nodes   ls [--user U] [--filter Q] [-o table|wide|json|yaml]
+headsup nodes   show ID|NAME
+headsup nodes   rename ID NEW
+headsup nodes   tags ID [--set a,b | --add a | --rm a]
+headsup nodes   expire ID [--disable]
+headsup nodes   delete ID [--yes]
+headsup nodes   register --user U KEY|URL
+headsup routes  ls [--pending]
+headsup routes  approve ID PREFIX... | revoke ID PREFIX...
+headsup users   ls | create NAME [--display-name --email] | rename ID NEW | delete ID [--yes]
+headsup keys    preauth ls|create|expire|delete  (create: --user --reusable --ephemeral --expiration 24h --tags a,b --qr)
+headsup keys    api ls|create|expire|delete      (create: --expiration 90d)
+headsup policy  get [-o raw|json] | check FILE | diff FILE | set FILE [--yes] | history | rollback N
+headsup auth    approve AUTH_ID [--user U] | reject AUTH_ID
+headsup server  info | caps | backfill-ips [--yes]
+headsup host    info | doctor | perms                        # environment, findings, fix commands
+headsup svc     status | start | stop | restart | reload | logs [-f] [--level warn] [--grep RE]
+headsup conf    get KEY | set KEY VALUE [--yes] [--no-restart] | diff | edit | migrate | rollback [N]
+headsup dns     show | records ls|add NAME TYPE VALUE|rm NAME | set KEY VALUE
+headsup derp    show | regions ls | map edit PATH
+headsup backup  create | ls | restore ID [--files-only]
+headsup upgrade check
+headsup themes  ls | preview SLUG | reload
+headsup config  path | theme SLUG | profile add|ls|rm|default
+headsup version
 ```
 
 ## Rules

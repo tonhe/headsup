@@ -8,9 +8,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/debug"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/debug"
 )
 
 // Slice identifies a part of the snapshot for targeted refresh.

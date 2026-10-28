@@ -6,8 +6,8 @@ import (
 	bs "github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // TickMsg is the spinner's tick message, re-exported for routing.

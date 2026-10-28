@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 var versions = []string{"v029", "v030"}

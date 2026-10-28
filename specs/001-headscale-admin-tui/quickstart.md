@@ -10,7 +10,7 @@
 
 ```bash
 make build
-./bin/fathom --demo
+./bin/headsup --demo
 ```
 
 Expected: the dashboard shows 51 machines (42 online), 4 users, 2 pending routes, 1 pending
@@ -24,7 +24,7 @@ docker run -d --name hs -p 8080:8080 -v $PWD/testdata/headscale:/etc/headscale \
 docker exec hs headscale users create alice
 export HEADSCALE_URL=http://localhost:8080
 export HEADSCALE_API_KEY=$(docker exec hs headscale apikeys create -o json | jq -r .)
-./bin/fathom
+./bin/headsup
 ```
 
 Validation scenarios. Each one maps to an acceptance scenario in the spec.
@@ -40,7 +40,7 @@ Validation scenarios. Each one maps to an acceptance scenario in the spec.
 | V7 | Fix the rule and save | The diff shows only the new rule. `ctrl+s` applies it after a confirm (US5) |
 | V8 | `T`, then scroll through themes | Every view repaints live. The choice persists across restarts (US8) |
 | V9 | `:` then type "expire" | The palette lists every expire action (US9) |
-| V10 | `fathom nodes ls -o json \| jq length` | Matches the TUI's machine count (US11) |
+| V10 | `headsup nodes ls -o json \| jq length` | Matches the TUI's machine count (US11) |
 | V11 | `--read-only`, then `D` on a machine | Blocked with a "read-only profile" toast (FR-035) |
 | V12 | Resize to 80x24 | The sidebar becomes tabs and low-priority columns drop. Nothing wraps (SC-006) |
 
@@ -49,7 +49,7 @@ Validation scenarios. Each one maps to an acceptance scenario in the spec.
 ```bash
 sudo usermod -aG headscale $USER   # socket access (or run as root)
 newgrp headscale
-fathom                              # zero flags
+headsup                              # zero flags
 ```
 
 | # | Do | Expect |
@@ -64,9 +64,9 @@ fathom                              # zero flags
 | H8 | With `policy.mode: file`, edit the policy | `policy check`, diff, write, reload, active (US5) |
 | H9 | `g l`, filter by level `warn` | Live journald lines, and a machine link jumps to that machine (US14) |
 | H10 | `8`, `c` (doctor), then `b` (backup) | Findings with fixes. The bundle lists the config, policy, records, and an online database copy (US16) |
-| H11 | `fathom conf set log.level debug --yes` (no TTY) | Exit 0, the restart is skipped with a notice. `--no-restart` is honoured (US11) |
+| H11 | `headsup conf set log.level debug --yes` (no TTY) | Exit 0, the restart is skipped with a notice. `--no-restart` is honoured (US11) |
 
-Container install: `fathom --host` with `[host].container = "headscale"` runs the same table
+Container install: `headsup --host` with `[host].container = "headscale"` runs the same table
 through `docker exec`.
 
 ## 4. Test suite

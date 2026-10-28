@@ -10,10 +10,10 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/ui/modal"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/modal"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // MaxVisible is how many toasts are drawn at once (newest at the bottom).

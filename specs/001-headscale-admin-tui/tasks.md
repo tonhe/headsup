@@ -1,4 +1,4 @@
-# Tasks: Fathom, a Headscale Admin TUI
+# Tasks: Headsup, a Headscale Admin TUI
 
 **Input**: Design documents from `/specs/001-headscale-admin-tui/`
 
@@ -16,7 +16,7 @@ dependencies.
 
 ## Phase 1: Setup
 
-- [X] T001 Initialise the Go module `github.com/tonhe/fathom` with Go 1.25 in go.mod, and add deps from plan.md
+- [X] T001 Initialise the Go module `github.com/tonhe/headsup` with Go 1.25 in go.mod, and add deps from plan.md
 - [X] T002 [P] Create the directory skeleton from plan.md under cmd/ and internal/ with doc.go package comments
 - [X] T003 [P] Create a Makefile with build, install, test, test-race, test-all, test-tui, golden-update, coverage-gate, test-integration, release-dry-run, and demo, using ldflags into internal/version (copy viaduct's pattern)
 - [X] T004 [P] Add internal/version/version.go with Version, Build, and Commit variables
@@ -87,11 +87,11 @@ dependencies.
 - [X] T050 [P] Pipeline tests proving that every Mutating action with Danger≥Confirm cannot run without confirmation, and that read-only blocks every Mutating action, in internal/app/actions_test.go (SC-005)
 - [X] T051 Root model: layout (sidebar or tabs breakpoints, detail split), modal stack, global keys, resize handling, and a "resize me" notice below 80x24, in internal/app/app.go
 - [X] T052 [P] Keymap that merges `[keys]` overrides and detects conflicts, in internal/keys/keys.go
-- [X] T053 [P] Activity logger writing redacted JSONL to $XDG_STATE_HOME/fathom/activity.jsonl in internal/activity/activity.go
-- [X] T054 Entry point cmd/fathom/main.go: parse flags, dispatch to cli.Run or the TUI, and wire up `--demo` to fake.Backend
+- [X] T053 [P] Activity logger writing redacted JSONL to $XDG_STATE_HOME/headsup/activity.jsonl in internal/activity/activity.go
+- [X] T054 Entry point cmd/headsup/main.go: parse flags, dispatch to cli.Run or the TUI, and wire up `--demo` to fake.Backend
 - [X] T055 [P] Golden test harness: render each module at 80x24 and 120x40 with tokyo-night, solarized-light, and an ascii/16-colour profile, in internal/app/golden_test.go. Also add an all-themes smoke test in internal/app/themes_smoke_test.go: render every module in every bundled theme at 80x24 and assert no panic, no unset role, and no line wider than the terminal (SC-006).
 
-**Checkpoint**: `fathom --demo` opens an empty shell with a working sidebar, theme, toasts, and
+**Checkpoint**: `headsup --demo` opens an empty shell with a working sidebar, theme, toasts, and
 quit.
 
 ---
@@ -129,8 +129,8 @@ quit.
   - add a `Needs` gate in the action pipeline that shows the FixCommand.
 - [X] T072 [P] Test that every Action with Needs is disabled, with a FixCommand reason, when Perms lacks it, and that host modules render their explainer in remote mode, in internal/app/modes_test.go
 
-**Checkpoint**: `fathom --demo --host` shows host-mode chrome over host/fake, and on a real
-host Detect reports the environment correctly through `fathom host info`.
+**Checkpoint**: `headsup --demo --host` shows host-mode chrome over host/fake, and on a real
+host Detect reports the environment correctly through `headsup host info`.
 
 ---
 
@@ -256,7 +256,7 @@ command contains the right login server and key.
 
 - [ ] T121 [P] [US8] teatest flow: switch theme in the picker, check every view re-renders, check the choice persists to config, and check a user theme appears, in internal/modules/prefs/theme_test.go
 - [ ] T122 [US8] Theme picker modal (`T`) with live preview, light/dark filter, search, and reload of user themes, in internal/ui/themepicker/themepicker.go
-- [ ] T123 [US8] Prefs module (Fathom's own settings) covering theme, icons, density, sidebar mode, columns editor, refresh intervals, and time format, in internal/modules/prefs/prefs.go
+- [ ] T123 [US8] Prefs module (Headsup's own settings) covering theme, icons, density, sidebar mode, columns editor, refresh intervals, and time format, in internal/modules/prefs/prefs.go
 - [ ] T124 [US8] Per-profile theme override in internal/app/profiles.go
 - [ ] T125 [P] [US8] Ship example themes in themes/ (Midnight Harbor plus a high-contrast accessibility theme)
 
@@ -354,7 +354,7 @@ A restart with an invalid config is refused before the service is touched.
 - [ ] T166 [P] docs/THEMES.md (authoring guide and role table), docs/MODULES.md (how to add a module in one directory), and CONTRIBUTING.md
 - [ ] T167 [P] docs/CAPABILITIES.md: a capability matrix generated from the endpoint table, covering parity with the Tailscale console and headscale gaps
 - [ ] T168 [P] docs/HOST-MODE.md: permissions model (root vs the `headscale` group), container setup, what each managed file does and when changes take effect, and the backup and restore story
-- [ ] T169 [P] Integration test job against dockerised headscale 0.29.6 and main: run quickstart V1–V12 in remote mode, and H1–H11 in host mode by running fathom inside the headscale container image, in test/integration/ Add a shape-drift check that re-records the /debug/* and /metrics responses from both images and fails if the parsers return ErrUnsupportedShape. Schedule it weekly against headscale main.
+- [ ] T169 [P] Integration test job against dockerised headscale 0.29.6 and main: run quickstart V1–V12 in remote mode, and H1–H11 in host mode by running headsup inside the headscale container image, in test/integration/ Add a shape-drift check that re-records the /debug/* and /metrics responses from both images and fails if the parsers return ErrUnsupportedShape. Schedule it weekly against headscale main.
 - [ ] T170 Performance check: 2,000-node fake, filter keystroke to frame time under 16ms, as a benchmark in internal/ui/table/bench_test.go
 - [ ] T171 Accessibility pass: the ascii icon set, and a 16-colour plus NO_COLOR run of every golden test
 - [ ] T172 Run the quickstart.md validation end to end and update CHANGELOG.md for v0.1.0
@@ -405,7 +405,7 @@ Setup (T001–T010)
 ## Implementation Strategy
 
 1. **MVP (v0.1.0-alpha)**: Setup, Foundational, Host Foundation, US1, US2, and US3. Running
-   `fathom` on the server with no flags gives a live tailnet with OS and DERP detail, and the
+   `headsup` on the server with no flags gives a live tailnet with OS and DERP detail, and the
    pending queue fills itself. Ship it with `--demo`.
 2. **The host killer features (v0.2)**: US14 (service and logs), US13 (DNS), and US10 (server
    settings). None of these is possible in any headscale web UI without a server agent.

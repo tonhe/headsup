@@ -1,25 +1,25 @@
 # package-path floor-percent. Raise floors over time; never lower them.
 # Modules are exercised end to end by internal/app's driver tests, so they are
 # gated through internal/app rather than individually.
-github.com/tonhe/fathom/internal/api 90
-github.com/tonhe/fathom/internal/api/fake 75
-github.com/tonhe/fathom/internal/api/httpapi 80
-github.com/tonhe/fathom/internal/api/execcli 75
-github.com/tonhe/fathom/internal/api/wire 55
-github.com/tonhe/fathom/internal/config 78
-github.com/tonhe/fathom/internal/activity 78
-github.com/tonhe/fathom/internal/keys 88
-github.com/tonhe/fathom/internal/theme 65
-github.com/tonhe/fathom/internal/host/files 72
-github.com/tonhe/fathom/internal/host/hsconfig 75
-github.com/tonhe/fathom/internal/host/detect 75
-github.com/tonhe/fathom/internal/host/service 73
-github.com/tonhe/fathom/internal/host/logs 82
-github.com/tonhe/fathom/internal/host/debug 85
-github.com/tonhe/fathom/internal/host/db 70
-github.com/tonhe/fathom/internal/host/local 64
-github.com/tonhe/fathom/internal/ui/filter 88
-github.com/tonhe/fathom/internal/ui/table 75
-github.com/tonhe/fathom/internal/ui/form 87
-github.com/tonhe/fathom/internal/ui/confirm 86
-github.com/tonhe/fathom/internal/app 78
+github.com/tonhe/headsup/internal/api 90
+github.com/tonhe/headsup/internal/api/fake 75
+github.com/tonhe/headsup/internal/api/httpapi 80
+github.com/tonhe/headsup/internal/api/execcli 75
+github.com/tonhe/headsup/internal/api/wire 55
+github.com/tonhe/headsup/internal/config 78
+github.com/tonhe/headsup/internal/activity 78
+github.com/tonhe/headsup/internal/keys 88
+github.com/tonhe/headsup/internal/theme 65
+github.com/tonhe/headsup/internal/host/files 72
+github.com/tonhe/headsup/internal/host/hsconfig 75
+github.com/tonhe/headsup/internal/host/detect 75
+github.com/tonhe/headsup/internal/host/service 73
+github.com/tonhe/headsup/internal/host/logs 82
+github.com/tonhe/headsup/internal/host/debug 85
+github.com/tonhe/headsup/internal/host/db 70
+github.com/tonhe/headsup/internal/host/local 64
+github.com/tonhe/headsup/internal/ui/filter 88
+github.com/tonhe/headsup/internal/ui/table 75
+github.com/tonhe/headsup/internal/ui/form 87
+github.com/tonhe/headsup/internal/ui/confirm 86
+github.com/tonhe/headsup/internal/app 78

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tonhe/fathom/internal/brand"
+	"github.com/tonhe/headsup/internal/brand"
 )
 
 // Flags are the command-line overrides. The API key is never a flag value.

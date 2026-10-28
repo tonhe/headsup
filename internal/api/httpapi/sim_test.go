@@ -11,9 +11,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/apitest"
-	"github.com/tonhe/fathom/internal/api/fake"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/apitest"
+	"github.com/tonhe/headsup/internal/api/fake"
 )
 
 const testKey = "hskey-api-testprefix01-0123456789abcdef"

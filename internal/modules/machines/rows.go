@@ -6,14 +6,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/store"
-	"github.com/tonhe/fathom/internal/ui/badge"
-	"github.com/tonhe/fathom/internal/ui/humanize"
-	"github.com/tonhe/fathom/internal/ui/styles"
-	"github.com/tonhe/fathom/internal/ui/table"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/store"
+	"github.com/tonhe/headsup/internal/ui/badge"
+	"github.com/tonhe/headsup/internal/ui/humanize"
+	"github.com/tonhe/headsup/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/ui/table"
 )
 
 // columns returns the machine table columns. Host-only columns are included

@@ -21,7 +21,7 @@ import (
 
 	"github.com/prometheus/common/expfmt"
 	"github.com/prometheus/common/model"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 const maxBody = 8 << 20

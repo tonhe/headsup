@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tonhe/fathom/internal/config"
+	"github.com/tonhe/headsup/internal/config"
 )
 
 // FileName is the log's name inside the state directory.

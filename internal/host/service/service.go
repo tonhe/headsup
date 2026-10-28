@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 // ErrUnsupported means the service manager cannot perform the operation

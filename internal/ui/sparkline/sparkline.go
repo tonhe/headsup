@@ -6,7 +6,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 var (

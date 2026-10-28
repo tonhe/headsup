@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 // Obj is a JSON object with normalised keys.

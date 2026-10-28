@@ -5,15 +5,15 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/tonhe/fathom/internal/store"
+	"github.com/tonhe/headsup/internal/store"
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/modules/dashboard"
-	"github.com/tonhe/fathom/internal/modules/machines"
-	"github.com/tonhe/fathom/internal/modules/pending"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/modules/dashboard"
+	"github.com/tonhe/headsup/internal/modules/machines"
+	"github.com/tonhe/headsup/internal/modules/pending"
 )
 
 // TestStartupBudget checks SC-009: with realistic local latency (each API call

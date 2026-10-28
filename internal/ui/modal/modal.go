@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Center draws box centred over base, with base dimmed (ANSI stripped and

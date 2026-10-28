@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/hsconfig"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/hsconfig"
 )
 
 func TestSeedIsValid(t *testing.T) {

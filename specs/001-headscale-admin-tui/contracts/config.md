@@ -1,6 +1,6 @@
 # Contract: `config.toml`
 
-Path: `$XDG_CONFIG_HOME/fathom/config.toml`. Use `fathom config path` to print it.
+Path: `$XDG_CONFIG_HOME/headsup/config.toml`. Use `headsup config path` to print it.
 
 Precedence, highest first: flags, then environment variables, then the profile, then
 `[defaults]`, then built-in defaults.
@@ -38,7 +38,7 @@ events  = ["node_offline", "key_expiring", "route_advertised"]
 enabled         = "auto"          # auto | always | never
 headscale_config = ""             # override config discovery
 container       = ""              # e.g. "headscale" to force container mode
-backup_dir      = ""              # default $XDG_STATE_HOME/fathom/backups; must be 0700 and owned by you (backups hold private keys)
+backup_dir      = ""              # default $XDG_STATE_HOME/headsup/backups; must be 0700 and owned by you (backups hold private keys)
 backup_keep     = 50
 db_enrich       = true            # read-only host_info enrichment
 debug_addr      = ""              # override metrics_listen_addr
@@ -54,13 +54,13 @@ skew_warn = "2s"
 [[profile]]
 name    = "homelab"
 url     = "https://hs.example.com"
-keyring = true                   # key stored in OS keychain under fathom/<name>
+keyring = true                   # key stored in OS keychain under headsup/<name>
 
 [[profile]]
 name        = "work"
 url         = "https://headscale.corp.internal"
 api_key_cmd = "op read op://infra/headscale/credential"
-ca_file     = "~/.config/fathom/corp-ca.pem"
+ca_file     = "~/.config/headsup/corp-ca.pem"
 read_only   = true
 theme       = "gruvbox-dark"     # per-profile theme: visual cue for prod
 ```
@@ -79,9 +79,9 @@ and `ps`. It is read from the environment, from a file, from a command, or from 
 
 ## Environment variables
 
-- `FATHOM_URL` / `HEADSCALE_URL` / `HEADSCALE_CLI_ADDRESS`
-- `FATHOM_API_KEY` / `HEADSCALE_API_KEY` / `HEADSCALE_CLI_API_KEY`
-- `FATHOM_PROFILE`, `FATHOM_THEME`, `NO_COLOR` (honoured)
+- `HEADSUP_URL` / `HEADSCALE_URL` / `HEADSCALE_CLI_ADDRESS`
+- `HEADSUP_API_KEY` / `HEADSCALE_API_KEY` / `HEADSCALE_CLI_API_KEY`
+- `HEADSUP_PROFILE`, `HEADSUP_THEME`, `NO_COLOR` (honoured)
 - `HEADSCALE_CONFIG` (honoured for discovery, the same as headscale itself)
 
 When no profile, URL, or key is given, the precedence is: a usable host mode, then

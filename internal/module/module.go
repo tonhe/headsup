@@ -7,11 +7,11 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/store"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/store"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Modes says where a module works.

@@ -20,11 +20,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/brand"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/files"
-	"github.com/tonhe/fathom/internal/host/hsconfig"
-	"github.com/tonhe/fathom/internal/host/service"
+	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/files"
+	"github.com/tonhe/headsup/internal/host/hsconfig"
+	"github.com/tonhe/headsup/internal/host/service"
 )
 
 // FileInfo is the subset of stat(2) detection needs.

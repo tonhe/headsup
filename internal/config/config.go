@@ -13,8 +13,8 @@ import (
 
 	toml "github.com/pelletier/go-toml/v2"
 
-	"github.com/tonhe/fathom/internal/brand"
-	"github.com/tonhe/fathom/internal/theme"
+	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/theme"
 )
 
 // Config is the on-disk schema.

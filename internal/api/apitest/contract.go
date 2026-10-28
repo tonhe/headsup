@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 // Facts about the standard seed (internal/api/fake/seed.json) that the

@@ -41,8 +41,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/wire"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/wire"
 )
 
 // Option configures a Client.

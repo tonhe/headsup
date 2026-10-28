@@ -1,4 +1,4 @@
-# Research: Fathom
+# Research: Headsup
 
 Each entry records a decision, why it was made, and what else was considered.
 
@@ -48,7 +48,7 @@ Each entry records a decision, why it was made, and what else was considered.
 
 - **Decision**: Port viaduct's `internal/theme` package, which has 61 Base16 themes, the
   `Slug`/`Light` fields, and `SparkGradient`. Then:
-  - Add user themes: `$XDG_CONFIG_HOME/fathom/themes/*.toml`, in Base16 keys `base00` to
+  - Add user themes: `$XDG_CONFIG_HOME/headsup/themes/*.toml`, in Base16 keys `base00` to
     `base0F` plus `name` and `light`. Standard Base16 YAML schemes are also accepted, so the
     whole tinted-theming catalogue works with no conversion.
   - Add a semantic layer, `theme.Roles`, derived from Base16: `Accent`, `Online`, `Offline`,
@@ -78,7 +78,7 @@ Each entry records a decision, why it was made, and what else was considered.
     local parse check.
   - Show diffs with a line diff (`github.com/sergi/go-diff`) and syntax highlighting with
     `github.com/alecthomas/chroma/v2`, using a style built from the active theme.
-  - Keep history as timestamped files in `$XDG_STATE_HOME/fathom/policy/<profile>/`, last 50.
+  - Keep history as timestamped files in `$XDG_STATE_HOME/headsup/policy/<profile>/`, last 50.
   - Use optimistic concurrency: compare `updatedAt` when the edit started with the current
     value before calling `PUT /policy`.
 - **Access preview**:
@@ -92,7 +92,7 @@ Each entry records a decision, why it was made, and what else was considered.
 ## R7. Configuration and secrets
 
 - **Decision**:
-  - TOML in `$XDG_CONFIG_HOME/fathom/config.toml`, read with go-toml/v2 (the same library as
+  - TOML in `$XDG_CONFIG_HOME/headsup/config.toml`, read with go-toml/v2 (the same library as
     viaduct).
   - `[[profile]]` tables hold `name`, `url`, `api_key_env` | `api_key_file` | `api_key_cmd` |
     `keyring = true`, `insecure`, `read_only`, and `ca_file`. A plaintext `api_key` in the
@@ -198,7 +198,7 @@ Sources:
 
 ## R16. Editing YAML without losing comments
 
-- **Decision**: Use `gopkg.in/yaml.v3`'s `yaml.Node` tree. Fathom reads typed values from the
+- **Decision**: Use `gopkg.in/yaml.v3`'s `yaml.Node` tree. Headsup reads typed values from the
   tree and writes edits back into the existing nodes, so comments, key order, and quoting
   survive.
   - New keys are inserted next to related keys.
@@ -223,22 +223,22 @@ Sources:
 - Validators run on a temporary copy written next to the target, never on the live file.
 - `dns.extra_records` (inline) and `extra_records_path` cannot both be set. The DNS editor
   offers to move inline records into a file.
-- 0.30 accepts `.yaml`, `.yml`, `.json`, and `.hujson` for map and records files. Fathom keeps
+- 0.30 accepts `.yaml`, `.yml`, `.json`, and `.hujson` for map and records files. Headsup keeps
   whatever format the file already uses.
 
 ## R18. Atomic writes and backups
 
 1. Read the file and record its sha256 when it is opened.
 2. Before writing, re-read it. If the hash has changed, run a three-way merge, or refuse.
-3. Copy the current file to `$XDG_STATE_HOME/fathom/backups/<profile>/<ts>/<path>`, with a
+3. Copy the current file to `$XDG_STATE_HOME/headsup/backups/<profile>/<ts>/<path>`, with a
    `manifest.json` recording sha256, owner, and mode.
-4. Write `<dir>/.<name>.fathom-tmp`, fsync it, `chown` and `chmod` it to match the original,
+4. Write `<dir>/.<name>.headsup-tmp`, fsync it, `chown` and `chmod` it to match the original,
    rename it over the target, then fsync the directory.
 5. Retention keeps the last 50 backups per file, with configurable age.
 6. **Secret hygiene (FR-064)**:
    - Every backup and history directory is created with mode 0700 and every file with mode
      0600, using `os.OpenFile(..., 0600)` under a 0077 umask.
-   - Before writing, Fathom `lstat`s the backup root and refuses when it is a symlink, has any
+   - Before writing, Headsup `lstat`s the backup root and refuses when it is a symlink, has any
      group or other permission bit set, or is owned by another uid. It shows the fix command,
      for example `chmod 700 <dir>`.
    - This applies equally to policy history and the per-write backups in step 3.
@@ -268,7 +268,7 @@ truncate-and-write, after the backup.
 
 ## R20. Debug and metrics endpoints (`metrics_listen_addr`, default 127.0.0.1:9090)
 
-Fathom uses these debug endpoints:
+Headsup uses these debug endpoints:
 
 | Endpoint | Used for |
 |---|---|
@@ -281,7 +281,7 @@ Fathom uses these debug endpoints:
 
 - Metrics come from `/metrics`, parsed with `prometheus/common/expfmt`. Series of interest:
   `headscale_nodestore_nodes`, `headscale_mapresponse_sent_total`, `go_memstats_*`, and
-  `process_*`. Fathom samples every 5s into ring buffers that feed the dashboard sparklines.
+  `process_*`. Headsup samples every 5s into ring buffers that feed the dashboard sparklines.
 - The response formats are internal to headscale and unversioned. Fixtures are recorded from
   real 0.29.6 and main containers (`scripts/record-debug-fixtures.sh`), and a weekly CI
   shape-drift job re-records them and fails on parser regressions. Each consumer parses
@@ -334,4 +334,4 @@ Danger levels follow constitution IV:
 - Enforce the documented upgrade path: one minor version at a time, no downgrades, and 0.30
   only from 0.29.x.
 - Render the release notes, and take a backup before the upgrade.
-- Fathom does not run package managers. It shows the commands.
+- Headsup does not run package managers. It shows the commands.

@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/tailscale/hujson"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/hsconfig"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/hsconfig"
 	"gopkg.in/yaml.v3"
 )
 

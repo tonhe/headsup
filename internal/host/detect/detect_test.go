@@ -13,9 +13,9 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/tonhe/fathom/internal/brand"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/service"
+	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/service"
 )
 
 func treeRoot(name string) string { return filepath.Join("..", "..", "..", "testdata", "hostfs", name) }

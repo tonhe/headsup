@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tonhe/fathom/internal/config"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/config"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 func TestHostUnavailableExplains(t *testing.T) {
@@ -39,7 +39,7 @@ func TestDemoAndRemoteSelection(t *testing.T) {
 func TestSubcommands(t *testing.T) {
 	t.Setenv("XDG_CONFIG_HOME", t.TempDir())
 	var out, errb bytes.Buffer
-	if code := run([]string{"version"}, &out, &errb); code != 0 || !strings.Contains(out.String(), "fathom") {
+	if code := run([]string{"version"}, &out, &errb); code != 0 || !strings.Contains(out.String(), "headsup") {
 		t.Fatalf("version: %d %q %q", code, out.String(), errb.String())
 	}
 	out.Reset()

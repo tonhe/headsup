@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/ui/uitest"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 func TestTags(t *testing.T) {

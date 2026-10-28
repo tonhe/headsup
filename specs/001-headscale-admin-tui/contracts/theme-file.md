@@ -1,7 +1,7 @@
 # Contract: User Theme Files
 
-Location: `$XDG_CONFIG_HOME/fathom/themes/`. Files ending in `*.toml`, `*.yaml`, or `*.yml`
-are loaded at startup. `fathom themes reload` and the theme picker's reload key load them again.
+Location: `$XDG_CONFIG_HOME/headsup/themes/`. Files ending in `*.toml`, `*.yaml`, or `*.yml`
+are loaded at startup. `headsup themes reload` and the theme picker's reload key load them again.
 
 ## TOML (native)
 

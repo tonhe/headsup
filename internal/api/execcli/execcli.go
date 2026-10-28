@@ -34,8 +34,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/wire"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/wire"
 )
 
 // Runner executes argv (argv[0] is the program) and returns its output. A
@@ -659,7 +659,7 @@ func (b *Backend) GetPolicy(ctx context.Context) (api.Policy, error) {
 // withPolicyFile writes raw to a temp file visible to headscale (copied into
 // the container when one is used) and calls fn with its path.
 func (b *Backend) withPolicyFile(ctx context.Context, raw string, fn func(path string) error) error {
-	f, err := os.CreateTemp("", "fathom-policy-*.hujson")
+	f, err := os.CreateTemp("", "headsup-policy-*.hujson")
 	if err != nil {
 		return api.Errf(api.KindServer, "creating temp policy file: %v", err)
 	}

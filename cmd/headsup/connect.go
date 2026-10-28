@@ -6,11 +6,11 @@ import (
 	"io"
 	"os"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/api/httpapi"
-	"github.com/tonhe/fathom/internal/config"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/api/httpapi"
+	"github.com/tonhe/headsup/internal/config"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 // connection is what the UI runs against.

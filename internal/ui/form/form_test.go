@@ -7,9 +7,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/ui/uitest"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 func typeStr(m *Model, s string) {

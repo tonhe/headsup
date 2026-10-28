@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 func TestRedact(t *testing.T) {

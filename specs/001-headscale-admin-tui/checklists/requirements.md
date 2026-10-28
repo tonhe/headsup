@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Fathom, a Headscale Admin TUI
+# Specification Quality Checklist: Headsup, a Headscale Admin TUI
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-10-28

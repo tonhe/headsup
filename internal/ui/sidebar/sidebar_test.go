@@ -7,8 +7,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/uitest"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 func Items() []Item {

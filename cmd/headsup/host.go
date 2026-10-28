@@ -8,15 +8,15 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/execcli"
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/api/httpapi"
-	"github.com/tonhe/fathom/internal/config"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/detect"
-	hostfake "github.com/tonhe/fathom/internal/host/fake"
-	"github.com/tonhe/fathom/internal/host/local"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/execcli"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/api/httpapi"
+	"github.com/tonhe/headsup/internal/config"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/detect"
+	hostfake "github.com/tonhe/headsup/internal/host/fake"
+	"github.com/tonhe/headsup/internal/host/local"
 )
 
 func detectEnv(f config.Flags) host.Env {
@@ -111,7 +111,7 @@ func demoHost() host.Host {
 	return h
 }
 
-// hostInfo prints what detection found, with fix commands (`fathom host info`).
+// hostInfo prints what detection found, with fix commands (`headsup host info`).
 func hostInfo(f config.Flags, w io.Writer) int {
 	env := detectEnv(f)
 	row := func(k, v string) {

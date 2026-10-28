@@ -1,4 +1,4 @@
-// Package fake is an in-memory api.Backend for tests and `fathom --demo`.
+// Package fake is an in-memory api.Backend for tests and `headsup --demo`.
 package fake
 
 import (
@@ -16,8 +16,8 @@ import (
 
 	"github.com/tailscale/hujson"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/wire"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/wire"
 )
 
 // Call is one recorded Backend invocation.

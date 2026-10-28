@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/host"
-	hostfake "github.com/tonhe/fathom/internal/host/fake"
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/store"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/host"
+	hostfake "github.com/tonhe/headsup/internal/host/fake"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/store"
 )
 
 func demoHostFor(t *testing.T, b api.Backend, opts ...hostfake.Option) *hostfake.Host {

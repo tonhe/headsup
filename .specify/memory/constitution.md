@@ -1,6 +1,6 @@
-# Fathom Constitution
+# Headsup Constitution
 
-Fathom is a terminal UI for administering a headscale control server. It is meant first of all
+Headsup is a terminal UI for administering a headscale control server. It is meant first of all
 to run on the headscale host itself. It exists so that people who self-host their tailnet can
 do everything they would do in the Tailscale admin console, and the server-side work the
 console never needed (config, DNS, DERP, the service, logs), from a keyboard, over SSH, without
@@ -58,9 +58,9 @@ running a web app.
   5. Get explicit confirmation.
   6. Write atomically (temp file, fsync, rename), keeping the original owner and mode.
   7. Offer a one-key rollback.
-- Fathom MUST NEVER write to the headscale database. Database access is read-only, opened in a
+- Headsup MUST NEVER write to the headscale database. Database access is read-only, opened in a
   way that cannot block or corrupt the running server.
-- Fathom MUST NEVER escalate privileges on its own. When an action needs more rights than the
+- Headsup MUST NEVER escalate privileges on its own. When an action needs more rights than the
   process has, the TUI explains why and shows the exact command to run (for example with
   `sudo`). It does not run `sudo` itself.
 - Service restarts MUST say what they will interrupt (connected clients reconnect) and MUST be
@@ -98,7 +98,7 @@ running a web app.
 
 - Host mode is the primary experience, and remote API mode is fully supported as a second mode.
   Every feature declares which modes it needs: `api`, `host`, or `api+host`.
-- Every host file Fathom can edit has a typed model and a validator. Free-form editing in
+- Every host file Headsup can edit has a typed model and a validator. Free-form editing in
   `$EDITOR` is always available as an escape hatch, and it goes through the same validate,
   diff, and confirm pipeline.
 - Host features MUST detect their environment rather than assume it. That covers config path,
@@ -111,7 +111,7 @@ running a web app.
 
 - Go (latest stable), Bubble Tea, Bubbles, Lipgloss: the same stack as flo and viaduct, so code
   and themes can be shared.
-- Configuration is TOML at XDG paths (`$XDG_CONFIG_HOME/fathom/`), with a Windows APPDATA
+- Configuration is TOML at XDG paths (`$XDG_CONFIG_HOME/headsup/`), with a Windows APPDATA
   fallback.
 - CLI flags use the stdlib `flag` package, matching sibling projects.
 - No CGO. Releases are built with goreleaser. SQLite reads use a pure-Go driver.

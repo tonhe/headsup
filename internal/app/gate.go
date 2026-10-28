@@ -3,9 +3,9 @@ package app
 import (
 	"fmt"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/module"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/module"
 )
 
 // GateEnv is what the gate needs to decide whether an action may proceed.

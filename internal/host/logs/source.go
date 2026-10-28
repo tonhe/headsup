@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 // StreamFunc starts a command and returns its combined stdout+stderr. The

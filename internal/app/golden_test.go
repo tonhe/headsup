@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/theme"
-	"github.com/tonhe/fathom/internal/ui/uitest"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/theme"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 var goldenNow = time.Date(2026, 10, 28, 12, 0, 0, 0, time.UTC)

@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 	"gopkg.in/yaml.v3"
 )
 

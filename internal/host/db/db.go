@@ -19,8 +19,8 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/files"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/files"
 	_ "modernc.org/sqlite"
 )
 

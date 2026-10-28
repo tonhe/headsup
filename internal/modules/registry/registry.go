@@ -8,7 +8,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/tonhe/fathom/internal/module"
+	"github.com/tonhe/headsup/internal/module"
 )
 
 var (

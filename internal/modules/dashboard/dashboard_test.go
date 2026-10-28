@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/store"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/store"
 )
 
 func TestIssues(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"net/netip"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 //go:embed seed.json

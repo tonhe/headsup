@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/tonhe/fathom/internal/brand"
+	"github.com/tonhe/headsup/internal/brand"
 )
 
 // Overridable seams for tests.

@@ -8,11 +8,11 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/tonhe/fathom/internal/api/fake"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/modules/dashboard"
-	"github.com/tonhe/fathom/internal/modules/machines"
-	"github.com/tonhe/fathom/internal/modules/pending"
+	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/modules/dashboard"
+	"github.com/tonhe/headsup/internal/modules/machines"
+	"github.com/tonhe/headsup/internal/modules/pending"
 )
 
 // driver runs a Model headlessly: it executes commands synchronously, drops

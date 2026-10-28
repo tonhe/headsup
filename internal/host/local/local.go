@@ -11,13 +11,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/db"
-	"github.com/tonhe/fathom/internal/host/debug"
-	"github.com/tonhe/fathom/internal/host/files"
-	"github.com/tonhe/fathom/internal/host/hsconfig"
-	"github.com/tonhe/fathom/internal/host/logs"
-	"github.com/tonhe/fathom/internal/host/service"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/db"
+	"github.com/tonhe/headsup/internal/host/debug"
+	"github.com/tonhe/headsup/internal/host/files"
+	"github.com/tonhe/headsup/internal/host/hsconfig"
+	"github.com/tonhe/headsup/internal/host/logs"
+	"github.com/tonhe/headsup/internal/host/service"
 )
 
 // Options tunes the adapter. Zero values use the real OS.

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 var ansiRE = regexp.MustCompile("\x1b\\[[0-9;?]*[A-Za-z]")

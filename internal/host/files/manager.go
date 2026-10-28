@@ -17,8 +17,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tonhe/fathom/internal/brand"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 // SchemaFunc validates content in memory and returns issues (Source "schema").

@@ -6,7 +6,7 @@ package styles
 import (
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/tonhe/fathom/internal/theme"
+	"github.com/tonhe/headsup/internal/theme"
 )
 
 // Styles is rebuilt whenever the theme changes.

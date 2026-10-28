@@ -1,4 +1,4 @@
-// Command fathom is a terminal UI for administering a headscale server. On the
+// Command headsup is a terminal UI for administering a headscale server. On the
 // headscale host it needs no flags; elsewhere it uses the API with a key.
 package main
 
@@ -12,15 +12,15 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/tonhe/fathom/internal/activity"
-	"github.com/tonhe/fathom/internal/app"
-	"github.com/tonhe/fathom/internal/brand"
-	"github.com/tonhe/fathom/internal/config"
-	"github.com/tonhe/fathom/internal/modules/registry"
-	"github.com/tonhe/fathom/internal/theme"
-	"github.com/tonhe/fathom/internal/version"
+	"github.com/tonhe/headsup/internal/activity"
+	"github.com/tonhe/headsup/internal/app"
+	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/config"
+	"github.com/tonhe/headsup/internal/modules/registry"
+	"github.com/tonhe/headsup/internal/theme"
+	"github.com/tonhe/headsup/internal/version"
 
-	_ "github.com/tonhe/fathom/internal/modules/all"
+	_ "github.com/tonhe/headsup/internal/modules/all"
 )
 
 func main() {

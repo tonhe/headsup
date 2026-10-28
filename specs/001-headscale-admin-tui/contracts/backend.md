@@ -121,5 +121,5 @@ present, the store merges them into `Node`:
 
 - An in-memory implementation seeded from `testdata/seed/*.json`.
 - Supports latency and error injection (`fake.WithLatency`, `fake.FailNext(method, kind)`).
-- Used by unit and golden tests and by `fathom --demo`, a zero-setup demo mode for the README
+- Used by unit and golden tests and by `headsup --demo`, a zero-setup demo mode for the README
   GIF and for trying the app.

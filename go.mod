@@ -1,4 +1,4 @@
-module github.com/tonhe/fathom
+module github.com/tonhe/headsup
 
 go 1.26.0
 

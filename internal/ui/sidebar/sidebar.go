@@ -7,8 +7,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Item is one navigation entry. Key is the jump key ("1"), Badge a short

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 func TestNodeShapes(t *testing.T) {

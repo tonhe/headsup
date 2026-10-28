@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
-	"github.com/tonhe/fathom/internal/host"
+	"github.com/tonhe/headsup/internal/host"
 )
 
 // Diff returns a line diff from old to next, with 1-based line numbers on

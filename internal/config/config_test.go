@@ -11,8 +11,8 @@ import (
 
 	"github.com/zalando/go-keyring"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/brand"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/brand"
 )
 
 func envMap(m map[string]string) func(string) string {

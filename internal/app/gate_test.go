@@ -3,15 +3,15 @@ package app
 import (
 	"testing"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/module"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/module"
 )
 
 func TestGate(t *testing.T) {
 	perms := host.Perms{
 		host.NeedSocket:  {OK: true},
-		host.NeedConfigW: {OK: false, Reason: "config.yaml is owned by root", FixCommand: "sudo fathom"},
+		host.NeedConfigW: {OK: false, Reason: "config.yaml is owned by root", FixCommand: "sudo headsup"},
 	}
 	caps := api.NewCapabilities(api.CapPolicyCheck)
 	tests := []struct {
@@ -27,7 +27,7 @@ func TestGate(t *testing.T) {
 		{"present cap", module.Action{Cap: api.CapPolicyCheck}, GateEnv{Caps: caps}, true, ""},
 		{"host need in remote mode", module.Action{Needs: host.NeedSocket}, GateEnv{}, false, ""},
 		{"host need granted", module.Action{Needs: host.NeedSocket}, GateEnv{HostMode: true, Perms: perms}, true, ""},
-		{"host need missing carries fix", module.Action{Needs: host.NeedConfigW}, GateEnv{HostMode: true, Perms: perms}, false, "sudo fathom"},
+		{"host need missing carries fix", module.Action{Needs: host.NeedConfigW}, GateEnv{HostMode: true, Perms: perms}, false, "sudo headsup"},
 		{"enabled false", module.Action{Enabled: func(module.Context) (bool, string) { return false, "nope" }}, GateEnv{}, false, ""},
 	}
 	for _, tt := range tests {

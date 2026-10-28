@@ -11,9 +11,9 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // MaxListed is how many targets are listed before "and N more".

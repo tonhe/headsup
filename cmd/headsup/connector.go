@@ -4,8 +4,8 @@ import (
 	"errors"
 	"os"
 
-	"github.com/tonhe/fathom/internal/app"
-	"github.com/tonhe/fathom/internal/config"
+	"github.com/tonhe/headsup/internal/app"
+	"github.com/tonhe/headsup/internal/config"
 )
 
 // newConnector lets the running app switch profiles and save new ones.

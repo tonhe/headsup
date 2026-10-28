@@ -8,8 +8,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/uitest"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 func TestParse(t *testing.T) {

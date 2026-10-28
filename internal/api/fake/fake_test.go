@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/apitest"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/apitest"
 )
 
 func TestContract(t *testing.T) {

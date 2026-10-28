@@ -8,8 +8,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // ChangedMsg is emitted whenever the bar's query text changes.

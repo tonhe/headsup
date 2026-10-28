@@ -7,8 +7,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Render draws as many hints as fit, plus right-aligned text, as exactly one

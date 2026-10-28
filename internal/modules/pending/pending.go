@@ -14,17 +14,17 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/clip"
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/modules/registry"
-	"github.com/tonhe/fathom/internal/store"
-	"github.com/tonhe/fathom/internal/ui/form"
-	"github.com/tonhe/fathom/internal/ui/humanize"
-	"github.com/tonhe/fathom/internal/ui/pane"
-	"github.com/tonhe/fathom/internal/ui/qr"
-	"github.com/tonhe/fathom/internal/ui/table"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/clip"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/modules/registry"
+	"github.com/tonhe/headsup/internal/store"
+	"github.com/tonhe/headsup/internal/ui/form"
+	"github.com/tonhe/headsup/internal/ui/humanize"
+	"github.com/tonhe/headsup/internal/ui/pane"
+	"github.com/tonhe/headsup/internal/ui/qr"
+	"github.com/tonhe/headsup/internal/ui/table"
 )
 
 func init() { registry.Register(func() module.Module { return New() }) }

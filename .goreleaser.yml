@@ -4,15 +4,15 @@ env:
   - CGO_ENABLED=0
 
 builds:
-  - binary: fathom
-    main: ./cmd/fathom
+  - binary: headsup
+    main: ./cmd/headsup
     flags:
       - -trimpath
     ldflags:
       - -s -w
-      - -X github.com/tonhe/fathom/internal/version.Version={{.Version}}
-      - -X github.com/tonhe/fathom/internal/version.Commit={{.ShortCommit}}
-      - -X github.com/tonhe/fathom/internal/version.Build={{.Date}}
+      - -X github.com/tonhe/headsup/internal/version.Version={{.Version}}
+      - -X github.com/tonhe/headsup/internal/version.Commit={{.ShortCommit}}
+      - -X github.com/tonhe/headsup/internal/version.Build={{.Date}}
     goos: [darwin, linux, windows]
     goarch: [amd64, arm64]
 
@@ -36,10 +36,10 @@ changelog:
     exclude: ["^docs:", "^test:", "^ci:", "^Merge pull request"]
 
 nfpms:
-  - package_name: fathom
+  - package_name: headsup
     file_name_template: "{{ .ConventionalFileName }}"
     vendor: tonhe
-    homepage: https://github.com/tonhe/fathom
+    homepage: https://github.com/tonhe/headsup
     maintainer: tonhe
     description: Terminal UI for administering headscale
     license: MIT
@@ -47,27 +47,27 @@ nfpms:
     bindir: /usr/bin
 
 brews:
-  - name: fathom
+  - name: headsup
     repository:
       owner: tonhe
       name: homebrew-tap
-    homepage: https://github.com/tonhe/fathom
+    homepage: https://github.com/tonhe/headsup
     description: Terminal UI for administering headscale
     license: MIT
 
 scoops:
-  - name: fathom
+  - name: headsup
     repository:
       owner: tonhe
       name: scoop-bucket
-    homepage: https://github.com/tonhe/fathom
+    homepage: https://github.com/tonhe/headsup
     description: Terminal UI for administering headscale
     license: MIT
 
 release:
   github:
     owner: tonhe
-    name: fathom
+    name: headsup
   name_template: "v{{.Version}}"
   draft: false
   prerelease: auto

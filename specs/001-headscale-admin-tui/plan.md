@@ -1,4 +1,4 @@
-# Implementation Plan: Fathom, a Headscale Admin TUI
+# Implementation Plan: Headsup, a Headscale Admin TUI
 
 **Branch**: `001-headscale-admin-tui` | **Date**: 2026-10-28 | **Spec**: [spec.md](spec.md)
 
@@ -6,7 +6,7 @@
 
 ## Summary
 
-Fathom is a keyboard-first, themeable terminal UI and companion CLI for headscale. It is meant
+Headsup is a keyboard-first, themeable terminal UI and companion CLI for headscale. It is meant
 first of all to run on the headscale server. It covers every operation in the headscale admin
 API, and in host mode it also covers what headscale only allows through files and the service:
 server settings, DNS, DERP, file-mode policy, service control, logs, metrics and debug data,
@@ -33,7 +33,7 @@ How it is put together:
 **Primary Dependencies**:
 
 - UI: bubbletea v1.3, bubbles v1, lipgloss v1.1
-- Config: go-toml/v2 (Fathom's own), yaml.v3 Node API (headscale's config, preserving comments)
+- Config: go-toml/v2 (Headsup's own), yaml.v3 Node API (headscale's config, preserving comments)
 - Host: modernc.org/sqlite (pure Go, read-only), pgx (read-only), fsnotify,
   prometheus/common/expfmt; journalctl, systemctl, and docker are run as subprocesses
 - Policy: tailscale/hujson, chroma/v2, sergi/go-diff
@@ -42,10 +42,10 @@ How it is put together:
 
 **Storage**:
 
-- Config: TOML at `$XDG_CONFIG_HOME/fathom`.
-- Policy history, activity log, and host-file backups: `$XDG_STATE_HOME/fathom` (JSONL plus
+- Config: TOML at `$XDG_CONFIG_HOME/headsup`.
+- Policy history, activity log, and host-file backups: `$XDG_STATE_HOME/headsup` (JSONL plus
   files).
-- Fathom never writes headscale's database.
+- Headsup never writes headscale's database.
 - No database.
 
 **Testing**: stdlib `testing` (table-driven), teatest end-to-end tests, golden view snapshots,
@@ -112,7 +112,7 @@ specs/001-headscale-admin-tui/
 ### Source Code (repository root)
 
 ```text
-cmd/fathom/main.go                 # flag parsing → cli router or TUI
+cmd/headsup/main.go                 # flag parsing → cli router or TUI
 internal/
 ├── version/                       # ldflags-stamped version/build
 ├── config/                        # TOML load/save, profiles, XDG paths, secret resolution
@@ -156,7 +156,7 @@ internal/
 │   ├── registry/                  # Register(), All(), ordering, enable/disable
 │   ├── all/                       # blank-imports every built-in module
 │   ├── dashboard/  machines/  users/  routes/  pending/  keys/
-│   ├── policy/  server/  activity/  prefs/      # prefs = Fathom's own settings
+│   ├── policy/  server/  activity/  prefs/      # prefs = Headsup's own settings
 │   ├── serverconfig/  dns/  derp/  service/      # host-mode modules (service = status + logs)
 └── cli/                           # subcommand router + formatters (table/json/yaml)
 testdata/                          # recorded API fixtures (0.29, 0.30), sample policies
@@ -174,7 +174,7 @@ never one another. Cross-module jumps, such as going from a user to their machin
 ### Layout
 
 ```text
-╭ fathom ─ host:hs01 ▾ ─ headscale v0.29.6 ● ─────────────── 42 online / 51 ─╮
+╭ headsup ─ host:hs01 ▾ ─ headscale v0.29.6 ● ─────────────── 42 online / 51 ─╮
 │ ▸ Dashboard   │ ╭ Machines ─ 51 ─ filter: tag:server is:online ────────────╮ │
 │   Machines    │ │ ● nas-01       alice   100.64.0.3   tag:server  2m ago  │ │
 │   Users       │ │ ○ laptop       bob     100.64.0.9   -          3d ago  │ │

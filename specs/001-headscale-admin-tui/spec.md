@@ -1,4 +1,4 @@
-# Feature Specification: Fathom, a Headscale Admin TUI
+# Feature Specification: Headsup, a Headscale Admin TUI
 
 **Feature Branch**: `001-headscale-admin-tui`
 
@@ -14,13 +14,13 @@ directly edit files, not just use the API. That could expose more features."
 
 ## Operating Modes
 
-- **Host mode (primary)**: Fathom runs on the headscale server itself. It finds headscale's
+- **Host mode (primary)**: Headsup runs on the headscale server itself. It finds headscale's
   config, connects locally without an API key, and can also:
   - read and edit headscale's files: config, policy file, DNS extra records, and DERP map;
   - control the service and read its logs;
   - read live metrics and debug data;
   - read extra machine detail from the database, read-only.
-- **Remote mode**: Fathom runs anywhere and uses the API with a key. It covers every API
+- **Remote mode**: Headsup runs anywhere and uses the API with a key. It covers every API
   feature. Host-only features appear with a "available when run on the server" note.
 - Each user story below is marked **[api]**, **[host]**, or **[api+host]** to show which mode
   it needs. [api+host] means it works in both modes and does more in host mode. **[local]**
@@ -37,7 +37,7 @@ Personas:
 
 ### User Story 1 - Connect and See My Tailnet (Priority: P1) [api+host]
 
-On the server, the admin types `fathom` with no flags. It finds headscale's config, connects
+On the server, the admin types `headsup` with no flags. It finds headscale's config, connects
 locally, and opens the dashboard. Remotely, the admin gives a server address and API key, or a
 saved profile.
 
@@ -309,8 +309,8 @@ anything is written.
 ### User Story 11 - Scriptable Companion CLI (Priority: P3) [api+host]
 
 Every TUI action also exists as a non-interactive subcommand with `--output json|table|yaml`,
-so the same tool works in scripts and CI. Examples: `fathom nodes ls --filter tag:server -o
-json` and `fathom keys preauth create --user ops --reusable`.
+so the same tool works in scripts and CI. Examples: `headsup nodes ls --filter tag:server -o
+json` and `headsup keys preauth create --user ops --reusable`.
 
 **Independent Test**: The JSON output of a list command parses and matches the TUI's data.
 
@@ -449,11 +449,11 @@ The backup bundle contains every expected file. The capability matrix is accurat
   be found, the app asks for the path.
 - A restart leaves headscale unhealthy: show the last log lines and offer to restore the backup
   and restart again.
-- A file is changed by another tool while it is open in Fathom: detect it by content hash
+- A file is changed by another tool while it is open in Headsup: detect it by content hash
   before writing and show a three-way diff.
 - The database is Postgres instead of SQLite: database-sourced machine detail uses the
   configured connection read-only, or is turned off with an explanation.
-- The server's database schema is newer than Fathom understands: database-sourced extras are
+- The server's database schema is newer than Headsup understands: database-sourced extras are
   turned off with a version notice, and everything else keeps working.
 
 ## Requirements *(mandatory)*
@@ -590,7 +590,7 @@ The backup bundle contains every expected file. The capability matrix is accurat
   writes and service actions as well as API calls.
 - **Host Environment**: what was found on this machine: config path, headscale version, local
   transport, service manager, log source, database kind, and permissions.
-- **Managed File**: a headscale-owned file Fathom can edit (main config, policy, extra records,
+- **Managed File**: a headscale-owned file Headsup can edit (main config, policy, extra records,
   DERP map). It has a path, owner and mode, a content hash, a validator, and how changes take
   effect: live, on reload, or on restart.
 - **Backup**: a timestamped bundle of managed files plus a database copy, with a manifest.
@@ -619,7 +619,7 @@ The backup bundle contains every expected file. The capability matrix is accurat
   one registration line.
 - **SC-008**: The community adopts it: the project reaches 100+ GitHub stars and contributors
   submit themes within 3 months of release.
-- **SC-009**: On a stock headscale package install, running `fathom` as root or as a member of
+- **SC-009**: On a stock headscale package install, running `headsup` as root or as a member of
   the `headscale` group reaches the dashboard with zero flags and zero config in under 3
   seconds.
 - **SC-010**: Every host file change can be rolled back with one action. In tests, 100% of
@@ -635,17 +635,17 @@ The backup bundle contains every expected file. The capability matrix is accurat
 - Some console features have no headscale equivalent: device posture, network flow logs,
   Funnel, billing, admin audit logs, webhooks, and changing a machine's owner. These are out of scope.
   They are listed in a capability matrix as "not supported by headscale".
-- DNS, DERP, OIDC, and server settings are config-file-only in headscale. Fathom edits them in
+- DNS, DERP, OIDC, and server settings are config-file-only in headscale. Headsup edits them in
   host mode only. Remote editing of server files is out of scope, because it would need an
   agent on the server.
 - Policy in database mode is edited through the API in both modes. Policy in file mode is
   edited on the host.
 - The primary host target is a Linux headscale package install under systemd, with
   container-based installs second.
-- Fathom runs with the rights of the user who starts it. It is not a daemon and it installs
+- Headsup runs with the rights of the user who starts it. It is not a daemon and it installs
   nothing on the server.
 - OAuth client management is out of scope for v1.0 and planned for v1.1. It is reached through
   headscale 0.30's `/api/v2` keys endpoint.
 - In remote mode, admins have an API key, created with `headscale apikeys create`. The TUI does not do the
   OIDC login flow for admins in v1.
-- The working name "Fathom" is provisional and can be renamed before release.
+- The working name "Headsup" is provisional and can be renamed before release.

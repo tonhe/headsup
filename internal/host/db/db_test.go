@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/files"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/files"
 )
 
 const schema = `

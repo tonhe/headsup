@@ -7,9 +7,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/tonhe/fathom/internal/module"
-	"github.com/tonhe/fathom/internal/ui/pane"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/pane"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Section is a titled group of key hints.

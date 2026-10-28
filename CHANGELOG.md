@@ -9,7 +9,7 @@ All notable changes to this project are documented here.
 - Host mode: run with no flags on the headscale server. It finds headscale's
   config, connects over the local socket (0.30) or CLI (0.29) without an API
   key, and adds OS, client version, DERP and endpoint detail, route primaries,
-  live metrics and the server's pending-login count. `fathom host info` explains
+  live metrics and the server's pending-login count. `headsup host info` explains
   permissions with exact fix commands.
 - Remote mode over REST `/api/v1` for headscale 0.29.x and 0.30.
 - Dashboard with tailnet counts, sparklines and a "needs attention" list.

@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
-	"github.com/tonhe/fathom/internal/api/apitest"
+	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/api/apitest"
 )
 
 func TestContract(t *testing.T) {
@@ -39,7 +39,7 @@ func TestContractInContainer(t *testing.T) {
 		}
 		// Map the in-container path back to the host temp file.
 		for i, a := range args {
-			if strings.HasPrefix(a, "/tmp/fathom-policy-") {
+			if strings.HasPrefix(a, "/tmp/headsup-policy-") {
 				for _, h := range copied {
 					if filepath.Base(h) == filepath.Base(a) {
 						args[i] = h

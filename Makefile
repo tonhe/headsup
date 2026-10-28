@@ -1,9 +1,9 @@
-BINARY   := fathom
-PKG      := ./cmd/fathom
+BINARY   := headsup
+PKG      := ./cmd/headsup
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 COMMIT   := $(shell git rev-parse --short HEAD 2>/dev/null || echo none)
 BUILD_TS := $(shell date -u '+%Y%m%d.%H%M')
-VPKG     := github.com/tonhe/fathom/internal/version
+VPKG     := github.com/tonhe/headsup/internal/version
 LDFLAGS  := -trimpath -ldflags "-s -w -X $(VPKG).Version=$(VERSION) -X $(VPKG).Commit=$(COMMIT) -X $(VPKG).Build=$(BUILD_TS)"
 
 .PHONY: build clean install test test-race test-all test-tui golden-update coverage-gate test-integration release-dry-run demo

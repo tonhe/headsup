@@ -1,4 +1,4 @@
- fathom ─ remote ─ headscale v0.30.0 ●                                                                   42 online / 51 
+ headsup ─ remote ─ headscale v0.30.0 ●                                                                  42 online / 51 
   1 ◫ Dashboard     7 ╭ Machines • 51 ─────────────────────────────────────────────────────────────────────────────────╮
 ▸ 2 ▣ Machines        │     NAME ▲         USER       IPV4            TAGS                  LAST SEEN EXPIRY   ROUTES  │
   3 ◌ Add device      │ ▌ ● backup-01      ops        100.64.0.44      tag:server   tag:st… online    never    -       │

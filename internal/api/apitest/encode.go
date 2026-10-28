@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tonhe/fathom/internal/api"
+	"github.com/tonhe/headsup/internal/api"
 )
 
 // Style selects a headscale JSON wire shape for simulated servers and CLIs.

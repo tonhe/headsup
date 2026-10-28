@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tonhe/fathom/internal/host"
-	"github.com/tonhe/fathom/internal/host/service"
+	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/service"
 )
 
 const cfg = "server_url: https://hs.example.com\nlog:\n  level: info\n"

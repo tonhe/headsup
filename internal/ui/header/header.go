@@ -8,13 +8,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tonhe/fathom/internal/icons"
-	"github.com/tonhe/fathom/internal/ui/styles"
+	"github.com/tonhe/headsup/internal/icons"
+	"github.com/tonhe/headsup/internal/ui/styles"
 )
 
 // Header is what the header shows. Icons defaults to icons.Unicode.
 type Header struct {
-	App       string // "fathom"
+	App       string // "headsup"
 	Profile   string
 	ModeLabel string // "host:hs01" or "remote"
 	Version   string // headscale version, "v0.29.6"
