@@ -20,7 +20,7 @@
 //	HEADSCALE_IMAGE_TAG  headscale/headscale tag (default 0.29.6; "development" is main)
 //	HEADSCALE_IMAGE      full image reference, overriding the tag
 //	TAILSCALE_IMAGE      client image (default tailscale/tailscale:stable)
-//	HEADSUP_RECORD_FIXTURES=1  rewrite testdata/debug/<v029|v030> from this server
+//	HEADSUP_RECORD_FIXTURES=DIR  save the raw /debug and /metrics bodies to DIR/<v029|v030>
 //	HEADSUP_KEEP=1       leave the containers running after the run
 package integration
 

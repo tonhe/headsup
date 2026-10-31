@@ -46,7 +46,7 @@ coverage-gate:
 	bash scripts/check-coverage.sh
 
 test-integration:
-	go test -tags integration -timeout 20m ./test/integration/...
+	go test -count=1 -tags integration -timeout 20m -v ./test/integration/...
 
 release-dry-run:
 	goreleaser release --snapshot --clean

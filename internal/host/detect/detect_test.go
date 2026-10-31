@@ -315,7 +315,7 @@ func TestParseVersion(t *testing.T) {
 			t.Errorf("ParseVersion(%q) = %q, want %q", in, got, want)
 		}
 	}
-	if !AtLeast("0.30.0", 0, 30) || AtLeast("0.29.6", 0, 30) || !AtLeast("1.0.0", 0, 30) || AtLeast("", 0, 1) {
+	if !AtLeast("0.30.0", 0, 30) || AtLeast("0.29.6", 0, 30) || !AtLeast("1.0.0", 0, 30) || AtLeast("", 0, 1) || !AtLeast("0.0.0-20261030160536-7721d8c29978", 0, 30) {
 		t.Error("AtLeast")
 	}
 }

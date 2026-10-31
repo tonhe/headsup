@@ -242,9 +242,16 @@ func Deprecations(version string) map[string]string {
 	return out
 }
 
+// devMinor is what minor returns for a development build.
+const devMinor = 1 << 30
+
 // minor parses "0.30.1" / "v0.30" into 30 (major*1000+minor).
 func minor(v string) (int, bool) {
 	v = strings.TrimPrefix(strings.TrimSpace(v), "v")
+	if strings.HasPrefix(v, "0.0.0-") {
+		// A development build's pseudo-version: newer than any release.
+		return devMinor, true
+	}
 	parts := strings.SplitN(v, ".", 3)
 	if len(parts) < 2 {
 		return 0, false

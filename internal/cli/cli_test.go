@@ -598,6 +598,12 @@ func TestHostVerbs(t *testing.T) {
 	if b, _ := x.h.File(hostfake.ConfigPath); !strings.Contains(string(b), "tail.corp.example") {
 		t.Error("config not written")
 	}
+	// No terminal: the write lands, the restart is left to the caller.
+	x.err.Reset()
+	x.ok("conf", "set", "log.level", "debug", "--yes")
+	if !strings.Contains(x.err.String(), "was not restarted (no terminal)") {
+		t.Errorf("non-interactive conf set should skip the restart with a notice:\n%s", x.err.String())
+	}
 	x.ok("dns", "set", "magic_dns", "false", "--yes")
 	x.ok("conf", "diff", writeTemp(t, "c.yaml", "server_url: https://x\n"))
 	x.code(ExitError, "conf", "migrate", "--yes") // nothing deprecated in the seed

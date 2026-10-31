@@ -75,6 +75,9 @@ func joinedNode(t *testing.T) (*tsClient, uint64) {
 	if sharedNode == nil {
 		sharedNode = S.startClient(t, "client-1", key, "--advertise-routes=10.0.0.0/24")
 		sharedID = waitNode(t, "client-1", 60*time.Second).ID
+	} else {
+		// Host scenarios restart headscale; wait for the client to reconnect.
+		waitNode(t, "client-1", 90*time.Second)
 	}
 	return sharedNode, sharedID
 }
