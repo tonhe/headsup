@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -43,6 +44,18 @@ func newEnv(t *testing.T, o Options) *env {
 	o.Now = func() time.Time { e.clock = e.clock.Add(time.Second); return e.clock }
 	e.m = New(o)
 	return e
+}
+
+// unixModes reports whether the platform exposes Unix mode bits and
+// ownership. Windows reports 0666/0777 and no owner, so assertions on modes
+// and chown semantics only hold elsewhere (host mode targets Linux).
+const unixModes = runtime.GOOS != "windows"
+
+func skipWithoutUnixModes(t *testing.T, why string) {
+	t.Helper()
+	if !unixModes {
+		t.Skip("Unix permission semantics unavailable on " + runtime.GOOS + ": " + why)
+	}
 }
 
 func (e *env) target() string { return filepath.Join(e.root, "etc/headscale/config.yaml") }
@@ -111,7 +124,7 @@ func TestPlanApply(t *testing.T) {
 				t.Fatalf("content = %q", after)
 			}
 			fi, _ := os.Stat(e.target())
-			if fi.Mode().Perm() != 0o640 {
+			if unixModes && fi.Mode().Perm() != 0o640 {
 				t.Errorf("mode = %v, want 0640", fi.Mode().Perm())
 			}
 			uid, gid, _ := Owner(fi)
@@ -168,7 +181,7 @@ func TestBackupHygiene(t *testing.T) {
 		if d.IsDir() {
 			want = 0o700
 		}
-		if fi.Mode().Perm() != want {
+		if unixModes && fi.Mode().Perm() != want {
 			t.Errorf("%s mode %v, want %v", p, fi.Mode().Perm(), want)
 		}
 		return nil
@@ -188,7 +201,7 @@ func TestBackupHygiene(t *testing.T) {
 		t.Fatal("manifest contains file contents")
 	}
 	var mf Manifest
-	if err := json.Unmarshal(man, &mf); err != nil || len(mf.Files) != 1 || mf.Files[0].SHA256 != f.SHA256 || mf.Files[0].Mode != "0640" {
+	if err := json.Unmarshal(man, &mf); err != nil || len(mf.Files) != 1 || mf.Files[0].SHA256 != f.SHA256 || (unixModes && mf.Files[0].Mode != "0640") {
 		t.Fatalf("manifest = %s (%v)", man, err)
 	}
 	var raw map[string]any
@@ -234,6 +247,9 @@ func TestInsecureBackupRoots(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.name != "symlink" {
+				skipWithoutUnixModes(t, "mode bits and ownership of the backup root")
+			}
 			dir := filepath.Join(t.TempDir(), "backups")
 			e := newEnv(t, tt.setup(t, dir))
 			f, _ := e.m.Open(host.FileConfig, "/etc/headscale/config.yaml")

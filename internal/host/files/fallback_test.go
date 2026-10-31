@@ -27,6 +27,7 @@ func (e *env) apply(t *testing.T, next string) (host.Applied, error) {
 // A config directory the user cannot write (typical /etc/headscale) but a
 // writable file falls back to an in-place write after the backup.
 func TestInPlaceFallbackWhenDirNotWritable(t *testing.T) {
+	skipWithoutUnixModes(t, "chmod 0555 does not make a directory unwritable")
 	if os.Getuid() == 0 {
 		t.Skip("root ignores directory permissions")
 	}
@@ -60,6 +61,7 @@ func TestInPlaceFallbackWhenDirNotWritable(t *testing.T) {
 // A file the user cannot write at all yields ErrPermission with a fix
 // command, and the file is untouched.
 func TestPermissionErrorCarriesFix(t *testing.T) {
+	skipWithoutUnixModes(t, "chmod 0440/0555 does not deny writes the Unix way")
 	if os.Getuid() == 0 {
 		t.Skip("root ignores file permissions")
 	}
@@ -100,7 +102,7 @@ func TestNeedForKinds(t *testing.T) {
 
 func TestDefaultBackupDirHonoursXDG(t *testing.T) {
 	t.Setenv("XDG_STATE_HOME", "/x/state")
-	if got := DefaultBackupDir(); filepath.Dir(filepath.Dir(got)) != "/x/state" {
+	if got := DefaultBackupDir(); filepath.Dir(filepath.Dir(got)) != filepath.Clean("/x/state") {
 		t.Errorf("DefaultBackupDir = %q, want under /x/state", got)
 	}
 }
