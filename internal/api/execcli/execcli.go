@@ -28,6 +28,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -681,7 +682,9 @@ func (b *Backend) withPolicyFile(ctx context.Context, raw string, fn func(path s
 	if rt == "" {
 		rt = "docker"
 	}
-	inCtr := "/tmp/" + path.Base(host)
+	// The container path is POSIX regardless of the host OS; take the base
+	// name with filepath so a Windows temp path (C:\...\x) is split correctly.
+	inCtr := path.Join("/tmp", filepath.Base(host))
 	if _, errb, err := b.run(ctx, rt, "cp", host, b.container+":"+inCtr); err != nil {
 		return cliError(err, errb, nil)
 	}

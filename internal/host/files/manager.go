@@ -306,7 +306,10 @@ func checkPrivateDir(dir string, uid int, create bool) error {
 	case ok && uid >= 0 && owner != uid:
 		return &host.ErrInsecureBackupDir{Path: dir, Mode: fi.Mode(), Owner: owner,
 			FixCommand: fmt.Sprintf("sudo chown -R $(id -u):$(id -g) %s && chmod 700 %s", dir, dir)}
-	case fi.Mode().Perm()&0o077 != 0:
+	case ok && fi.Mode().Perm()&0o077 != 0:
+		// Mode bits are only meaningful where the platform exposes Unix
+		// ownership (ok). On Windows Go reports every directory as 0777, so
+		// this check would refuse every backup root there.
 		return &host.ErrInsecureBackupDir{Path: dir, Mode: fi.Mode(), Owner: owner,
 			FixCommand: "chmod 700 " + dir}
 	}

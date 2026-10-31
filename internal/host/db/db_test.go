@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/netip"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -142,6 +143,9 @@ func TestSchemaGuard(t *testing.T) {
 }
 
 func TestWALUnwritableDir(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("relies on Unix owner/group/other mode bits to make the DB directory unwritable for another uid")
+	}
 	p := makeDB(t, schema, true)
 	outsider := &files.Ident{UID: 4242, GIDs: []int{4242}}
 	if _, err := Open(host.DBSQLite, p, Options{Ident: outsider}); !errors.Is(err, ErrWALNeedsWrite) {
