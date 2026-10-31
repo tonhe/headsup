@@ -312,7 +312,7 @@ func subnetColumns() []table.Column {
 		{Key: "user", Title: "USER", Width: 8, Priority: 4},
 		{Key: "state", Title: "STATE", Width: 10, Priority: 1},
 		{Key: "ha", Title: "HA", Width: 10, Priority: 2},
-		{Key: "note", Title: "NOTE", Width: 22, Flex: true, Priority: 3},
+		{Key: "note", Title: "NOTE", Width: 18, Priority: 3},
 	}
 }
 

@@ -1,10 +1,10 @@
 ╭ Subnet routes • 5 ─ 2 pending ─────────────────────────────────────────────────────────────────╮
-│     PREFIX             MACHINE       USER     STATE      HA         NOTE                       │
-│ ▌ ● 10.0.0.0/24        router-ha-a   ops      ✓ served   ★ primary                             │
-│   ●                    router-ha-b   ops      ✓ served   failover                              │
-│   ● 10.20.0.0/16       homelab-alice alice    ◌ pending  -                                     │
-│   ● 192.168.50.0/24    vpn-gw-lab    ops      ◌ pending  -                                     │
-│   ● 192.168.51.0/24    vpn-gw-lab    ops      ✓ served   -                                     │
+│     PREFIX             MACHINE               USER     STATE      HA         NOTE               │
+│ ▌ ● 10.0.0.0/24        router-ha-a           ops      ✓ served   ★ primary                     │
+│   ●                    router-ha-b           ops      ✓ served   failover                      │
+│   ● 10.20.0.0/16       homelab-alice         alice    ◌ pending  -                             │
+│   ● 192.168.50.0/24    vpn-gw-lab            ops      ◌ pending  -                             │
+│   ● 192.168.51.0/24    vpn-gw-lab            ops      ✓ served   -                             │
 │                                                                                                │
 │                                                                                                │
 │                                                                                                │
