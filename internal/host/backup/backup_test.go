@@ -403,7 +403,11 @@ func TestRestoreReportsInvalidAndMissing(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := out.Failed[r.paths[backup.KindDERPMap]]; !ok || out.OK() {
+	failed := map[string]bool{}
+	for p := range out.Failed {
+		failed[filepath.ToSlash(p)] = true
+	}
+	if !failed[filepath.ToSlash(r.paths[backup.KindDERPMap])] || out.OK() {
 		t.Errorf("a vanished managed file should be reported: %+v", out)
 	}
 	if got, _ := os.ReadFile(r.paths[backup.KindExtraRecords]); !bytes.Equal(got, r.orig[r.paths[backup.KindExtraRecords]]) {
@@ -578,7 +582,7 @@ func TestMissingFilesRecorded(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(res.Manifest.Missing) != 1 || res.Manifest.Missing[0] != r.paths[backup.KindDERPKey] || len(res.Manifest.Files) != 5 {
+	if len(res.Manifest.Missing) != 1 || filepath.ToSlash(res.Manifest.Missing[0]) != filepath.ToSlash(r.paths[backup.KindDERPKey]) || len(res.Manifest.Files) != 5 {
 		t.Errorf("missing %v files %d", res.Manifest.Missing, len(res.Manifest.Files))
 	}
 }
