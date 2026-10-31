@@ -28,15 +28,7 @@ func (m *Model) helpSections() []help.Section {
 	global.Keys = append(global.Keys, module.Hint{Key: "ctrl+c", Desc: "Quit now"})
 	secs = append(secs, global)
 
-	nav := help.Section{Title: "Navigation"}
-	for _, mod := range m.modules {
-		if k := m.keyLabel("app.goto." + mod.ID()); k != "" {
-			nav.Keys = append(nav.Keys, module.Hint{Key: k, Desc: mod.Title()})
-		}
-	}
-	nav.Keys = append(nav.Keys, module.Hint{Key: "j / k  g / G", Desc: "Move, top, bottom"})
-	nav.Keys = append(nav.Keys, module.Hint{Key: "ctrl+d / ctrl+u", Desc: "Half page down / up"})
-	secs = append(secs, nav)
+	secs = append(secs, m.navHelp()...)
 
 	for _, mod := range m.modules {
 		if mod == cur {

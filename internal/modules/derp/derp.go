@@ -129,6 +129,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.DERP }
 func (m *Model) Order() int               { return 114 }
 func (m *Model) Modes() module.Modes      { return module.ModeHost }
 func (m *Model) Chord() string            { return "D" }
+func (m *Model) Section() module.Section  { return module.SectionServer }
 func (m *Model) Capturing() bool          { return false }
 
 func (m *Model) Badge(*store.Store) string {

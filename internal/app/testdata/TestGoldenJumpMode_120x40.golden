@@ -1,0 +1,40 @@
+ headsup ─ remote ─ headscale v0.30.0 ●                                                                  42 online / 51 
+ 1 TAILNET   pick one ╭ Machines ────────────╮╭ Users ───────────────╮╭ Waiting ─────────────╮╭ Expiry ────────────────╮
+▸ h Dashboard       7 │ 42 / 51 online       ││ 4 users              ││ 2 routes             ││ 1 machines soon        │
+  m Machines          │ collecting…          ││ 1 exit node(s)       ││ 0 registrations      ││ 3 keys soon            │
+  p Add device        │                      ││                      ││                      ││ 1 expired              │
+                      │                      ││                      ││                      ││                        │
+                      ╰──────────────────────╯╰──────────────────────╯╰──────────────────────╯╰────────────────────────╯
+                      ╭ Server ────────────────────────────────────────────────────────────────────────────────────────╮
+                      │ headscale v0.30.0  ● healthy                                                                   │
+                      │ updated now                                                                                    │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ Needs attention • 7 ───────────────────────────────────────────────────────────────────────────╮
+                      │ ▸ homelab-alice is waiting for approval of 1 route(s)                                          │
+                      │ ▲ vpn-gw-lab is waiting for approval of 1 route(s)                                             │
+                      │ ▲ desktop-alice expires in 4d                                                                  │
+                      │ ✗ phone-bob has expired and must re-authenticate                                               │
+                      │ • Pre-auth key for alice expires in 24h                                                        │
+                      │ • Pre-auth key for bob expires in 3d                                                           │
+                      │ • Pre-auth key for carol expires in 6d                                                         │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+  1 Tailnet   h Dashboard  m Machines  p Add device                                                          esc cancel 

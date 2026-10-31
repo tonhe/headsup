@@ -93,6 +93,7 @@ type Model struct {
 	active  int
 	keymap  keys.Map
 	chord   string
+	jump    module.Section // section whose jump waits for its second key; 0 for none
 
 	toasts  *toast.Stack
 	form    *form.Model
@@ -418,6 +419,9 @@ func (m *Model) handleKey(k tea.KeyMsg) tea.Cmd {
 	if key == " " {
 		key = "space"
 	}
+	if m.jump != 0 {
+		return m.jumpKey(key)
+	}
 	if m.chord != "" {
 		key = m.chord + " " + key
 		m.chord = ""
@@ -468,11 +472,11 @@ func (m *Model) defaultBindings() map[string][]string {
 	for _, a := range appActions {
 		b[a.id] = a.keys
 	}
-	for i, mod := range m.modules {
+	for _, sec := range module.Sections {
+		b[sectionActionID(sec)] = []string{fmt.Sprint(int(sec))}
+	}
+	for _, mod := range m.modules {
 		var ks []string
-		if i < 9 {
-			ks = append(ks, fmt.Sprint(i+1))
-		}
 		if c, ok := mod.(Chorder); ok && c.Chord() != "" {
 			ks = append(ks, "g "+c.Chord())
 		}
@@ -511,11 +515,18 @@ func (m *Model) global(id string) (tea.Cmd, bool) {
 	case id == "app.sidebar":
 		m.showSide = !m.showSide
 		return nil, true
-	case id == "app.next" && len(m.modules) > 0:
-		m.active = (m.active + 1) % len(m.modules)
+	case id == "app.next":
+		m.cycle(1)
 		return nil, true
-	case id == "app.prev" && len(m.modules) > 0:
-		m.active = (m.active + len(m.modules) - 1) % len(m.modules)
+	case id == "app.prev":
+		m.cycle(-1)
+		return nil, true
+	case strings.HasPrefix(id, "app.section."):
+		for _, sec := range module.Sections {
+			if id == sectionActionID(sec) {
+				return m.startJump(sec), true
+			}
+		}
 		return nil, true
 	case id == "app.switch":
 		return m.openSwitcher(), true
@@ -671,21 +682,26 @@ func (m *Model) View() string {
 		hints = cur.Hints()
 	}
 	hints = append(hints, m.globalHints()...)
-	foot := statusbar.Render(m.styles, hints, m.footerRight(), m.w)
+	var foot string
+	if lead, items, ok := m.jumpHints(); ok {
+		foot = statusbar.WhichKey(m.styles, lead, items, module.Hint{Key: "esc", Desc: "cancel"}, m.icons.Ellipsis, m.w)
+	} else {
+		foot = statusbar.Render(m.styles, hints, m.footerRight(), m.w)
+	}
 
 	bodyH := m.h - 2
-	items := m.navItems()
 	activeID := ""
 	if cur != nil {
 		activeID = cur.ID()
 	}
 	var body string
 	if m.useSidebar() {
-		side := sidebar.Render(m.styles, m.icons, items, activeID, sidebarWidth, bodyH)
+		groups, jump := m.navGroups()
+		side := sidebar.Render(m.styles, m.icons, groups, activeID, jump, sidebarWidth, bodyH)
 		content := m.moduleView(m.w-sidebarWidth, bodyH)
 		body = lipgloss.JoinHorizontal(lipgloss.Top, side, content)
 	} else {
-		bar := tabs.Render(m.styles, m.icons, items, activeID, m.w)
+		bar := tabs.Render(m.styles, m.icons, m.tabItems(), activeID, m.w)
 		body = lipgloss.JoinVertical(lipgloss.Left, bar, m.moduleView(m.w, bodyH-1))
 	}
 	screen := lipgloss.JoinVertical(lipgloss.Left, head, body, foot)
@@ -739,25 +755,6 @@ func (m *Model) moduleView(w, h int) string {
 	}
 	v := cur.View(m, module.Rect{W: w, H: h})
 	return lipgloss.NewStyle().Width(w).Height(h).MaxWidth(w).MaxHeight(h).Render(v)
-}
-
-func (m *Model) navItems() []sidebar.Item {
-	items := make([]sidebar.Item, 0, len(m.modules))
-	for i, mod := range m.modules {
-		k := ""
-		if i < 9 {
-			k = fmt.Sprint(i + 1)
-		}
-		items = append(items, sidebar.Item{
-			ID:    mod.ID(),
-			Title: mod.Title(),
-			Icon:  mod.Icon(m.icons),
-			Badge: mod.Badge(m.store),
-			Dim:   mod.Modes() == module.ModeHost && !m.HostMode(),
-			Key:   k,
-		})
-	}
-	return items
 }
 
 func (m *Model) headerData() header.Header {

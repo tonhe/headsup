@@ -76,6 +76,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Key }
 func (m *Model) Order() int               { return 40 }
 func (m *Model) Modes() module.Modes      { return module.ModeAPI }
 func (m *Model) Chord() string            { return "k" }
+func (m *Model) Section() module.Section  { return module.SectionTailnet }
 func (m *Model) Capturing() bool          { return m.bar != nil && m.bar.Active() }
 
 // Badge is the number of usable keys that expire within ExpiryWarn (T120).

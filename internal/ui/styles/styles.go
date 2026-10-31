@@ -26,6 +26,9 @@ type Styles struct {
 	SidebarItem   lipgloss.Style
 	SidebarActive lipgloss.Style
 	SidebarDim    lipgloss.Style
+	SidebarHead   lipgloss.Style // section header ("1 TAILNET")
+	SidebarJump   lipgloss.Style // section header while a section jump waits for its second key
+	JumpKey       lipgloss.Style // a page's key during a section jump
 	Badge         lipgloss.Style
 
 	Pane        lipgloss.Style
@@ -78,6 +81,9 @@ func New(t theme.Theme) *Styles {
 	s.SidebarItem = fg(r.Fg)
 	s.SidebarActive = lipgloss.NewStyle().Foreground(r.Bg).Background(r.Accent).Bold(true)
 	s.SidebarDim = fg(r.Muted)
+	s.SidebarHead = lipgloss.NewStyle().Foreground(r.Muted).Bold(true)
+	s.SidebarJump = lipgloss.NewStyle().Foreground(r.Bg).Background(r.Pending).Bold(true)
+	s.JumpKey = lipgloss.NewStyle().Foreground(r.Pending).Bold(true)
 	s.Badge = lipgloss.NewStyle().Foreground(r.Bg).Background(r.Pending).Padding(0, 1)
 
 	s.Pane = lipgloss.NewStyle().Foreground(r.Border)

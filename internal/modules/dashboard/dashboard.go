@@ -49,6 +49,7 @@ func (m *Model) Icon(ic icons.Set) string    { return ic.Dashboard }
 func (m *Model) Order() int                  { return 10 }
 func (m *Model) Modes() module.Modes         { return module.ModeAPIHost }
 func (m *Model) Chord() string               { return "h" }
+func (m *Model) Section() module.Section     { return module.SectionTailnet }
 func (m *Model) Capturing() bool             { return false }
 func (m *Model) Init(module.Context) tea.Cmd { return nil }
 

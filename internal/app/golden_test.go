@@ -29,15 +29,28 @@ func goldenDriver(t *testing.T, w, h int, themeSlug, icons string) *driver {
 func TestGoldenScreens(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
 		for _, ic := range []string{"unicode", "ascii"} {
-			for _, key := range []string{"1", "2", "3"} {
-				name := fmt.Sprintf("%dx%d/%s/module%s", sz[0], sz[1], ic, key)
+			// Tailnet section jumps: Dashboard, Machines, Add device.
+			for i, key := range []string{"1 h", "1 m", "1 p"} {
+				name := fmt.Sprintf("%dx%d/%s/module%d", sz[0], sz[1], ic, i+1)
 				t.Run(name, func(t *testing.T) {
 					d := goldenDriver(t, sz[0], sz[1], "tokyo-night", ic)
-					d.key(key)
+					d.key(strings.Fields(key)...)
 					uitest.Golden(t, d.view())
 				})
 			}
 		}
+	}
+}
+
+// TestGoldenJumpMode snapshots a pending section jump (sidebar and tab-bar
+// layouts): the highlighted section, its page keys and the which-key line.
+func TestGoldenJumpMode(t *testing.T) {
+	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
+		t.Run(fmt.Sprintf("%dx%d", sz[0], sz[1]), func(t *testing.T) {
+			d := goldenDriver(t, sz[0], sz[1], "tokyo-night", "unicode")
+			d.key("1")
+			uitest.Golden(t, d.view())
+		})
 	}
 }
 
@@ -47,8 +60,8 @@ func TestAllThemesSmoke(t *testing.T) {
 	for _, th := range theme.All() {
 		t.Run(th.Slug, func(t *testing.T) {
 			d := goldenDriver(t, 80, 24, th.Slug, "unicode")
-			for _, key := range []string{"1", "2", "3"} {
-				d.key(key)
+			for _, key := range []string{"1 h", "1 m", "1 p"} {
+				d.key(strings.Fields(key)...)
 				out := d.view()
 				checkFrame(t, out, 80, 24)
 				if strings.TrimSpace(out) == "" {

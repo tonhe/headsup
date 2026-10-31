@@ -47,6 +47,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Route }
 func (m *Model) Order() int               { return 24 }
 func (m *Model) Modes() module.Modes      { return module.ModeAPIHost }
 func (m *Model) Chord() string            { return "r" }
+func (m *Model) Section() module.Section  { return module.SectionTailnet }
 func (m *Model) Capturing() bool          { return false }
 
 // Badge is the number of route approvals waiting (T116).

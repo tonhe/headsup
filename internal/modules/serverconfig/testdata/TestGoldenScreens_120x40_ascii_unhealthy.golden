@@ -1,6 +1,6 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 *                                                     42 online / 51 
-> 1 % Server S...   ! ╭ Restart failed ─ /etc/headscale/config.yaml ───────────────────────────────────────────────────╮
-                      │ x headscale did not come back healthy (state failed).                                          │
+ 2 SERVER             ╭ Restart failed ─ /etc/headscale/config.yaml ───────────────────────────────────────────────────╮
+> % Server Set...   ! │ x headscale did not come back healthy (state failed).                                          │
                       │                                                                                                │
                       │ u restores the backup taken before your change and restarts headscale again.                   │
                       │ X retries the restart - esc goes back to the fields                                            │

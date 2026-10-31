@@ -255,8 +255,11 @@ with no restart. A user theme file appears in the picker.
 
 `:` or `Ctrl+P` opens a fuzzy command palette that lists every action in every module, for
 example "expire machine", "new pre-auth key", "switch theme", or "go to routes". A sidebar or
-tab bar switches modules with number keys. `?` shows context-aware help. Key bindings can be
-remapped in config.
+tab bar groups modules into sections (Tailnet, Server, App) with visible headers. Pressing a
+section's digit and then the page key shown next to each page jumps to it (for example `1 m`
+for Machines); the pending section is highlighted and the status bar lists its keys until a
+key is pressed. `g` chords (`g m`) jump directly. `?` shows context-aware help, including how
+navigation works. Key bindings can be remapped in config.
 
 **Independent Test**: Every action reachable by a key is also reachable from the palette. A
 remapped key works and shows up in help.

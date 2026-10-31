@@ -1,8 +1,8 @@
  headsup ─ remote ─ headscale v0.30.0 ●                                                                  42 online / 51 
-  1 ◫ Dashboard     7 ╭ Machines • 51 ─────────────────────────────────────────────────────────────────────────────────╮
-▸ 2 ▣ Machines        │     NAME ▲         USER       IPV4            TAGS                  LAST SEEN EXPIRY   ROUTES  │
-  3 ◌ Add device      │ ▌ ● backup-01      ops        100.64.0.44      tag:server   tag:st… online    never    -       │
-                      │   ● bastion        ops        100.64.0.43      tag:server           online    never    -       │
+ 1 TAILNET            ╭ Machines • 51 ─────────────────────────────────────────────────────────────────────────────────╮
+  ◫ Dashboard  7  g h │     NAME ▲         USER       IPV4            TAGS                  LAST SEEN EXPIRY   ROUTES  │
+▸ ▣ Machines      g m │ ▌ ● backup-01      ops        100.64.0.44      tag:server   tag:st… online    never    -       │
+  ◌ Add device    g p │   ● bastion        ops        100.64.0.43      tag:server           online    never    -       │
                       │   ◐ ci-cache       ops        100.64.0.52      tag:ci               20h ago   never    -       │
                       │   ● db-primary     ops        100.64.0.35      tag:server   tag:db  online    never    -       │
                       │   ● db-replica     ops        100.64.0.36      tag:server   tag:db  online    never    -       │

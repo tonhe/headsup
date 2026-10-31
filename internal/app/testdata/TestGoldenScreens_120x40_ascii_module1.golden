@@ -1,8 +1,8 @@
  headsup ─ remote ─ headscale v0.30.0 *                                                                  42 online / 51 
-> 1 H Dashboard     7 ╭ Machines ────────────╮╭ Users ───────────────╮╭ Waiting ─────────────╮╭ Expiry ────────────────╮
-  2 M Machines        │ 42 / 51 online       ││ 4 users              ││ 2 routes             ││ 1 machines soon        │
-  3 ? Add device      │ collecting…          ││ 1 exit node(s)       ││ 0 registrations      ││ 3 keys soon            │
-                      │                      ││                      ││                      ││ 1 expired              │
+ 1 TAILNET            ╭ Machines ────────────╮╭ Users ───────────────╮╭ Waiting ─────────────╮╭ Expiry ────────────────╮
+> H Dashboard  7  g h │ 42 / 51 online       ││ 4 users              ││ 2 routes             ││ 1 machines soon        │
+  M Machines      g m │ collecting…          ││ 1 exit node(s)       ││ 0 registrations      ││ 3 keys soon            │
+  ? Add device    g p │                      ││                      ││                      ││ 1 expired              │
                       │                      ││                      ││                      ││                        │
                       ╰──────────────────────╯╰──────────────────────╯╰──────────────────────╯╰────────────────────────╯
                       ╭ Server ────────────────────────────────────────────────────────────────────────────────────────╮

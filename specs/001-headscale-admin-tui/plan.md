@@ -192,7 +192,8 @@ never one another. Cross-module jumps, such as going from a user to their machin
 ```
 
 - **Sidebar**: shown at width 100 and above, collapsible with `ctrl+b`. Below 100 it becomes a
-  tab bar. Number keys `1`–`9` jump to modules. Badge counts come from module `Badge()`.
+  tab bar. Pages are grouped into sections (Tailnet, Server, App); a section digit then a page
+  key jumps to a page (see contracts/module.md). Badge counts come from module `Badge()`.
 - **Detail pane**: on wide screens it splits right; on narrow screens it splits below. Under 30
   rows it becomes a full-screen push view.
 - **Modals**: confirm, form, palette, theme picker, profile switcher, and help. They stack and

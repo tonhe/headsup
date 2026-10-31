@@ -83,6 +83,7 @@ func (m *Model) Icon(ic icons.Set) string  { return ic.Settings }
 func (m *Model) Order() int                { return 1000 }
 func (m *Model) Modes() module.Modes       { return module.ModeLocal }
 func (m *Model) Chord() string             { return "," }
+func (m *Model) Section() module.Section   { return module.SectionApp }
 func (m *Model) JumpKeys() []string        { return []string{","} }
 func (m *Model) Capturing() bool           { return false }
 func (m *Model) Badge(*store.Store) string { return "" }

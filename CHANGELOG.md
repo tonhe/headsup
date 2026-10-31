@@ -13,6 +13,7 @@ All notable changes to this project are documented here.
   a terminal and need `--yes` otherwise (exit 7). Exit 8 means no host mode
   and 9 a missing permission, with the fix on stderr.
 - Activity (`9`): this app's changes (with targets, results, backup IDs and
+- Activity (`3 v`, `g v`): this app's changes (with targets, results, backup IDs and
   diff stats) and a live feed of tailnet events: machines coming online or
   going offline, keys nearing expiry, new advertised routes. Filter with `/`,
   export to JSON with `x`. Events can also raise toasts, the terminal bell or
@@ -21,7 +22,7 @@ All notable changes to this project are documented here.
   reach under the current (or unsaved) policy. Best-effort.
 - Quitting with unsaved edits in Access Controls, Server Settings, DNS or
   DERP now asks first. The statusbar shows the service state in host mode.
-- Server page (`8`): version and health, a capability matrix by mode with
+- Server page (`2 S`, `g S`): version and health, a capability matrix by mode with
   explanations for config-file-only features, and backfill IPs. In host
   mode: a doctor (permissions, socket, server_url reachability, TLS expiry,
   deprecated keys, database and WAL size, disk space, clock skew), each
@@ -37,7 +38,7 @@ All notable changes to this project are documented here.
 - DERP (host mode, `g D`): embedded server settings, map URLs and files, a
   region and node editor for map files, and a live map with per-region
   machine counts and latency.
-- Access Controls (`7`, `g a`): view the policy with syntax highlighting,
+- Access Controls (`1 a`, `g a`): view the policy with syntax highlighting,
   edit inline or in `$EDITOR`, check, diff and apply with a conflict check;
   history of the last 50 revisions with rollback; an explorer of groups,
   tags, hosts and rules with "where used"; and the compiled filter in host
@@ -93,6 +94,19 @@ All notable changes to this project are documented here.
 - 61 built-in themes plus user theme files (TOML or Base16 YAML); Unicode,
   Nerd Font and ASCII icon sets; read-only mode; activity log.
 - `--demo` mode with realistic data (`--demo --host` for host mode).
+
+### Changed
+
+- Page navigation is now two keys. The sidebar groups pages under section
+  headers: `1` Tailnet, `2` Server, `3` App. Press a section's digit and the
+  section lights up, each of its pages shows its key, and the status bar
+  lists them; then press the page's key (`1 m` Machines, `2 d` DNS, `3 v`
+  Activity). `enter` or the digit again opens the section's first page;
+  `esc` or any other key cancels. The flat `1`–`9` page keys are gone, so
+  every page is reachable, not just the first nine. `g` chords (shown dimmed
+  in the sidebar), `,` for Preferences and the palette work as before.
+  Host-only pages are no longer listed in remote mode (their `g` chords still
+  explain host mode). Clicking a section header opens its first page.
 
 ### Fixed
 

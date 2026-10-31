@@ -77,8 +77,8 @@ func newDriver(t *testing.T) *driver {
 
 func TestThreeActionsListedInOrder(t *testing.T) {
 	d := newDriver(t)
-	d.Key("1", "a", "y", "b", "y", "c", "y")
-	d.Key("2")
+	d.Key("3", "1", "a", "y", "b", "y", "c", "y")
+	d.Key("g", "v")
 	d.Want("Changes (3)", "actor.apply", "actor.tags", "actor.rename", "charlie", "+2 -1", "config.yaml.bak")
 	scr := d.Screen()
 	if i, j, k := strings.Index(scr, "actor.apply"), strings.Index(scr, "actor.tags"), strings.Index(scr, "actor.rename"); !(i < j && j < k) {
@@ -115,7 +115,7 @@ func TestThreeActionsListedInOrder(t *testing.T) {
 
 func TestExport(t *testing.T) {
 	d := newDriver(t)
-	d.Key("1", "a", "y", "2")
+	d.Key("3", "1", "a", "y", "g", "v")
 	d.Send(watch.EventsMsg{Events: []watch.Event{{Kind: watch.NodeOnline, At: flowNow, Subject: "nas-01"}}})
 	d.Key("x")
 	d.Want("Export activity")
@@ -169,6 +169,6 @@ func TestEmptyLogAndNoSource(t *testing.T) {
 		t.Error("event cells")
 	}
 	d := newDriver(t)
-	d.Key("2")
+	d.Key("g", "v")
 	d.Want("Nothing recorded yet")
 }

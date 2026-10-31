@@ -22,10 +22,15 @@ func wheel(x, y int, down bool) tea.MouseMsg {
 
 func TestMouseSidebarClick(t *testing.T) {
 	d := newDriver(t, 120, 40, Options{Mouse: true})
-	d.send(click(4, 2)) // header is row 0; sidebar entry 2 is row 2
+	d.send(click(4, 3)) // header is row 0; row 1 is "1 TAILNET", then Dashboard, Machines
 	if got := d.m.current().ID(); got != "machines" {
 		t.Fatalf("clicking the second sidebar entry should open machines, got %s", got)
 	}
+	d.send(click(4, 1)) // the section header goes to the section's first page
+	if got := d.m.current().ID(); got != "dashboard" {
+		t.Fatalf("clicking the section header should open its first page, got %s", got)
+	}
+	d.send(click(4, 3))
 	d.send(click(4, 30)) // below the entries: nothing
 	if got := d.m.current().ID(); got != "machines" {
 		t.Errorf("click on empty sidebar moved to %s", got)
@@ -34,7 +39,7 @@ func TestMouseSidebarClick(t *testing.T) {
 
 func TestMouseWheelScrollsModule(t *testing.T) {
 	d := newDriver(t, 120, 40, Options{Mouse: true})
-	d.key("2")
+	d.key("1", "m")
 	first := cursorLine(d.view())
 	d.send(wheel(60, 10, true))
 	d.send(wheel(60, 10, true))
@@ -58,11 +63,11 @@ func cursorLine(view string) int {
 func TestMouseTabClick(t *testing.T) {
 	d := newDriver(t, 80, 24, Options{Mouse: true})
 	bar := strings.Split(ansi.Strip(d.view()), "\n")[1]
-	x := strings.Index(bar, "3 ")
+	x := strings.Index(bar, "Add device")
 	if x < 0 {
 		t.Fatalf("no third tab in %q", bar)
 	}
-	d.send(click(len([]rune(bar[:x]))+1, 1))
+	d.send(click(len([]rune(bar[:x])), 1))
 	if got := d.m.current().ID(); got != "pending" {
 		t.Fatalf("clicking the third tab should open pending, got %s", got)
 	}
@@ -99,7 +104,7 @@ func TestMouseOverlays(t *testing.T) {
 		t.Error("wheel in the picker should preview")
 	}
 	d.key("esc")
-	d.send(click(4, 2))
+	d.send(click(4, 3))
 	if got := d.m.current().ID(); got != "machines" {
 		t.Errorf("after closing modals clicks should work, on %s", got)
 	}

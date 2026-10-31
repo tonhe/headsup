@@ -15,14 +15,14 @@ func TestDumpFrames(t *testing.T) {
 	d := newDriver(t, 120, 36, Options{ServerURL: "https://hs.example.com"})
 	write := func(name string) { os.WriteFile(dir+"/"+name+".txt", []byte(ansi.Strip(d.view())), 0o644) }
 	write("1-dashboard")
-	d.key("2")
+	d.key("1", "m")
 	write("2-machines")
 	d.key("j", "j", "j")
 	write("3-machines-cursor")
-	d.key("3")
+	d.key("1", "p")
 	write("4-pending")
 	d.key("n")
 	write("5-newkey-form")
-	d.key("esc", "2", "D")
+	d.key("esc", "1", "m", "D")
 	write("6-delete-confirm")
 }

@@ -84,6 +84,7 @@ func (m *Model) Icon(ic icons.Set) string  { return ic.Activity }
 func (m *Model) Order() int                { return 90 }
 func (m *Model) Modes() module.Modes       { return module.ModeLocal }
 func (m *Model) Chord() string             { return "v" }
+func (m *Model) Section() module.Section   { return module.SectionApp }
 func (m *Model) Capturing() bool           { return m.filtering }
 func (m *Model) Badge(*store.Store) string { return "" }
 

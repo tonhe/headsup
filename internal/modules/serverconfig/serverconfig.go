@@ -79,6 +79,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Settings }
 func (m *Model) Order() int               { return 110 }
 func (m *Model) Modes() module.Modes      { return module.ModeHost }
 func (m *Model) Chord() string            { return "s" }
+func (m *Model) Section() module.Section  { return module.SectionServer }
 func (m *Model) Capturing() bool          { return false }
 
 // Badge shows unsaved edits, then a pending restart.
