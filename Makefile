@@ -6,7 +6,7 @@ BUILD_TS := $(shell date -u '+%Y%m%d.%H%M')
 VPKG     := github.com/tonhe/headsup/internal/version
 LDFLAGS  := -trimpath -ldflags "-s -w -X $(VPKG).Version=$(VERSION) -X $(VPKG).Commit=$(COMMIT) -X $(VPKG).Build=$(BUILD_TS)"
 
-.PHONY: build clean install test test-race test-all test-tui golden-update coverage-gate test-integration release-dry-run demo
+.PHONY: build clean install test test-race test-all test-tui golden-update coverage-gate test-integration release-dry-run demo docs demo-gif
 
 build:
 	go build $(LDFLAGS) -o bin/$(BINARY) $(PKG)
@@ -37,6 +37,11 @@ test-tui:
 golden-update:
 	go test ./internal/... -update-goldens
 
+# Regenerate the generated tables in docs/CAPABILITIES.md. A test fails when
+# the committed file is stale.
+docs:
+	go test ./internal/capsdoc -run TestCapabilitiesDoc -update-docs
+
 coverage-gate:
 	bash scripts/check-coverage.sh
 
@@ -48,3 +53,8 @@ release-dry-run:
 
 demo: build
 	./bin/$(BINARY) --demo
+
+# Render docs/demo.gif from demo.tape. Needs vhs (github.com/charmbracelet/vhs).
+demo-gif: build
+	@command -v vhs >/dev/null || { echo "vhs is not installed: https://github.com/charmbracelet/vhs"; exit 1; }
+	PATH="$(CURDIR)/bin:$$PATH" vhs demo.tape
