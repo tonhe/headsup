@@ -5,7 +5,7 @@
 │ URL      https://hs.demo.example.com                                         │
 │ Config   /etc/headscale/config.yaml  (o opens Server Settings)               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
- Capabilities │ Doctor (1) │ Backups │ Upgrade                                  
+[Capabilities]│ Doctor (1) │ Backups │ Upgrade                                  
 ╭ Capabilities ─ 0.30.0 - host mode ───────────────────────────────────────────╮
 │  Feature                            Remote  Host   Here                      │
 │> Health endpoint                    +       +      +                         │

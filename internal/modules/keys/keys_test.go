@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/store"
 	"github.com/tonhe/headsup/internal/ui/uitest"
@@ -16,7 +17,13 @@ const selfKey = "hskey-api-f55ff16f66f4-0123456789abcdef0123456789abcdef01234567
 
 func setup(t *testing.T) (*Model, *testCtx) {
 	t.Helper()
+	return setupIcons(t, icons.Unicode)
+}
+
+func setupIcons(t *testing.T, ic icons.Set) (*Model, *testCtx) {
+	t.Helper()
 	c := newCtx(t)
+	c.ic = ic
 	c.self = api.NewSecret(selfKey)
 	m := New()
 	m.Init(c)
@@ -310,18 +317,20 @@ func TestViewGolden(t *testing.T) {
 	for _, tab := range []string{"preauth", "api"} {
 		for _, sz := range [][2]int{{98, 37}, {58, 21}} {
 			t.Run(fmt.Sprintf("%s_%dx%d", tab, sz[0], sz[1]), func(t *testing.T) {
-				m, c := setup(t)
-				if tab == "api" {
-					m.Update(c, keyMsg("tab"))
-				}
-				out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
-				if w := uitest.MaxWidth(out); w > sz[0] {
-					t.Fatalf("view is %d wide, want <= %d", w, sz[0])
-				}
-				if h := len(uitest.Lines(out)); h > sz[1] {
-					t.Fatalf("view is %d tall, want <= %d", h, sz[1])
-				}
-				uitest.Golden(t, out)
+				uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+					m, c := setupIcons(t, ic)
+					if tab == "api" {
+						m.Update(c, keyMsg("tab"))
+					}
+					out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
+					if w := uitest.MaxWidth(out); w > sz[0] {
+						t.Fatalf("view is %d wide, want <= %d", w, sz[0])
+					}
+					if h := len(uitest.Lines(out)); h > sz[1] {
+						t.Fatalf("view is %d tall, want <= %d", h, sz[1])
+					}
+					return out
+				})
 			})
 		}
 	}

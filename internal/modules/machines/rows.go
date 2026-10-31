@@ -116,7 +116,8 @@ func (r row) Cell(col string) string {
 		case n.Expired(r.now):
 			return r.s.Expired.Render("expired")
 		case n.ExpiresSoon(r.now, r.warn):
-			return r.s.Expiring.Render(humanize.Short(n.Expiry.Sub(r.now)))
+			// The warning glyph marks "soon" without relying on colour (T171).
+			return r.s.Expiring.Render(r.ic.Warn + " " + humanize.Short(n.Expiry.Sub(r.now)))
 		default:
 			return humanize.Short(n.Expiry.Sub(r.now))
 		}

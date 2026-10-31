@@ -9,6 +9,7 @@ import (
 
 	"github.com/tonhe/headsup/internal/api"
 	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/store"
 	"github.com/tonhe/headsup/internal/ui/uitest"
@@ -355,21 +356,24 @@ func TestTabSwitchesSectionAndEnterOpensMachine(t *testing.T) {
 func TestViewGolden(t *testing.T) {
 	for _, sz := range [][2]int{{98, 37}, {58, 21}} {
 		t.Run(fmt.Sprintf("%dx%d", sz[0], sz[1]), func(t *testing.T) {
-			c := newCtx(t)
-			c.host = true
-			a, b := nodeNamed(t, c, "router-ha-a"), nodeNamed(t, c, "router-ha-b")
-			c.st.Routes = []host.RouteState{{Prefix: pfx("10.0.0.0/24"), Primary: a.ID, Candidates: []uint64{a.ID, b.ID}}}
-			m := New()
-			m.Init(c)
-			m.Update(c, store.UpdatedMsg{Slices: store.SliceAll})
-			out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
-			if w := uitest.MaxWidth(out); w > sz[0] {
-				t.Fatalf("view is %d wide, want <= %d", w, sz[0])
-			}
-			if h := len(uitest.Lines(out)); h > sz[1] {
-				t.Fatalf("view is %d tall, want <= %d", h, sz[1])
-			}
-			uitest.Golden(t, out)
+			uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+				c := newCtx(t)
+				c.ic = ic
+				c.host = true
+				a, b := nodeNamed(t, c, "router-ha-a"), nodeNamed(t, c, "router-ha-b")
+				c.st.Routes = []host.RouteState{{Prefix: pfx("10.0.0.0/24"), Primary: a.ID, Candidates: []uint64{a.ID, b.ID}}}
+				m := New()
+				m.Init(c)
+				m.Update(c, store.UpdatedMsg{Slices: store.SliceAll})
+				out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
+				if w := uitest.MaxWidth(out); w > sz[0] {
+					t.Fatalf("view is %d wide, want <= %d", w, sz[0])
+				}
+				if h := len(uitest.Lines(out)); h > sz[1] {
+					t.Fatalf("view is %d tall, want <= %d", h, sz[1])
+				}
+				return out
+			})
 		})
 	}
 }

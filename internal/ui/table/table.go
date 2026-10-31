@@ -480,7 +480,9 @@ func (m *Model) row(i int, vis []Column, widths []int) string {
 	}
 	line := strings.Join(parts, " ")
 	cm, sm := " ", " "
-	if isCur {
+	if plain {
+		// Only the focused table marks its cursor row, so with two tables on
+		// screen the marker (not just colour) shows which one keys go to.
 		cm = m.ic.Select
 	}
 	if m.sel[k] {
@@ -489,9 +491,6 @@ func (m *Model) row(i int, vis []Column, widths []int) string {
 	cm, sm = Fit(cm, 1, lipgloss.Left, ""), Fit(sm, 1, lipgloss.Left, "")
 	if plain {
 		return m.s.RowSel.Render(fitLine(cm+sm+line, m.w))
-	}
-	if isCur {
-		cm = m.s.RowCursor.Render(cm)
 	}
 	if m.sel[k] {
 		sm = m.s.Accent.Render(sm)

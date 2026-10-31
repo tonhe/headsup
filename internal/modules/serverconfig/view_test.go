@@ -9,6 +9,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 
 	hostfake "github.com/tonhe/headsup/internal/host/fake"
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/ui/toast"
 	"github.com/tonhe/headsup/internal/ui/uitest"
 )
@@ -56,18 +57,18 @@ var screens = []struct {
 // ASCII icon set (constitution V).
 func TestGoldenScreens(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
-		for _, ic := range []string{"unicode", "ascii"} {
-			for _, sc := range screens {
-				t.Run(fmt.Sprintf("%dx%d/%s/%s", sz[0], sz[1], ic, sc.name), func(t *testing.T) {
+		for _, sc := range screens {
+			t.Run(fmt.Sprintf("%dx%d/%s", sz[0], sz[1], sc.name), func(t *testing.T) {
+				uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
 					h := hostfake.New(hostfake.WithClock(func() time.Time { return flowNow }))
-					d := newSizedDriver(t, h, false, sz[0], sz[1], ic)
+					d := newSizedDriver(t, h, false, sz[0], sz[1], ic.Name)
 					sc.run(d)
 					d.dismissToasts()
 					out := d.View()
 					checkFrame(t, out, sz[0], sz[1])
-					uitest.Golden(t, out)
+					return out
 				})
-			}
+			})
 		}
 	}
 }

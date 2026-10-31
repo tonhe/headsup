@@ -130,7 +130,9 @@ func (m *Model) historyView(ctx module.Context, w, h int) string {
 		line := fmt.Sprintf("%s  %-16s %-10s %s%s", r.FetchedAt.Local().Format("2006-01-02 15:04"),
 			humanize.Ago(r.FetchedAt, now), r.Source, r.SHA256[:min(12, len(r.SHA256))], live)
 		if i == hv.cursor {
-			line = s.RowSel.Render(pane.Fit(line, iw))
+			line = s.RowSel.Render(pane.Fit(cursorMark(ctx.Icons())+line, iw))
+		} else {
+			line = "  " + line
 		}
 		rows = append(rows, line)
 	}

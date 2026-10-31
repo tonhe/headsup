@@ -540,7 +540,7 @@ func (m *Model) tabs(ctx module.Context, w int) string {
 	var parts []string
 	for i, n := range sectionNames {
 		if Section(i) == m.sec {
-			parts = append(parts, s.SidebarActive.Render(" "+n+" "))
+			parts = append(parts, s.SidebarActive.Render("["+n+"]"))
 		} else {
 			parts = append(parts, s.SidebarItem.Render(" "+n+" "))
 		}
@@ -552,10 +552,11 @@ func (m *Model) list(ctx module.Context, lines []string, cur, w, h int) string {
 	s := ctx.Styles()
 	top := max(0, cur-h+1)
 	var out []string
+	ic := ctx.Icons()
 	for i := top; i < len(lines) && len(out) < h; i++ {
-		l := table.Fit(lines[i], w, lipgloss.Left, ctx.Icons().Ellipsis)
+		l := table.Fit("  "+lines[i], w, lipgloss.Left, ic.Ellipsis)
 		if i == cur {
-			l = s.RowSel.Render(table.Fit(stripStyle(lines[i]), w, lipgloss.Left, ctx.Icons().Ellipsis))
+			l = s.RowSel.Render(table.Fit(table.Fit(ic.Arrow, 1, lipgloss.Left, "")+" "+stripStyle(lines[i]), w, lipgloss.Left, ic.Ellipsis))
 		}
 		out = append(out, l)
 	}

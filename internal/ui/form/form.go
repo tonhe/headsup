@@ -335,10 +335,7 @@ func (m *Model) View(w int) string {
 	if submit == "" {
 		submit = "Save"
 	}
-	btn := m.s.Button.Render(submit)
-	if m.focus == len(m.fields)-1 || len(m.fields) == 0 {
-		btn = m.s.ButtonFo.Render(submit)
-	}
+	btn := m.s.RenderButton(submit, m.focus == len(m.fields)-1 || len(m.fields) == 0)
 	lines = append(lines, "", fit(btn), fit(m.s.Muted.Render("tab next · enter/ctrl+s save · esc cancel")))
 	return box.Width(cw + box.GetHorizontalPadding()).Render(strings.Join(lines, "\n"))
 }

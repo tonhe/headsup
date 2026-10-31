@@ -724,7 +724,7 @@ func (m *Model) sectionTabs(ctx module.Context, w int) string {
 	for i, sec := range sections {
 		label := " " + sec.name + " "
 		if i == m.sec {
-			parts = append(parts, s.RowSel.Render(label))
+			parts = append(parts, s.RowSel.Render("["+sec.name+"]"))
 		} else if sec.link != "" {
 			parts = append(parts, s.Link.Render(label))
 		} else {

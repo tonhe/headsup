@@ -1,0 +1,40 @@
+ headsup ─ remote ─ headscale v0.30.0 ●                                                                  42 online / 51 
+ 1 TAILNET            ╭ Machines • 51 ─────────────────────────────────────────────────────────────────────────────────╮
+  ◫ Dashboard  7  g h │     NAME ▲         USER       IPV4            TAGS                  LAST SEEN EXPIRY   ROUTES  │
+▸ ▣ Machines      g m │ ▌ ● backup-01      ops        100.64.0.44      tag:server   tag:st… online    never    -       │
+  ◌ Add device    g p │   ● bastion        ops        100.64.0.43      tag:server           online    never    -       │
+                      │   ◐ ci-cache       ops        100.64.0.52      tag:ci               20h ago   never    -       │
+                      │   ● db-primary     ops        100.64.0.35      tag:server   tag:db  online    never    -       │
+                      │   ● db-replica     ops        100.64.0.36      tag:server   tag:db  online    never    -       │
+                      │   ● desktop-alice  alice      100.64.0.5      -                     online    ▲ 4d     -       │
+                      │   ● exit-fra-1 ⇱   ops        100.64.0.33      tag:exit             online    never    ✓ 2     │
+                      │   ● gitlab-runner… ops        100.64.0.40      tag:ci               online    never    -       │
+                      │   ● gitlab-runner… ops        100.64.0.41      tag:ci               online    never    -       │
+                      │   ○ gitlab-runner… ops        100.64.0.42      tag:ci               5w ago    never    -       │
+                      │   ● grafana        ops        100.64.0.37      tag:server   tag:mo… online    never    -       │
+                      │   ● home-assistant ops        100.64.0.46      tag:iot              online    never    -       │
+                      │   ● homelab-alice  alice      100.64.0.6      -                     online    never    ◌ 0/1   │
+                      │   ◐ ipad-alice     alice      100.64.0.4      -                     5h ago    11w      -       │
+                      │   ● jellyfin       ops        100.64.0.48      tag:server   tag:me… online    never    -       │
+                      │   ● k8s-node-1     ops        100.64.0.15      tag:k8s   tag:serve… online    never    -       │
+                      │   ● k8s-node-10    ops        100.64.0.24      tag:k8s   tag:serve… online    never    -       │
+                      │   ◐ k8s-node-11    ops        100.64.0.25      tag:k8s   tag:serve… 2h ago    never    -       │
+                      │   ○ k8s-node-12    ops        100.64.0.26      tag:k8s   tag:serve… 2w ago    never    -       │
+                      │   ● k8s-node-2     ops        100.64.0.16      tag:k8s   tag:serve… online    never    -       │
+                      │   ● k8s-node-3     ops        100.64.0.17      tag:k8s   tag:serve… online    never    -       │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ backup-01 ─────────────────────────────────────────────────────────────────────────────────────╮
+                      │ Name        backup-01                                                                          │
+                      │ Hostname    backup-01                                                                          │
+                      │ User        ops                                                                                │
+                      │ IPs         100.64.0.44  fd7a:115c:a1e0::2b                                                    │
+                      │ Tags        tag:server tag:storage                                                             │
+                      │ Last seen   online now                                                                         │
+                      │ Expiry      never                                                                              │
+                      │ Created     2026-10-11                                                                         │
+                      │ Registered  authkey                                                                            │
+                      │ Routes      -                                                                                  │
+                      │ Node key    936de9777afe…                                                                      │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ / filter  enter detail  r rename  t tags  a routes  e expire  D delete  space select  ? help          updated 12:00:00 

@@ -1,0 +1,24 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 *             42 online / 51 
+[Server Settings (!)]                                                           
+╭ Saved ─ /etc/headscale/config.yaml ──────────────────────────────────────────╮
+│ + Wrote /etc/headscale/config.yaml. Backup: mem://backups/20261028T120000... │
+│                                                                              │
+│ This change takes effect after headscale restarts.                           │
+│ ! headscale restarts: every connected client loses the control plane for a   │
+│ few seconds and reconnects. Existing tunnels keep working.                   │
+│                                                                              │
+│ X restart now (config check first) - u undo the write - esc later            │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ X restart now  u undo write  esc later  ? help    * running · updated 12:00:00 

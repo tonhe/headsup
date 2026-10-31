@@ -145,57 +145,60 @@ func TestRemoteModeGates(t *testing.T) {
 }
 
 func TestDoctorFlow(t *testing.T) {
-	c := newCtx(t, "", true)
-	c.h = hostfake.New(hostfake.WithFile(hostfake.ConfigPath, append(append([]byte{}, hostfake.SeedConfig...), "\ntls_letsencrypt_hostname: hs.example.com\n"...)))
-	m := New()
-	m.root = filepath.Join(t.TempDir(), "bundles")
-	drain(t, c, m, m.Init(c))
-	if !m.docRan || m.docFull {
-		t.Fatal("Init runs a quick doctor pass without the clock check")
-	}
-	if b := m.Badge(c.st); b != "2" {
-		t.Errorf("badge %q (deprecated key + demo WAL)", b)
-	}
-	clock := false
-	for _, f := range m.findings {
-		if f.Check == doctor.CheckClock && f.Severity == doctor.SevSkipped {
-			clock = true
+	uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+		c := newCtx(t, "", true)
+		c.ic = ic
+		c.h = hostfake.New(hostfake.WithFile(hostfake.ConfigPath, append(append([]byte{}, hostfake.SeedConfig...), "\ntls_letsencrypt_hostname: hs.example.com\n"...)))
+		m := New()
+		m.root = filepath.Join(t.TempDir(), "bundles")
+		drain(t, c, m, m.Init(c))
+		if !m.docRan || m.docFull {
+			t.Fatal("Init runs a quick doctor pass without the clock check")
 		}
-	}
-	if !clock {
-		t.Error("the quick pass must skip the clock check")
-	}
-	res := drain(t, c, m, action(t, m, "server.doctor").Run(c, nil))
-	if len(res) != 1 || !strings.Contains(res[0].Message, "2 warnings") || !m.docFull || m.tab != tabDoctor {
-		t.Errorf("explicit run %+v", res)
-	}
-	// Move to the deprecated-key finding and follow its fix.
-	for i := 0; i < len(m.findings); i++ {
-		if f, _ := m.finding(); f.Action != "" {
-			break
+		if b := m.Badge(c.st); b != "2" {
+			t.Errorf("badge %q (deprecated key + demo WAL)", b)
 		}
-		m.Update(c, keyMsg("j"))
-	}
-	fix := action(t, m, "server.fix")
-	if ok, why := fix.Enabled(c); !ok {
-		t.Fatalf("fix disabled: %s", why)
-	}
-	fix.Run(c, nil)
-	if len(c.navs) != 1 || c.navs[0].id != "serverconfig" {
-		t.Errorf("navs %+v", c.navs)
-	}
-	if ok, _ := action(t, m, "server.copyfix").Enabled(c); !ok {
-		t.Error("copy fix should be enabled")
-	}
-	// A command-only fix cannot be "opened".
-	m.Update(c, keyMsg("k"))
-	for f, _ := m.finding(); f.Action != ""; f, _ = m.finding() {
+		clock := false
+		for _, f := range m.findings {
+			if f.Check == doctor.CheckClock && f.Severity == doctor.SevSkipped {
+				clock = true
+			}
+		}
+		if !clock {
+			t.Error("the quick pass must skip the clock check")
+		}
+		res := drain(t, c, m, action(t, m, "server.doctor").Run(c, nil))
+		if len(res) != 1 || !strings.Contains(res[0].Message, "2 warnings") || !m.docFull || m.tab != tabDoctor {
+			t.Errorf("explicit run %+v", res)
+		}
+		// Move to the deprecated-key finding and follow its fix.
+		for i := 0; i < len(m.findings); i++ {
+			if f, _ := m.finding(); f.Action != "" {
+				break
+			}
+			m.Update(c, keyMsg("j"))
+		}
+		fix := action(t, m, "server.fix")
+		if ok, why := fix.Enabled(c); !ok {
+			t.Fatalf("fix disabled: %s", why)
+		}
+		fix.Run(c, nil)
+		if len(c.navs) != 1 || c.navs[0].id != "serverconfig" {
+			t.Errorf("navs %+v", c.navs)
+		}
+		if ok, _ := action(t, m, "server.copyfix").Enabled(c); !ok {
+			t.Error("copy fix should be enabled")
+		}
+		// A command-only fix cannot be "opened".
 		m.Update(c, keyMsg("k"))
-	}
-	if ok, why := fix.Enabled(c); ok || !strings.Contains(why, "copies") {
-		t.Errorf("command-only fix: %v %q", ok, why)
-	}
-	uitest.Golden(t, m.View(c, module.Rect{W: 100, H: 34}))
+		for f, _ := m.finding(); f.Action != ""; f, _ = m.finding() {
+			m.Update(c, keyMsg("k"))
+		}
+		if ok, why := fix.Enabled(c); ok || !strings.Contains(why, "copies") {
+			t.Errorf("command-only fix: %v %q", ok, why)
+		}
+		return m.View(c, module.Rect{W: 100, H: 34})
+	})
 }
 
 func TestDoctorUsesInjectedProbesAndThresholds(t *testing.T) {
@@ -309,19 +312,27 @@ func (errSource) Releases(context.Context) ([]upgrade.Release, error) {
 }
 
 func TestUpgradeCard(t *testing.T) {
-	c := newCtx(t, "0.29.6", true)
-	m := New()
-	m.arch = "amd64" // the golden shows linux_amd64 whatever the runner is
-	m.src = staticSource{
-		{Tag: "v0.29.6", Body: "old"},
-		{Tag: "v0.30.0", Published: testNow.Add(-30 * 24 * time.Hour), Body: "## Breaking\n- `tls_*` keys move under `tls:`"},
-		{Tag: "v0.30.1", Published: testNow.Add(-24 * time.Hour), Body: "## Fixes\n- [Crash](https://x) fixed"},
+	card := func(t *testing.T, ic icons.Set) (*Model, *testCtx, []module.ActionResult) {
+		c := newCtx(t, "0.29.6", true)
+		c.ic = ic
+		m := New()
+		m.arch = "amd64" // the golden shows linux_amd64 whatever the runner is
+		m.src = staticSource{
+			{Tag: "v0.29.6", Body: "old"},
+			{Tag: "v0.30.0", Published: testNow.Add(-30 * 24 * time.Hour), Body: "## Breaking\n- `tls_*` keys move under `tls:`"},
+			{Tag: "v0.30.1", Published: testNow.Add(-24 * time.Hour), Body: "## Fixes\n- [Crash](https://x) fixed"},
+		}
+		res := drain(t, c, m, action(t, m, "server.upgrade").Run(c, nil))
+		if len(res) != 1 || res[0].Message != "Upgrade available: v0.30.1." {
+			t.Fatalf("upgrade %+v", res)
+		}
+		return m, c, res
 	}
-	res := drain(t, c, m, action(t, m, "server.upgrade").Run(c, nil))
-	if len(res) != 1 || res[0].Message != "Upgrade available: v0.30.1." {
-		t.Fatalf("upgrade %+v", res)
-	}
-	uitest.Golden(t, m.View(c, module.Rect{W: 110, H: 40}))
+	uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+		m, c, _ := card(t, ic)
+		return m.View(c, module.Rect{W: 110, H: 40})
+	})
+	m, c, _ := card(t, icons.Unicode)
 	before := m.upTop
 	for range 3 {
 		m.Update(c, keyMsg("j"))
@@ -392,21 +403,27 @@ func TestViewsAndTabs(t *testing.T) {
 		ver      string
 		hostMode bool
 		w, h     int
-		ic       icons.Set
 	}{
-		{"remote_029_80x24", "0.29.6", false, 80, 24, icons.Unicode},
-		{"host_030_120x40", "0.30.0", true, 120, 40, icons.Unicode},
-		{"host_030_80x24_ascii", "0.30.0", true, 80, 24, icons.ASCII},
+		{"remote_029_80x24", "0.29.6", false, 80, 24},
+		{"host_030_120x40", "0.30.0", true, 120, 40},
+		{"host_030_80x24", "0.30.0", true, 80, 24},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			c := newCtx(t, tt.ver, tt.hostMode)
-			c.ic = tt.ic
-			m := New()
-			m.root = filepath.Join(t.TempDir(), "bundles")
-			drain(t, c, m, m.Init(c))
-			out := m.View(c, module.Rect{W: tt.w, H: tt.h})
-			checkFrame(t, out, tt.w, tt.h)
-			uitest.Golden(t, out)
+			load := func(t *testing.T, ic icons.Set) (*Model, *testCtx) {
+				c := newCtx(t, tt.ver, tt.hostMode)
+				c.ic = ic
+				m := New()
+				m.root = filepath.Join(t.TempDir(), "bundles")
+				drain(t, c, m, m.Init(c))
+				return m, c
+			}
+			uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+				m, c := load(t, ic)
+				out := m.View(c, module.Rect{W: tt.w, H: tt.h})
+				checkFrame(t, out, tt.w, tt.h)
+				return out
+			})
+			m, c := load(t, icons.Unicode)
 			for range tabCount {
 				m.Update(c, keyMsg("tab"))
 				checkFrame(t, m.View(c, module.Rect{W: tt.w, H: tt.h}), tt.w, tt.h)

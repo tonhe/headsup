@@ -155,8 +155,9 @@ func TestGoldenOutput(t *testing.T) {
 	}
 	for name, args := range cases {
 		t.Run(name, func(t *testing.T) {
-			x := newHarness(t)
-			uitest.Golden(t, x.ok(args...))
+			uitest.ScreenColours(t, func(t *testing.T) string {
+				return newHarness(t).ok(args...)
+			})
 		})
 	}
 }

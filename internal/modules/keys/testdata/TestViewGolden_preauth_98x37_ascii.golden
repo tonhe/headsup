@@ -1,0 +1,37 @@
+[Pre-auth keys (6)]│ API keys (3)                                                                 
+╭ Pre-auth keys - 6 ─────────────────────────────────────────────────────────────────────────────╮
+│     KEY                USER       FLAGS          STATE   TAGS          CREATED v  EXPIRES      │
+│ > K hskey-auth-…6ac0   carol      ephemeral      active  -             24h ago    6d           │
+│   K hskey-auth-…b84f   bob        reusable,used  active  -             4d ago     3d           │
+│   K hskey-auth-…a1d5   alice      -              active  -             6d ago     24h          │
+│   K hskey-auth-…3ed7   alice      -              expired -             8d ago     24h ago      │
+│   K hskey-auth-…746a   bob        used           used    -             10d ago    2w           │
+│   K hskey-auth-…bb87   ops        reusable,used  active   tag:server   4w ago     12w          │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+╰─ n new · e expire · D delete ──────────────────────────────────────────────────────────────────╯

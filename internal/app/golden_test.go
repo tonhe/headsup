@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/tonhe/headsup/internal/api/fake"
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/theme"
 	"github.com/tonhe/headsup/internal/ui/uitest"
 )
@@ -24,20 +25,20 @@ func goldenDriver(t *testing.T, w, h int, themeSlug, icons string) *driver {
 	})
 }
 
-// TestGoldenScreens snapshots every MVP screen at both reference sizes and in
-// the ASCII icon set (constitution V, SC-006).
+// TestGoldenScreens snapshots every MVP screen at both reference sizes, in
+// the ASCII icon set, in 16 colours and under NO_COLOR (constitution V,
+// SC-006, T171).
 func TestGoldenScreens(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
-		for _, ic := range []string{"unicode", "ascii"} {
-			// Tailnet section jumps: Dashboard, Machines, Add device.
-			for i, key := range []string{"1 h", "1 m", "1 p"} {
-				name := fmt.Sprintf("%dx%d/%s/module%d", sz[0], sz[1], ic, i+1)
-				t.Run(name, func(t *testing.T) {
-					d := goldenDriver(t, sz[0], sz[1], "tokyo-night", ic)
+		// Tailnet section jumps: Dashboard, Machines, Add device.
+		for i, key := range []string{"1 h", "1 m", "1 p"} {
+			t.Run(fmt.Sprintf("%dx%d/module%d", sz[0], sz[1], i+1), func(t *testing.T) {
+				uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+					d := goldenDriver(t, sz[0], sz[1], "tokyo-night", ic.Name)
 					d.key(strings.Fields(key)...)
-					uitest.Golden(t, d.view())
+					return d.view()
 				})
-			}
+			})
 		}
 	}
 }
@@ -47,9 +48,11 @@ func TestGoldenScreens(t *testing.T) {
 func TestGoldenJumpMode(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
 		t.Run(fmt.Sprintf("%dx%d", sz[0], sz[1]), func(t *testing.T) {
-			d := goldenDriver(t, sz[0], sz[1], "tokyo-night", "unicode")
-			d.key("1")
-			uitest.Golden(t, d.view())
+			uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+				d := goldenDriver(t, sz[0], sz[1], "tokyo-night", ic.Name)
+				d.key("1")
+				return d.view()
+			})
 		})
 	}
 }

@@ -5,7 +5,7 @@
 │ URL      https://hs.demo.example.com                                                             │
 │ Config   /etc/headscale/config.yaml  (o opens Server Settings)                                   │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
- Capabilities │ Doctor (2) │ Backups │ Upgrade                                                      
+ Capabilities │[Doctor (2)]│ Backups │ Upgrade                                                      
 ╭ Doctor ─ 2 warnings ─────────────────────────────────────────────────────────────────────────────╮
 │          Check            Finding                                                                │
 │  ✓ ok    Permissions      This user has every host permission it needs                           │

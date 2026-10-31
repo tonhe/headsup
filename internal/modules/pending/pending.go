@@ -388,7 +388,11 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 		if e.FromServer {
 			src = "web login"
 		}
-		line := fmt.Sprintf("%s %-24s %-14s %s  %s", ic.Pending, name, src, humanize.Ago(e.RequestedAt, now), s.Muted.Render(e.AuthID))
+		glyph := ic.Pending
+		if i == m.cursor {
+			glyph = ic.Arrow // the cursor shows without colour too
+		}
+		line := fmt.Sprintf("%s %-24s %-14s %s  %s", glyph, name, src, humanize.Ago(e.RequestedAt, now), s.Muted.Render(e.AuthID))
 		if i == m.cursor {
 			line = s.RowSel.Render(table.Fit(line, w, lipgloss.Left, ic.Ellipsis))
 		} else {
@@ -434,8 +438,9 @@ func (m *Model) keysView(ctx module.Context, w, h int) string {
 		case api.KeyExpired:
 			st = s.Expired
 		}
-		line := fmt.Sprintf("%s %-22s %-10s %-20s %-8s expires %s %s",
-			st.Render(ic.Key), k.Key.Masked(), owner, strings.Join(flags, ","), st.Render(state.String()),
+		// Pad before styling: %-8s would count the colour codes as width.
+		line := fmt.Sprintf("%s %-22s %-10s %-20s %s expires %s %s",
+			st.Render(ic.Key), k.Key.Masked(), owner, strings.Join(flags, ","), st.Render(fmt.Sprintf("%-8s", state.String())),
 			humanize.In(k.Expiration, now), s.Tag.Render(strings.Join(k.ACLTags, " ")))
 		lines = append(lines, table.Fit(line, w, lipgloss.Left, ic.Ellipsis))
 	}
