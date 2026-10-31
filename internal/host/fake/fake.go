@@ -707,6 +707,22 @@ func (d *Debug) Routes(ctx context.Context) ([]host.RouteState, error) {
 	return []host.RouteState{r}, nil
 }
 
+// Filter serves a compiled packet filter: every node reaches every other.
+func (d *Debug) Filter(ctx context.Context) ([]byte, error) {
+	if !d.Available() {
+		return nil, host.ErrNoHost
+	}
+	d.h.mu.Lock()
+	defer d.h.mu.Unlock()
+	var src []string
+	for _, id := range d.h.nodes {
+		src = append(src, fmt.Sprintf("%q", fmt.Sprintf("100.64.0.%d/32", id)))
+	}
+	all := `{"IP":"*","Ports":{"First":0,"Last":65535}}`
+	return []byte(`[{"SrcIPs":[` + strings.Join(src, ",") + `],"DstPorts":[` + all + `]},` +
+		`{"SrcIPs":["*"],"DstPorts":[{"IP":"100.64.0.1/32","Ports":{"First":53,"Last":53}}],"IPProto":[6,17]}]`), nil
+}
+
 func (d *Debug) Ping(ctx context.Context, id uint64) (time.Duration, error) {
 	if !d.Available() {
 		return 0, host.ErrNoHost

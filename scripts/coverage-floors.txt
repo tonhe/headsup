@@ -38,3 +38,7 @@ github.com/tonhe/headsup/internal/ui/help 90
 github.com/tonhe/headsup/internal/modules/prefs 75
 github.com/tonhe/headsup/internal/app 78
 github.com/tonhe/headsup/internal/modules/serverconfig 80
+github.com/tonhe/headsup/internal/policy 90
+github.com/tonhe/headsup/internal/ui/codeview 92
+github.com/tonhe/headsup/internal/ui/diffview 95
+github.com/tonhe/headsup/internal/modules/policy 82

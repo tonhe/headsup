@@ -55,6 +55,10 @@ func server(t *testing.T, v string) *httptest.Server {
 			w.Write(fixture(t, v, "ping-not-connected.html"))
 		}
 	})
+	mux.HandleFunc("/debug/filter", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`[{"SrcIPs":["*"],"DstPorts":[{"IP":"*","Ports":{"First":0,"Last":65535}}]}]`))
+	})
 	mux.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		w.Write(fixture(t, v, "metrics.txt"))
 	})
@@ -195,6 +199,27 @@ func TestUnsupportedShapes(t *testing.T) {
 	}
 	if _, err := ParseMetrics([]byte("other_metric 1\n")); !errors.Is(err, host.ErrUnsupportedShape) {
 		t.Errorf("metrics without series err = %v", err)
+	}
+}
+
+func TestFilter(t *testing.T) {
+	c := New(strings.TrimPrefix(server(t, "v030").URL, "http://"))
+	b, err := c.Filter(context.Background())
+	if err != nil || !strings.Contains(string(b), "SrcIPs") {
+		t.Fatalf("filter: %s %v", b, err)
+	}
+	html := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte("<html></html>"))
+	}))
+	defer html.Close()
+	if _, err := New(strings.TrimPrefix(html.URL, "http://")).Filter(context.Background()); !errors.Is(err, host.ErrUnsupportedShape) {
+		t.Errorf("html filter err = %v", err)
+	}
+	nf := httptest.NewServer(http.NotFoundHandler())
+	defer nf.Close()
+	if _, err := New(strings.TrimPrefix(nf.URL, "http://")).Filter(context.Background()); !errors.Is(err, host.ErrUnsupportedShape) {
+		t.Errorf("missing filter err = %v", err)
 	}
 }
 
