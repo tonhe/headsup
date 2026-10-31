@@ -38,7 +38,9 @@ func ConfigSchema(b []byte, version string) []host.Issue {
 
 // PolicySchema checks that a policy is a HuJSON object.
 func PolicySchema(b []byte) []host.Issue {
-	v, err := hujson.Parse(b)
+	// Parse a copy: Standardize rewrites the parsed bytes in place, and b is
+	// the content about to be written.
+	v, err := hujson.Parse(append([]byte(nil), b...))
 	if err != nil {
 		return schemaErr("HuJSON: "+err.Error(), lineOf(err))
 	}

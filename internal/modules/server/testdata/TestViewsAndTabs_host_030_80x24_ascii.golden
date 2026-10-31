@@ -1,0 +1,24 @@
+╭ Server ──────────────────────────────────────────────────────────────────────╮
+│ Version  0.30.0  + supported                                                 │
+│ Health   * healthy                                                           │
+│ API      unix socket (HTTP) - host mode                                      │
+│ URL      https://hs.demo.example.com                                         │
+│ Config   /etc/headscale/config.yaml  (o opens Server Settings)               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ Capabilities │ Doctor (1) │ Backups │ Upgrade                                  
+╭ Capabilities ─ 0.30.0 - host mode ───────────────────────────────────────────╮
+│  Feature                            Remote  Host   Here                      │
+│> Health endpoint                    +       +      +                         │
+│  Policy check                       +       +      +                         │
+│  Policy writable via API            +       +      +                         │
+│  Web-auth approval                  +       +      +                         │
+│  Pre-auth key delete                +       +      +                         │
+│  API key delete                     +       +      +                         │
+│  OAuth clients (planned)            x       x      x planned                 │
+│  Problem+json errors                +       +      +                         │
+│  Tag-only pre-auth keys             +       +      +                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ About ───────────────────────────────────────────────────────────────────────╮
+│ GET /health answers when headscale and its database are up.                  │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯

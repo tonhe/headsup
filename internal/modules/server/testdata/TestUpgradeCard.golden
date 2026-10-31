@@ -1,0 +1,40 @@
+╭ Server ────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Version  0.29.6  ✓ supported                                                                               │
+│ Health   ● healthy                                                                                         │
+│ API      unix socket (HTTP) • host mode                                                                    │
+│ URL      https://hs.demo.example.com                                                                       │
+│ Config   /etc/headscale/config.yaml  (o opens Server Settings)                                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ Capabilities │ Doctor │ Backups │ Upgrade                                                                    
+╭ Upgrade ───────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Installed 0.29.6                                                                                           │
+│ Latest    v0.30.1 2026-10-27                                                                               │
+│ Next      v0.30.1                                                                                          │
+│                                                                                                            │
+│ 1. Read the release notes below for breaking config changes.                                               │
+│ 2. Take a backup first (press b).                                                                          │
+│ 3. Run: curl -fLO                                                                                          │
+│ https://github.com/juanfont/headscale/releases/download/v0.30.1/headscale_0.30.1_linux_amd64.deb           │
+│ 4. Run: sudo apt install ./headscale_0.30.1_linux_amd64.deb                                                │
+│ 5. Run: sudo systemctl restart headscale                                                                   │
+│ 6. Check the config with: headscale configtest, and the server with the doctor (press c).                  │
+│                                                                                                            │
+│ Release notes v0.30.1                                                                                      │
+│ Fixes                                                                                                      │
+│ • Crash fixed                                                                                              │
+│                                                                                                            │
+│ Release notes v0.30.0                                                                                      │
+│ Breaking                                                                                                   │
+│ • tls_* keys move under tls:                                                                               │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+│                                                                                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
