@@ -6,6 +6,16 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Host mode asks to restart under sudo when this user can't reach headscale,
+  instead of only printing the fix.
+
+### Fixed
+
+- Host mode on headscale 0.27+: `headscale version` no longer gets `-c`, which
+  that command rejects, so the CLI transport connects again.
+- A socket hidden behind an unreadable directory is now reported as missing
+  access (with the group fix), not as "does not exist (is headscale running?)".
+
 - Host mode: run with no flags on the headscale server. It finds headscale's
   config, connects over the local socket (0.30) or CLI (0.29) without an API
   key, and adds OS, client version, DERP and endpoint detail, route primaries,

@@ -107,6 +107,7 @@ type Perm struct {
 	OK         bool
 	Reason     string // why not, in plain words
 	FixCommand string // exact command to run, e.g. "sudo usermod -aG headscale $USER"
+	Denied     bool   // the failure is missing access, so root would get past it
 }
 
 // Perms maps each probed Need to its outcome. Missing entries mean "not probed / not applicable".

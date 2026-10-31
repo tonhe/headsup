@@ -358,6 +358,7 @@ A restart with an invalid config is refused before the service is touched.
 - [ ] T170 Performance check: 2,000-node fake, filter keystroke to frame time under 16ms, as a benchmark in internal/ui/table/bench_test.go
 - [ ] T171 Accessibility pass: the ascii icon set, and a 16-colour plus NO_COLOR run of every golden test
 - [ ] T172 Run the quickstart.md validation end to end and update CHANGELOG.md for v0.1.0
+- [X] T173 Ask-first restart under sudo when host mode lacks access (constitution 2.0.0, US1 scenario 3), in cmd/headsup/elevate.go, with the escalation lint extended to cmd/ in internal/host/lint_test.go
 
 ---
 

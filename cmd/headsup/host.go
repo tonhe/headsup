@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/netip"
@@ -74,16 +73,18 @@ func hostUnavailable(env host.Env) error {
 	var b strings.Builder
 	if env.ConfigPath == "" && env.Transport == host.TransportNone {
 		b.WriteString("headscale was not found on this machine (no config in /etc/headscale, $HOME/.headscale or ./, and no headscale container)")
-		return errors.New(b.String())
+		// A running service means it is here but hidden from this user.
+		return &hostErr{msg: b.String(), denied: env.Service != host.ServiceNone}
 	}
 	b.WriteString("host mode is not available")
-	if p, missing := env.Perms.Missing(host.NeedSocket); missing {
+	p, missing := env.Perms.Missing(host.NeedSocket)
+	if missing {
 		fmt.Fprintf(&b, ": %s", p.Reason)
 		if p.FixCommand != "" {
 			fmt.Fprintf(&b, "\n\nFix: %s", p.FixCommand)
 		}
 	}
-	return errors.New(b.String())
+	return &hostErr{msg: b.String(), denied: missing && p.Denied}
 }
 
 // demoHost is a fake host whose node IDs line up with the demo backend.

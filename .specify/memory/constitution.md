@@ -60,9 +60,12 @@ running a web app.
   7. Offer a one-key rollback.
 - Headsup MUST NEVER write to the headscale database. Database access is read-only, opened in a
   way that cannot block or corrupt the running server.
-- Headsup MUST NEVER escalate privileges on its own. When an action needs more rights than the
-  process has, the TUI explains why and shows the exact command to run (for example with
-  `sudo`). It does not run `sudo` itself.
+- Headsup MUST NEVER escalate privileges without asking. When host mode at startup fails for
+  lack of access on a machine where headscale is installed, it explains why and offers to
+  restart itself under `sudo`; it does so only after the user says yes, and sudo asks for the
+  password as usual. This startup offer (`cmd/headsup/elevate.go`) is the only code allowed to
+  run sudo, su, doas or pkexec. Everywhere else, when an action needs more rights than the
+  process has, the TUI explains why and shows the exact command to run.
 - Service restarts MUST say what they will interrupt (connected clients reconnect) and MUST be
   preceded by a successful config validation.
 - Rationale: this tool controls who can reach a private network, and on the host it can also
@@ -133,4 +136,4 @@ with a version bump: MAJOR when a principle is removed or redefined, MINOR when 
 expanded, PATCH for wording. Every plan's Constitution Check gates on these principles, and any
 violation MUST be justified in that plan's Complexity Tracking table.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-28 | **Last Amended**: 2026-10-28
+**Version**: 2.0.0 | **Ratified**: 2026-10-28 | **Last Amended**: 2026-10-31

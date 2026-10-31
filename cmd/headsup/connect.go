@@ -38,6 +38,11 @@ func connect(res config.Resolved, f config.Flags, stderr io.Writer) (connection,
 	wantHost := res.Host != config.HostNever && !f.Remote && (!res.Explicit || f.Host)
 	if wantHost {
 		c, err := hostConnect(res, f)
+		if err != nil {
+			if eerr := elevate(err); eerr != nil {
+				return connection{}, eerr
+			}
+		}
 		switch {
 		case err == nil:
 			return c, nil

@@ -100,10 +100,18 @@ func escalationFindings(fset *token.FileSet, f *ast.File) []string {
 	return out
 }
 
+// elevationAllowed is the one file that may run sudo: the startup offer to
+// restart under sudo, which asks first (constitution IV).
+const elevationAllowed = "cmd/headsup/elevate.go"
+
 func TestNoPrivilegeEscalation(t *testing.T) {
-	root := filepath.Join(repoRoot(t), "internal")
+	repo := repoRoot(t)
 	fset := token.NewFileSet()
-	for _, p := range goFiles(t, root) {
+	files := append(goFiles(t, filepath.Join(repo, "internal")), goFiles(t, filepath.Join(repo, "cmd"))...)
+	for _, p := range files {
+		if rel, _ := filepath.Rel(repo, p); filepath.ToSlash(rel) == elevationAllowed {
+			continue
+		}
 		f, err := parser.ParseFile(fset, p, nil, parser.SkipObjectResolution)
 		if err != nil {
 			t.Errorf("%s: %v", p, err)
