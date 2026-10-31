@@ -6,7 +6,9 @@ package activity
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -419,6 +421,10 @@ func writeExport(path string, ex Export) error {
 		return fmt.Errorf("encode: %w", err)
 	}
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if errors.Is(err, fs.ErrExist) {
+		// Same words on every OS (Windows says "The file exists.").
+		return fmt.Errorf("file exists, not overwriting %s", path)
+	}
 	if err != nil {
 		return fmt.Errorf("export: %w", err)
 	}
