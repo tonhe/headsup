@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -43,7 +44,7 @@ func TestHistoryRecordListLoad(t *testing.T) {
 	}
 
 	dir := filepath.Join(root, "hs.example.com")
-	for _, p := range []string{root, dir} {
+	for _, p := range unixOnly([]string{root, dir}) {
 		fi, err := os.Stat(p)
 		if err != nil || fi.Mode().Perm() != 0o700 {
 			t.Errorf("%s mode %v, want 0700 (%v)", p, fi.Mode().Perm(), err)
@@ -52,7 +53,7 @@ func TestHistoryRecordListLoad(t *testing.T) {
 	ents, _ := os.ReadDir(dir)
 	for _, e := range ents {
 		fi, _ := e.Info()
-		if fi.Mode().Perm() != 0o600 {
+		if runtime.GOOS != "windows" && fi.Mode().Perm() != 0o600 {
 			t.Errorf("%s mode %v, want 0600", e.Name(), fi.Mode().Perm())
 		}
 	}
@@ -91,7 +92,19 @@ func TestHistoryKeepsLastN(t *testing.T) {
 	}
 }
 
+// unixOnly returns s, or nothing on Windows, where Go reports every
+// directory as 0777 and files carry no Unix owner.
+func unixOnly(s []string) []string {
+	if runtime.GOOS == "windows" {
+		return nil
+	}
+	return s
+}
+
 func TestHistoryRefusesInsecureDir(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("needs Unix mode bits, symlinks and ownership")
+	}
 	root := t.TempDir()
 	if err := os.Chmod(root, 0o755); err != nil {
 		t.Fatal(err)

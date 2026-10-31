@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -264,7 +265,7 @@ func TestEditorRoundTrip(t *testing.T) {
 	hs.m.execProc = func(c *exec.Cmd, cb tea.ExecCallback) tea.Cmd {
 		ran = c.Args
 		path := c.Args[len(c.Args)-1]
-		if fi, err := os.Stat(path); err != nil || fi.Mode().Perm() != 0o600 {
+		if fi, err := os.Stat(path); err != nil || (runtime.GOOS != "windows" && fi.Mode().Perm() != 0o600) {
 			t.Errorf("temp file should be private: %v %v", fi, err)
 		}
 		err := os.WriteFile(path, []byte(next), 0o600)

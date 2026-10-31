@@ -211,7 +211,9 @@ func (h *History) checkPrivate(dir string) error {
 		return insecure(fmt.Sprintf("mv %s %s.old && mkdir -m 700 %s", dir, dir, dir))
 	case ok && h.UID >= 0 && owner != h.UID:
 		return insecure(fmt.Sprintf("sudo chown -R $(id -u):$(id -g) %s && chmod 700 %s", dir, dir))
-	case fi.Mode().Perm()&0o077 != 0:
+	case ok && fi.Mode().Perm()&0o077 != 0:
+		// Mode bits mean something only where the platform has Unix
+		// ownership (ok); Windows reports every directory as 0777.
 		return insecure("chmod 700 " + dir)
 	}
 	return nil
