@@ -47,21 +47,24 @@ func (*machinesStub) Actions() []module.Action                { return nil }
 func (*machinesStub) Capturing() bool                         { return false }
 func (*machinesStub) Hints() []module.Hint                    { return nil }
 
-// driver runs the app headlessly, executing commands synchronously and
-// dropping any that block (timers, the follow stream waiting for a line).
+// driver runs the app headlessly, executing commands synchronously. A
+// command still running after 200ms (a timer, the follow stream waiting for a
+// line, or slow I/O on a loaded CI runner) is parked: its result lands in
+// late and is applied only while want waits for the screen.
 type driver struct {
 	t    *testing.T
 	m    *app.Model
 	svc  *Model
 	mach *machinesStub
 	h    *hostfake.Host
+	late chan tea.Msg
 }
 
 func newDriver(t *testing.T, w, ht int, h *hostfake.Host, iconSet string) *driver {
 	t.Helper()
 	clock := func() time.Time { return flowNow }
 	b := apifake.Demo(apifake.WithClock(clock))
-	d := &driver{t: t, svc: New(), mach: &machinesStub{}, h: h}
+	d := &driver{t: t, svc: New(), mach: &machinesStub{}, h: h, late: make(chan tea.Msg, 256)}
 	opt := app.Options{Backend: b, Modules: []module.Module{d.svc, d.mach}, Now: clock,
 		Refresh: time.Hour, Theme: "tokyo-night", Icons: iconSet, Profile: "host:hs-demo"}
 	if h != nil {
@@ -108,8 +111,14 @@ func (d *driver) exec(cmd tea.Cmd, depth int) {
 	select {
 	case msg = <-done:
 	case <-time.After(200 * time.Millisecond):
+		go func() { d.late <- <-done }()
 		return
 	}
+	d.dispatch(msg, depth)
+}
+
+// dispatch applies one command result and runs what it returns.
+func (d *driver) dispatch(msg tea.Msg, depth int) {
 	switch msg := msg.(type) {
 	case nil, tea.QuitMsg:
 	case tea.BatchMsg:
@@ -160,10 +169,24 @@ func (d *driver) push(lines ...string) {
 	d.send(logMsg{id: d.svc.streamID, entries: es})
 }
 
+// want waits up to 5s for sub to be on screen, applying the results of
+// parked commands while it waits.
 func (d *driver) want(sub string) {
 	d.t.Helper()
-	if out := d.view(); !strings.Contains(out, sub) {
-		d.t.Fatalf("view missing %q:\n%s", sub, out)
+	deadline := time.Now().Add(5 * time.Second)
+	for {
+		out := d.view()
+		if strings.Contains(out, sub) {
+			return
+		}
+		if !time.Now().Before(deadline) {
+			d.t.Fatalf("view missing %q:\n%s", sub, out)
+		}
+		select {
+		case msg := <-d.late:
+			d.dispatch(msg, 0)
+		case <-time.After(50 * time.Millisecond):
+		}
 	}
 }
 
