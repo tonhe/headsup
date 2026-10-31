@@ -1,0 +1,40 @@
+// A policy that uses every section the model reads.
+/* Block comments
+   are allowed too. */
+{
+  "groups": {
+    "group:admins": ["alice@", "ops@"], // trailing comment
+    "group:devs":   ["bob@",],
+  },
+  "tagOwners": {
+    "tag:server": ["group:admins"],
+    "tag:ci":     ["group:admins", "group:devs"],
+  },
+  "hosts": {
+    "nas":  "100.64.0.10",
+    "lab":  "10.0.0.0/24",
+  },
+  "acls": [
+    // Admins reach everything.
+    {"action": "accept", "src": ["group:admins"], "dst": ["*:*"]},
+    {"action": "accept", "proto": "tcp", "src": ["group:devs"], "dst": ["tag:ci:*", "nas:445"]},
+  ],
+  "grants": [
+    {"src": ["group:devs"], "dst": ["tag:server"], "ip": ["tcp:22", "tcp:443"]},
+    {"src": ["autogroup:member"], "dst": ["autogroup:self"], "ip": ["*"], "app": {"tailscale.com/cap/x": [{}]}},
+  ],
+  "ssh": [
+    {"action": "check", "src": ["group:admins"], "dst": ["tag:server"], "users": ["root", "autogroup:nonroot"], "checkPeriod": "12h"},
+  ],
+  "autoApprovers": {
+    "routes": {
+      "10.0.0.0/24": ["tag:server"],
+      "192.168.0.0/16": ["group:admins"],
+    },
+    "exitNode": ["tag:server"],
+  },
+  "nodeAttrs": [{"target": ["*"], "attr": ["funnel"]}],
+  "tests": [
+    {"src": "bob@", "accept": ["tag:ci:22"], "deny": ["tag:server:22"]},
+  ],
+}
