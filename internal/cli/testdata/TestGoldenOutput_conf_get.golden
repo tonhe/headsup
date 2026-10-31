@@ -1,0 +1,7 @@
+{
+  "key": "dns.base_domain",
+  "value": null,
+  "list": [
+    "tail.demo.example.com"
+  ]
+}

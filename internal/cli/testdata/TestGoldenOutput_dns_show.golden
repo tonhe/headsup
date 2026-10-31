@@ -1,0 +1,8 @@
+magic_dns           yes
+base_domain         tail.demo.example.com
+override_local_dns  yes
+nameservers         1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001
+split               -
+search_domains      -
+extra_records_path  /var/lib/headscale/extra-records.json
+extra_records       3

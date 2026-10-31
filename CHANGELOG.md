@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Scriptable CLI: `headsup VERB ...` for nodes, routes, users, keys, auth,
+  policy, server, host, svc, conf, dns, derp, backup and upgrade, with
+  table/wide/json/yaml output. Changes run the same actions as the TUI
+  (same checks, confirmation and activity log); destructive verbs prompt on
+  a terminal and need `--yes` otherwise (exit 7). Exit 8 means no host mode
+  and 9 a missing permission, with the fix on stderr.
 - Activity (`9`): this app's changes (with targets, results, backup IDs and
   diff stats) and a live feed of tailnet events: machines coming online or
   going offline, keys nearing expiry, new advertised routes. Filter with `/`,

@@ -305,11 +305,11 @@ A restart with an invalid config is refused before the service is touched.
 
 ## Phase 15: User Story 11, Scriptable CLI (P3)
 
-- [ ] T144 [P] [US11] Golden tests for CLI output in table, json, and yaml formats, plus exit-code tests, in internal/cli/cli_test.go
-- [ ] T145 [US11] Subcommand router and formatters per contracts/cli.md in internal/cli/{router,format}.go
-- [ ] T146 [US11] Verbs for nodes, routes, users, keys, policy, auth, server, themes, config, and version, reusing the module Actions' Run logic, in internal/cli/cmd_*.go
-- [ ] T147 [US11] TTY-aware confirmation, with `--yes` and exit code 7 when not interactive, in internal/cli/confirm.go
-- [ ] T148 [US11] Host verbs (`host`, `svc`, `conf`, `dns`, `derp`, `backup`, `upgrade`), reusing module Actions, with exit codes 8 (no host) and 9 (permission) and the fix command on stderr, in internal/cli/cmd_host.go
+- [X] T144 [P] [US11] Golden tests for CLI output in table, json, and yaml formats, plus exit-code tests, in internal/cli/cli_test.go
+- [X] T145 [US11] Subcommand router and formatters per contracts/cli.md in internal/cli/{router,format}.go
+- [X] T146 [US11] Verbs for nodes, routes, users, keys, policy, auth, server, themes, config, and version, reusing the module Actions' Run logic, in internal/cli/cmd_*.go
+- [X] T147 [US11] TTY-aware confirmation, with `--yes` and exit code 7 when not interactive, in internal/cli/confirm.go
+- [X] T148 [US11] Host verbs (`host`, `svc`, `conf`, `dns`, `derp`, `backup`, `upgrade`), reusing module Actions, with exit codes 8 (no host) and 9 (permission) and the fix command on stderr, in internal/cli/cmd_host.go
 
 ## Phase 16: User Story 12, Activity and Watch (P3)
 

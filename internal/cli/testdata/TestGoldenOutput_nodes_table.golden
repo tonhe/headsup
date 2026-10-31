@@ -1,0 +1,5 @@
+ID  NAME             USER  IP           STATUS   LAST SEEN  TAGS
+6   laptop-bob       bob   100.64.0.7   online   now        -
+7   phone-bob        bob   100.64.0.8   expired  8d ago     -
+9   raspberrypi-bob  bob   100.64.0.10  online   now        -
+8   workstation-bob  bob   100.64.0.9   online   now        -

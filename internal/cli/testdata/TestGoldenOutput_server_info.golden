@@ -1,0 +1,18 @@
+version: v0.30.0
+healthy: true
+url: https://hs.example.com
+mode: host
+connection: host:test
+read_only: false
+supported_version: true
+capabilities:
+  - health endpoint
+  - policy check
+  - policy writable via API
+  - web-auth approval
+  - pre-auth key delete
+  - API key delete
+  - problem+json errors
+  - tag-only pre-auth keys
+  - backfill node IPs
+  - disable node expiry

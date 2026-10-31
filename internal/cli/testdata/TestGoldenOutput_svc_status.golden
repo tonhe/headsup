@@ -1,0 +1,9 @@
+{
+  "manager": "systemd",
+  "state": "active",
+  "running": true,
+  "since": "2026-02-28T10:00:00Z",
+  "pid": 812,
+  "memory_bytes": 50331648,
+  "version": "0.30.0"
+}

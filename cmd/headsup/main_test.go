@@ -50,3 +50,22 @@ func TestSubcommands(t *testing.T) {
 		t.Fatalf("unknown command exit = %d, want 2", code)
 	}
 }
+
+func TestCLIVerbs(t *testing.T) {
+	t.Setenv("XDG_CONFIG_HOME", t.TempDir())
+	t.Setenv("XDG_STATE_HOME", t.TempDir())
+	var out, errb bytes.Buffer
+	if code := run([]string{"--demo", "nodes", "ls", "-o", "json"}, &out, &errb); code != 0 || !strings.HasPrefix(out.String(), "[") {
+		t.Fatalf("nodes ls: %d %q", code, errb.String())
+	}
+	out.Reset()
+	if code := run([]string{"--demo", "host", "info"}, &out, &errb); code != 0 || !strings.Contains(out.String(), "hs-demo") {
+		t.Fatalf("host info: %d %q %q", code, out.String(), errb.String())
+	}
+	if code := run([]string{"--demo", "nodes", "delete", "1"}, &out, &errb); code != 7 {
+		t.Fatalf("delete without --yes: %d", code)
+	}
+	if code := run([]string{"config", "path"}, &out, &errb); code != 0 {
+		t.Fatalf("config path: %d", code)
+	}
+}

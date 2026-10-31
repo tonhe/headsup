@@ -8,15 +8,16 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/tonhe/headsup/internal/activity"
 	"github.com/tonhe/headsup/internal/app"
 	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/cli"
 	"github.com/tonhe/headsup/internal/config"
 	"github.com/tonhe/headsup/internal/modules/registry"
+	"github.com/tonhe/headsup/internal/policy"
 	"github.com/tonhe/headsup/internal/theme"
 	"github.com/tonhe/headsup/internal/version"
 
@@ -47,8 +48,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 	fs.StringVar(&f.ConfigPath, "config", "", "path to "+brand.Name+"'s own config file")
 	fs.BoolVar(&showVersion, "version", false, "print version and exit")
 	fs.Usage = func() {
-		fmt.Fprintf(stderr, "%s - a terminal UI for headscale\n\nUsage:\n  %s [flags]\n  %s version | host info | themes | config path\n\nFlags:\n",
-			brand.Display, brand.Name, brand.Name)
+		fmt.Fprintf(stderr, "%s - a terminal UI and CLI for headscale\n\nUsage:\n  %s [flags]                 launch the TUI\n  %s [flags] VERB ...        run a command (%s help lists them)\n\nFlags:\n",
+			brand.Display, brand.Name, brand.Name, brand.Name)
 		fs.PrintDefaults()
 	}
 	if err := fs.Parse(args); err != nil {
@@ -78,7 +79,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	}
 
 	if rest := fs.Args(); len(rest) > 0 {
-		return subcommand(rest, cfg, f, stdout, stderr)
+		return subcommand(rest, cfg, cfgPath, f, stdout, stderr)
 	}
 
 	res, err := config.Resolve(cfg, f, os.Getenv)
@@ -139,30 +140,52 @@ func run(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func subcommand(args []string, cfg config.Config, f config.Flags, stdout, stderr io.Writer) int {
-	switch strings.Join(args, " ") {
-	case "version":
-		fmt.Fprintln(stdout, brand.Name, version.String())
-		return 0
-	case "config path":
-		fmt.Fprintln(stdout, config.ConfigFile())
-		return 0
-	case "themes", "themes ls":
-		for _, t := range theme.All() {
-			kind := "dark"
-			if t.Light {
-				kind = "light"
-			}
-			src := ""
-			if t.Source != "" {
-				src = "  (" + t.Source + ")"
-			}
-			fmt.Fprintf(stdout, "%-28s %-5s %s%s\n", t.Slug, kind, t.Name, src)
+// subcommand runs a CLI verb (contracts/cli.md) through internal/cli.
+func subcommand(args []string, cfg config.Config, cfgPath string, f config.Flags, stdout, stderr io.Writer) int {
+	hist := ""
+	logger := activity.Logger(activity.Nop{})
+	if !f.Demo {
+		hist = policy.DefaultHistoryDir()
+		if l, err := activity.OpenDefault(); err == nil {
+			logger = l
 		}
-		return 0
-	case "host info":
-		return hostInfo(f, stdout)
 	}
-	fmt.Fprintf(stderr, "%s: unknown command %q (try --help)\n", brand.Name, strings.Join(args, " "))
-	return 2
+	return cli.Run(args, cli.Options{
+		Stdin:            os.Stdin,
+		Stdout:           stdout,
+		Stderr:           stderr,
+		Interactive:      isTerminal(os.Stdin) && isTerminal(os.Stderr),
+		Flags:            f,
+		Config:           cfg,
+		ConfigPath:       cfgPath,
+		Connect:          cliConnect(cfg, stderr),
+		DetectEnv:        detectEnv,
+		Activity:         logger,
+		PolicyHistoryDir: hist,
+		ThemesDir:        config.ThemesDir(),
+	})
+}
+
+// cliConnect opens the same connection the TUI would for the given flags.
+func cliConnect(cfg config.Config, stderr io.Writer) func(config.Flags) (cli.Conn, error) {
+	return func(f config.Flags) (cli.Conn, error) {
+		res, err := config.Resolve(cfg, f, os.Getenv)
+		if err != nil {
+			return cli.Conn{}, &cli.Error{Code: cli.ExitUsage, Msg: err.Error()}
+		}
+		c, err := connect(res, f, stderr)
+		if err != nil {
+			var he *hostErr
+			if errors.As(err, &he) {
+				code := cli.ExitNoHost
+				if he.denied {
+					code = cli.ExitPermission
+				}
+				return cli.Conn{}, &cli.Error{Code: code, Msg: err.Error()}
+			}
+			return cli.Conn{}, err
+		}
+		return cli.Conn{Backend: c.backend, Host: c.host, Label: c.label, ServerURL: c.serverURL,
+			ReadOnly: res.Profile.ReadOnly || c.readOnly}, nil
+	}
 }

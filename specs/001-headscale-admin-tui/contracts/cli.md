@@ -43,6 +43,8 @@ headsup version
   | 5 | unsupported by server |
   | 6 | validation failed |
   | 7 | aborted (not confirmed) |
+  | 8 | host mode unavailable |
+  | 9 | host permission denied |
 
 - A destructive verb without `--yes` prompts on a TTY. When stdin is not a TTY it fails with
   exit code 7.
@@ -51,5 +53,11 @@ headsup version
   `NO_COLOR` is set.
 - Host verbs exit with code 8 when host mode is unavailable, and code 9 on a permission
   error. Either way they print the fix command to stderr.
+- A mutating verb on a read-only profile (or with `--read-only`) exits with code 3.
+- Mutating verbs print a one-line result to stderr; with `-o json|yaml|table` they also
+  print the changed object to stdout. `keys * create` prints the new key on stdout.
+- `conf diff FILE` compares the live config with FILE (the CLI has no staged edits).
+  `conf edit`, `conf rollback` and `derp map edit` are interactive and exit 5 with a
+  pointer to the TUI.
 - `ID|NAME` arguments resolve a unique name to its ID. An ambiguous name lists the candidates
   and exits with code 2.

@@ -1,0 +1,7 @@
+ID  USER   KEY               REUSABLE  EPHEMERAL  STATE    EXPIRES               TAGS
+1   alice  hskey-auth-…a1d5  no        no         active   2026-03-02T12:00:00Z  -
+2   bob    hskey-auth-…b84f  yes       no         active   2026-03-04T12:00:00Z  -
+3   carol  hskey-auth-…6ac0  no        yes        active   2026-03-07T12:00:00Z  -
+4   ops    hskey-auth-…bb87  yes       no         active   2026-05-30T12:00:00Z  tag:server
+5   bob    hskey-auth-…746a  no        no         used     2026-03-21T12:00:00Z  -
+6   alice  hskey-auth-…3ed7  no        no         expired  2026-02-28T12:00:00Z  -

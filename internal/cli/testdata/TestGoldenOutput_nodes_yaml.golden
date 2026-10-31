@@ -1,0 +1,50 @@
+- id: 34
+  name: db-primary
+  given_name: db-primary
+  hostname: db-primary
+  user:
+    id: 4
+    name: ops
+  ip_addresses:
+    - 100.64.0.35
+    - fd7a:115c:a1e0::22
+  tags:
+    - tag:server
+    - tag:db
+  online: true
+  status: online
+  last_seen: "2026-03-01T12:00:00Z"
+  expiry: null
+  created_at: "2026-02-03T12:00:00Z"
+  register_method: authkey
+  exit_node: false
+  available_routes: []
+  approved_routes: []
+  pending_routes: []
+  machine_key: mkey:48315f3d410d63ca49dfe586459bf167848664e7a6b0397bf239d90bf4d9988f
+  node_key: nodekey:a28d87ec944005f521ad4020ab42051dd534d4d58f89b73c852f9e5422ca6340
+- id: 35
+  name: db-replica
+  given_name: db-replica
+  hostname: db-replica
+  user:
+    id: 4
+    name: ops
+  ip_addresses:
+    - 100.64.0.36
+    - fd7a:115c:a1e0::23
+  tags:
+    - tag:server
+    - tag:db
+  online: true
+  status: online
+  last_seen: "2026-03-01T12:00:00Z"
+  expiry: null
+  created_at: "2026-02-04T12:00:00Z"
+  register_method: authkey
+  exit_node: false
+  available_routes: []
+  approved_routes: []
+  pending_routes: []
+  machine_key: mkey:2d5be81b96d9ef7cfe348356e470a015adb5f3d0da586a5878d4da6544d19233
+  node_key: nodekey:9a9ee1372da70b8fcfe6956cbc9775544ee3644f732750246ece2475fcf89cae

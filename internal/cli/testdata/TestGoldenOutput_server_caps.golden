@@ -1,0 +1,12 @@
+CAPABILITY               SUPPORTED
+health endpoint          yes
+policy check             yes
+policy writable via API  yes
+web-auth approval        yes
+pre-auth key delete      yes
+API key delete           yes
+OAuth clients (planned)  no
+problem+json errors      yes
+tag-only pre-auth keys   yes
+backfill node IPs        yes
+disable node expiry      yes
