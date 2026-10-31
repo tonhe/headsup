@@ -1,0 +1,40 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
+▸ 1 ⚙ Server Set…   ! ╭ Restart failed ─ /etc/headscale/config.yaml ───────────────────────────────────────────────────╮
+                      │ ✗ headscale did not come back healthy (state failed).                                          │
+                      │                                                                                                │
+                      │ u restores the backup taken before your change and restarts headscale again.                   │
+                      │ X retries the restart • esc goes back to the fields                                            │
+                      │                                                                                                │
+                      │ Last log lines                                                                                 │
+                      │ 2026-10-28T11:58:15Z INF Node connected node.id=1                                              │
+                      │ 2026-10-28T11:58:22Z DBG Map response sent node.id=2 type=patch                                │
+                      │ 2026-10-28T11:58:29Z INF Sending keepalive node.id=3                                           │
+                      │ 2026-10-28T11:58:36Z DBG Map request received node.id=4 omitPeers=false stream=true            │
+                      │ 2026-10-28T11:58:43Z WRN Node did not respond to HA probe node.id=5 prefix=10.0.0.0/24         │
+                      │ 2026-10-28T11:58:50Z INF Node disconnected node.id=1                                           │
+                      │ 2026-10-28T11:58:57Z INF Policy reloaded path=/etc/headscale/policy.hujson                     │
+                      │ 2026-10-28T11:59:04Z DBG Map response sent node.id=3 type=patch                                │
+                      │ 2026-10-28T11:59:11Z INF Node connected node.id=4                                              │
+                      │ 2026-10-28T11:59:18Z DBG Map response sent node.id=5 type=patch                                │
+                      │ 2026-10-28T11:59:25Z INF Sending keepalive node.id=1                                           │
+                      │ 2026-10-28T11:59:32Z DBG Map request received node.id=2 omitPeers=false stream=true            │
+                      │ 2026-10-28T11:59:39Z WRN Node did not respond to HA probe node.id=3 prefix=10.0.0.0/24         │
+                      │ 2026-10-28T11:59:46Z INF Node disconnected node.id=4                                           │
+                      │ 2026-10-28T11:59:53Z INF Policy reloaded path=/etc/headscale/policy.hujson                     │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ u restore & restart  X retry restart  esc back  ? help  q quit                                        updated 12:00:00 

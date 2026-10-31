@@ -9,6 +9,7 @@ import (
 	_ "github.com/tonhe/headsup/internal/modules/pending"
 	_ "github.com/tonhe/headsup/internal/modules/prefs"
 	_ "github.com/tonhe/headsup/internal/modules/routes"
+	_ "github.com/tonhe/headsup/internal/modules/serverconfig"
 	_ "github.com/tonhe/headsup/internal/modules/service"
 	_ "github.com/tonhe/headsup/internal/modules/users"
 )

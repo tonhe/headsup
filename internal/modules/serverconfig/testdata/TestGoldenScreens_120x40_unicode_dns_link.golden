@@ -1,0 +1,40 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
+▸ 1 ⚙ Server Settings ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────────────────────────╮
+                      │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
+                      │                                                                                                │
+                      │ DNS settings have their own editor.                                                            │
+                      │ Press enter to open it (g d).                                                                  │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ DNS ───────────────────────────────────────────────────────────────────────────────────────────╮
+                      │ DNS keys live in config.yaml but are edited in the DNS module.                                 │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ enter open DNS  tab section  ? help  q quit                                                           updated 12:00:00 

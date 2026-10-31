@@ -31,3 +31,5 @@ github.com/tonhe/headsup/internal/ui/palette 90
 github.com/tonhe/headsup/internal/ui/themepicker 90
 github.com/tonhe/headsup/internal/ui/help 90
 github.com/tonhe/headsup/internal/modules/prefs 75
+github.com/tonhe/headsup/internal/app 78
+github.com/tonhe/headsup/internal/modules/serverconfig 80
