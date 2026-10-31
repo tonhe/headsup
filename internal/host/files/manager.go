@@ -471,6 +471,13 @@ type Manifest struct {
 
 const tsLayout = "20060102T150405.000000000Z"
 
+// backupRel is where a file's copy goes inside a backup directory: its path
+// without the leading separator or a drive letter (C: on Windows).
+func backupRel(p string) string {
+	p = strings.TrimPrefix(p, filepath.VolumeName(p))
+	return strings.TrimLeft(filepath.Clean(string(filepath.Separator)+p), `/\`)
+}
+
 func (m *Manager) backup(f *host.File, cur []byte, now time.Time) (string, error) {
 	if err := m.CheckBackupRoot(); err != nil {
 		return "", err
@@ -484,7 +491,7 @@ func (m *Manager) backup(f *host.File, cur []byte, now time.Time) (string, error
 		id = fmt.Sprintf("%s-%d", now.UTC().Format(tsLayout), i)
 		dir = filepath.Join(m.o.BackupDir, id)
 	}
-	rel := strings.TrimPrefix(filepath.Clean("/"+f.Path), "/")
+	rel := backupRel(f.Path)
 	target := filepath.Join(dir, rel)
 	if err := mkdirPrivate(filepath.Dir(target)); err != nil {
 		return "", err
@@ -505,7 +512,7 @@ func (m *Manager) backup(f *host.File, cur []byte, now time.Time) (string, error
 
 // Backups lists backup copies of path, oldest first.
 func (m *Manager) Backups(path string) ([]string, error) {
-	rel := strings.TrimPrefix(filepath.Clean("/"+path), "/")
+	rel := backupRel(path)
 	ents, err := os.ReadDir(m.o.BackupDir)
 	if err != nil {
 		return nil, err

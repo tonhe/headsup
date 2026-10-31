@@ -389,3 +389,18 @@ func TestAllowed(t *testing.T) {
 		}
 	}
 }
+
+func TestBackupRel(t *testing.T) {
+	tests := map[string]string{
+		"/etc/headscale/config.yaml": filepath.FromSlash("etc/headscale/config.yaml"),
+		"etc/../etc/x":               "etc" + string(filepath.Separator) + "x",
+	}
+	if runtime.GOOS == "windows" {
+		tests[`C:\Users\x\etc\config.yaml`] = `Users\x\etc\config.yaml`
+	}
+	for in, want := range tests {
+		if got := backupRel(in); got != want {
+			t.Errorf("backupRel(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
