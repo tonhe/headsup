@@ -277,6 +277,14 @@ func firstString(m map[string]any, keys ...string) string {
 	return ""
 }
 
+// --- DERP map ---------------------------------------------------------------
+
+// DERPMap fetches the server's current DERP map from /debug/derp. The body
+// is returned raw with its content type; internal/host/derpmap parses it.
+func (c *Client) DERPMap(ctx context.Context) ([]byte, string, error) {
+	return c.getJSON(ctx, "/debug/derp")
+}
+
 // --- routes -----------------------------------------------------------------
 
 // Routes returns the primary/HA state per prefix.

@@ -210,6 +210,9 @@ type File struct {
 	SHA256 string
 	Raw    []byte
 	Effect Effect
+	// New marks a file that does not exist yet: Apply creates it with Mode,
+	// UID and GID (refusing if it appeared meanwhile) and Rollback removes it.
+	New bool
 }
 
 // Severity of a validation issue.
