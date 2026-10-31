@@ -195,8 +195,9 @@ func TestBundleContentsAndHashes(t *testing.T) {
 			t.Errorf("bundle lacks %s (%s)", k, p)
 			continue
 		}
-		// The manifest stores paths in slash form on every OS.
-		if f.Path != filepath.ToSlash(p) || f.SHA256 != sum(r.orig[p]) {
+		// Compare separator-insensitively: on Windows the key and DERP paths
+		// are recorded in slash form, the rest natively.
+		if filepath.ToSlash(f.Path) != filepath.ToSlash(p) || f.SHA256 != sum(r.orig[p]) {
 			t.Errorf("%s: manifest %+v, want path %s hash %s", k, f, p, sum(r.orig[p]))
 		}
 		if runtime.GOOS != "windows" {
