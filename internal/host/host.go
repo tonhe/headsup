@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"io/fs"
 	"net/netip"
+	"path"
+	"strings"
 	"time"
 )
 
@@ -159,8 +161,31 @@ type Env struct {
 	PolicyMode       string // "file" or "database"
 	PolicyPath       string
 	RecordsPath      string
-	Perms            Perms
-	Notes            []string // human-readable detection remarks
+	// Mounts maps paths inside the container (as config.yaml names them)
+	// to where they are on this machine, for a containerised headscale.
+	Mounts []Mount
+	Perms  Perms
+	Notes  []string // human-readable detection remarks
+}
+
+// Mount is one bind mount of a containerised headscale.
+type Mount struct{ Source, Destination string }
+
+// HostPath maps a path inside the container to this machine through the
+// bind mounts. Outside container mode, or for a path that is not inside any
+// mount, it returns p unchanged and false.
+func (e Env) HostPath(p string) (string, bool) {
+	best := Mount{}
+	for _, m := range e.Mounts {
+		d := strings.TrimSuffix(m.Destination, "/")
+		if (p == m.Destination || strings.HasPrefix(p, d+"/")) && len(m.Destination) > len(best.Destination) {
+			best = m
+		}
+	}
+	if best.Destination == "" {
+		return p, false
+	}
+	return path.Join(best.Source, strings.TrimPrefix(p, best.Destination)), true
 }
 
 // Usable reports whether host mode can talk to headscale at all.

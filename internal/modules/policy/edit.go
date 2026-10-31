@@ -80,16 +80,20 @@ func (m *Model) startInline(ctx module.Context) tea.Cmd {
 	ta.SetWidth(76)
 	ta.SetHeight(20)
 	ta.SetValue(m.draft)
+	// A blurred textarea ignores keys: focus before moving to the top.
+	focus := ta.Focus()
 	ta, _ = ta.Update(tea.KeyMsg{Type: tea.KeyCtrlHome})
 	if m.invalid != nil && m.invalid.line > 1 {
-		for range m.invalid.line - 1 {
+		// CursorDown moves by screen rows, so a wrapped line takes more
+		// than one; step until the logical line is reached.
+		for i := 0; ta.Line() < m.invalid.line-1 && i < 4*m.invalid.line+len(m.draft)/max(1, ta.Width()); i++ {
 			ta.CursorDown()
 		}
 		ta.SetCursor(max(0, m.invalid.col-1))
 	}
 	m.ta, m.taOK = ta, true
 	m.back, m.mode = m.mode, modeEdit
-	return m.ta.Focus()
+	return focus
 }
 
 func (m *Model) stopEditing() {

@@ -183,7 +183,7 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 		return empty.Render(s, "Loading machines…", "", "", r.W, r.H)
 	}
 	if len(ctx.Store().Nodes) == 0 {
-		return empty.Render(s, "No machines yet", "Add one from Pending (5) or with a pre-auth key.", "", r.W, r.H)
+		return empty.Render(s, "No machines yet", "Add one from Add device (1 p) or with a pre-auth key.", "", r.W, r.H)
 	}
 	showBar := m.bar.Active() || m.bar.Value() != ""
 	h := r.H

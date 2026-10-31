@@ -184,6 +184,12 @@ func (h *Host) Open(kind host.FileKind, path string) (*host.File, error) {
 			return nil, err
 		}
 		path = p
+	} else if h.env.Container != "" && path != h.env.ConfigPath && path != h.env.PolicyPath && path != h.env.RecordsPath {
+		// config.yaml names paths inside the container; open the bind-mounted
+		// file on this machine instead.
+		if hp, ok := h.env.HostPath(path); ok {
+			path = hp
+		}
 	}
 	return h.files.Open(kind, path)
 }

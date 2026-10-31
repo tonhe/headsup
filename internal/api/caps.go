@@ -128,9 +128,15 @@ func VersionAtLeast(v string, major, minor int) bool {
 	return maj > major || (maj == major && min >= minor)
 }
 
-// ParseMajorMinor extracts major and minor from a version string.
+// ParseMajorMinor extracts major and minor from a version string. A Go
+// pseudo-version ("v0.0.0-20261030160536-7721d8c29978", what headscale's
+// development builds report) is not a release, so it is unparseable here and
+// callers treat it as newest.
 func ParseMajorMinor(v string) (int, int, bool) {
 	v = strings.TrimPrefix(strings.TrimSpace(v), "v")
+	if IsDevVersion(v) {
+		return 0, 0, false
+	}
 	parts := strings.SplitN(v, ".", 3)
 	if len(parts) < 2 {
 		return 0, 0, false
@@ -138,6 +144,12 @@ func ParseMajorMinor(v string) (int, int, bool) {
 	maj, ok1 := atoi(parts[0])
 	min, ok2 := atoi(parts[1])
 	return maj, min, ok1 && ok2
+}
+
+// IsDevVersion reports whether v is the Go pseudo-version of an untagged
+// build (headscale built from main reports "v0.0.0-<timestamp>-<commit>").
+func IsDevVersion(v string) bool {
+	return strings.HasPrefix(strings.TrimPrefix(strings.TrimSpace(v), "v"), "0.0.0-")
 }
 
 func atoi(s string) (int, bool) {

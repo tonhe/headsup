@@ -45,7 +45,8 @@ type Options struct {
 	Gids          []int                            // primary and supplementary gids
 	Hostname      string                           // default os.Hostname()
 	ConfigFlag    string                           // --hs-config
-	ContainerHint string                           // container name to prefer
+	ContainerHint string                           // container name to prefer ([host].container)
+	DebugAddr     string                           // overrides metrics_listen_addr ([host].debug_addr)
 	Dial          func(network, addr string) error // reachability probe; default net.DialTimeout
 	SocketHTTP    func(socket string) bool         // does the socket speak HTTP? nil = probe via Dial only for >= 0.30
 	Cwd           string                           // for ./config.yaml; default os.Getwd()
@@ -238,8 +239,13 @@ func ParseVersion(out string) string {
 	return m[1] + "." + m[2] + "." + m[3] + m[4]
 }
 
-// AtLeast reports whether version v >= major.minor. Unknown versions are false.
+// AtLeast reports whether version v >= major.minor. Unknown versions are
+// false; a development build's pseudo-version ("0.0.0-<timestamp>-<commit>")
+// is newer than every release.
 func AtLeast(v string, major, minor int) bool {
+	if strings.HasPrefix(strings.TrimPrefix(v, "v"), "0.0.0-") {
+		return true
+	}
 	m := versionRE.FindStringSubmatch(v)
 	if m == nil {
 		return false
@@ -276,6 +282,15 @@ func (o *Options) groups() groupDB {
 func groupFix(g string) string { return "sudo usermod -aG " + g + " $USER && newgrp " + g }
 
 func rootFix() string { return "sudo " + brand.Name }
+
+// socketFix is the fix for a socket owned by group g: join it, unless it is
+// root's group, which nobody should be added to; run as root instead.
+func socketFix(g string) string {
+	if g == "root" || g == "0" || g == "wheel" {
+		return rootFix()
+	}
+	return groupFix(g)
+}
 
 type container struct {
 	runtime, name string
@@ -383,6 +398,9 @@ func Detect(opts Options) host.Env {
 	if ctr != nil {
 		env.Container = ctr.name
 		env.ContainerRuntime = ctr.runtime
+		for _, m := range ctr.mounts {
+			env.Mounts = append(env.Mounts, host.Mount{Source: m.Source, Destination: m.Destination})
+		}
 		env.Transport = host.TransportContainerExec
 		env.Service = host.ServiceContainer
 		env.LogSource = host.LogContainer
@@ -435,7 +453,11 @@ func Detect(opts Options) host.Env {
 	env.SocketPath = cfg.UnixSocket
 	env.ServerURL = cfg.ServerURL
 	env.DebugAddr = cfg.MetricsAddr
-	if cfg.MetricsSet && cfg.MetricsAddr == "" {
+	if o.DebugAddr != "" {
+		// A container's metrics_listen_addr is inside it; the user says where
+		// it is published on this machine.
+		env.DebugAddr = o.DebugAddr
+	} else if cfg.MetricsSet && cfg.MetricsAddr == "" {
 		note("metrics_listen_addr is empty: live server data (debug, metrics) is disabled")
 	}
 	env.PolicyMode = cfg.PolicyMode
@@ -724,14 +746,14 @@ func (o *Options) socketPerm(env *host.Env, g groupDB, socketOK bool, svcStart s
 		if di, derr := o.Stat(dir); derr == nil {
 			gname = nonEmpty(g.byGID[di.GID], gname)
 		}
-		return host.Perm{Reason: "no access to " + dir + " (where the socket lives)", FixCommand: groupFix(gname), Denied: true}
+		return host.Perm{Reason: "no access to " + dir + " (where the socket lives)", FixCommand: socketFix(gname), Denied: true}
 	}
 	if err != nil {
 		return host.Perm{Reason: "socket " + env.SocketPath + " does not exist (is headscale running?)", FixCommand: svcStart}
 	}
 	if !files.Allowed(o.ident(), fi.Mode, fi.UID, fi.GID, files.AccessRead|files.AccessWrite) {
 		gname := nonEmpty(g.byGID[fi.GID], "headscale")
-		return host.Perm{Reason: fmt.Sprintf("no access to %s (group %s, mode %#o)", env.SocketPath, gname, uint32(fi.Mode.Perm())), FixCommand: groupFix(gname), Denied: true}
+		return host.Perm{Reason: fmt.Sprintf("no access to %s (group %s, mode %#o)", env.SocketPath, gname, uint32(fi.Mode.Perm())), FixCommand: socketFix(gname), Denied: true}
 	}
 	return host.Perm{Reason: "socket " + env.SocketPath + " refused the connection (is headscale running?)", FixCommand: svcStart}
 }
