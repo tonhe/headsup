@@ -536,6 +536,31 @@ func contains(xs []string, s string) bool {
 
 func slicesClone(xs []string) []string { return append([]string(nil), xs...) }
 
+// Equivalent reports whether two policies mean the same JSON, ignoring
+// comments, whitespace, and trailing commas. Unparseable input is equal only
+// to identical text.
+func Equivalent(a, b string) bool {
+	if a == b {
+		return true
+	}
+	na, errA := normalize(a)
+	nb, errB := normalize(b)
+	if errA != nil || errB != nil {
+		return false
+	}
+	return bytes.Equal(na, nb)
+}
+
+func normalize(s string) ([]byte, error) {
+	v, err := hujson.Parse([]byte(s))
+	if err != nil {
+		return nil, err
+	}
+	v.Standardize()
+	v.Minimize()
+	return v.Pack(), nil
+}
+
 // Check is the local fallback validation used when the server cannot check a
 // policy: it must parse, and every group, tag, and host it uses must be
 // defined. The error is a *ParseError with a position.

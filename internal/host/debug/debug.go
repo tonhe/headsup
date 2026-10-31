@@ -137,6 +137,21 @@ func looksHTML(b []byte, ct string) bool {
 	return strings.Contains(ct, "html") || strings.HasPrefix(t, "<!doctype") || strings.HasPrefix(t, "<html")
 }
 
+// --- filter ------------------------------------------------------------------
+
+// Filter returns the raw JSON of the packet filter headscale compiled from
+// the policy (/debug/filter). The shape is parsed by policy.ParseFilter.
+func (c *Client) Filter(ctx context.Context) ([]byte, error) {
+	b, ct, err := c.getJSON(ctx, "/debug/filter")
+	if err != nil {
+		return nil, err
+	}
+	if looksHTML(b, ct) {
+		return nil, fmt.Errorf("%w: /debug/filter returned HTML", host.ErrUnsupportedShape)
+	}
+	return b, nil
+}
+
 // --- registration cache -----------------------------------------------------
 
 // CacheSummary is what headscale 0.29.6 and main expose at

@@ -12,6 +12,18 @@ import (
 	"github.com/tonhe/headsup/internal/api/fake"
 )
 
+func TestEquivalent(t *testing.T) {
+	if !Equivalent("{\n  // c\n  \"a\": [1,],\n}\n", `{"a":[1]}`) {
+		t.Error("comments, whitespace and trailing commas must not matter")
+	}
+	if Equivalent(`{"a":1}`, `{"a":2}`) || Equivalent("{", "}") {
+		t.Error("different or broken policies are not equivalent")
+	}
+	if !Equivalent("{", "{") {
+		t.Error("identical text is equivalent")
+	}
+}
+
 func readFixture(t testing.TB, name string) []byte {
 	t.Helper()
 	b, err := os.ReadFile(filepath.Join("testdata", name))

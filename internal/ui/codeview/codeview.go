@@ -179,7 +179,7 @@ func Render(s *styles.Styles, lines []string, w, h int, o Options) string {
 			case n == o.Cursor:
 				g = s.Accent.Render("› "+num) + " " + s.Muted.Render("│")
 			default:
-				g = s.Muted.Render("  "+num+" │")
+				g = s.Muted.Render("  " + num + " │")
 			}
 		}
 		body := lines[i]
