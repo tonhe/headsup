@@ -21,6 +21,14 @@ All notable changes to this project are documented here.
   Live log viewer with a 10k-line buffer, level filter, regex search, pause,
   jump to error, field expansion and links to machines. The dashboard and
   sidebar show the service state.
+- Command palette (`:` or `ctrl+p`): every action, "go to" each page and
+  "theme: <name>", recent first. Help (`?`) is generated from the actions and
+  the live keymap, so remapped keys show.
+- Theme picker (`T`) with live preview, search, light/dark filter, user-theme
+  reload and per-profile override. Preferences page (`,`) for theme, icons,
+  density, sidebar, mouse, time format, refresh intervals and columns.
+- Optional mouse support (`ui.mouse`): click the sidebar, scroll lists.
+- The High Contrast theme now clears 7:1 contrast for all text colours.
 - Host mode asks to restart under sudo when this user can't reach headscale,
   instead of only printing the fix.
 - Host mode: run with no flags on the headscale server. It finds headscale's

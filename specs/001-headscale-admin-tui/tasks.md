@@ -254,18 +254,18 @@ command contains the right login server and key.
 
 ## Phase 10: User Story 8, Look and Feel (P2)
 
-- [ ] T121 [P] [US8] teatest flow: switch theme in the picker, check every view re-renders, check the choice persists to config, and check a user theme appears, in internal/modules/prefs/theme_test.go
-- [ ] T122 [US8] Theme picker modal (`T`) with live preview, light/dark filter, search, and reload of user themes, in internal/ui/themepicker/themepicker.go
-- [ ] T123 [US8] Prefs module (Headsup's own settings) covering theme, icons, density, sidebar mode, columns editor, refresh intervals, and time format, in internal/modules/prefs/prefs.go
-- [ ] T124 [US8] Per-profile theme override in internal/app/profiles.go
-- [ ] T125 [P] [US8] Ship example themes in themes/ (Midnight Harbor plus a high-contrast accessibility theme)
+- [X] T121 [P] [US8] teatest flow: switch theme in the picker, check every view re-renders, check the choice persists to config, and check a user theme appears, in internal/modules/prefs/theme_test.go
+- [X] T122 [US8] Theme picker modal (`T`) with live preview, light/dark filter, search, and reload of user themes, in internal/ui/themepicker/themepicker.go
+- [X] T123 [US8] Prefs module (Headsup's own settings) covering theme, icons, density, sidebar mode, columns editor, refresh intervals, and time format, in internal/modules/prefs/prefs.go
+- [X] T124 [US8] Per-profile theme override in internal/app/profiles.go
+- [X] T125 [P] [US8] Ship example themes in themes/ (Midnight Harbor plus a high-contrast accessibility theme)
 
 ## Phase 11: User Story 9, Command Palette and Navigation (P2)
 
-- [ ] T126 [P] [US9] Test that every registered Action with Keys is present in the palette and the help screen, in internal/app/palette_test.go
-- [ ] T127 [US9] Fuzzy command palette (`:`, `ctrl+p`) over all Actions plus "go to <module>" and "theme: <name>", with recent items first, in internal/ui/palette/palette.go
-- [ ] T128 [US9] Context-aware help overlay generated from Actions and the keymap, in internal/ui/help/help.go
-- [ ] T129 [US9] Optional mouse support: click rows, scroll, and click sidebar entries, in internal/app/mouse.go
+- [X] T126 [P] [US9] Test that every registered Action with Keys is present in the palette and the help screen, in internal/app/palette_test.go
+- [X] T127 [US9] Fuzzy command palette (`:`, `ctrl+p`) over all Actions plus "go to <module>" and "theme: <name>", with recent items first, in internal/ui/palette/palette.go
+- [X] T128 [US9] Context-aware help overlay generated from Actions and the keymap, in internal/ui/help/help.go
+- [X] T129 [US9] Optional mouse support: click rows, scroll, and click sidebar entries, in internal/app/mouse.go
 
 ## Phase 12: User Story 10, Server Settings Editor (P2) [host]
 
