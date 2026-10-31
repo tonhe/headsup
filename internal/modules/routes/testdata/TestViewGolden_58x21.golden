@@ -1,0 +1,21 @@
+╭ Subnet routes • 5 ─ 2 pending ─────────────────────────╮
+│     PREFIX             MACHINE   STATE      HA         │
+│ ▌ ● 10.0.0.0/24        router-h… ✓ served   ★ primary  │
+│   ●                    router-h… ✓ served   failover   │
+│   ● 10.20.0.0/16       homelab-… ◌ pending  -          │
+│   ● 192.168.50.0/24    vpn-gw-l… ◌ pending  -          │
+│   ● 192.168.51.0/24    vpn-gw-l… ✓ served   -          │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+│                                                        │
+╰────────────────────────────────────────────────────────╯
+╭ Exit nodes • 1 ────────────────────────────────────────╮
+│     MACHINE      STATE      NOTE                       │
+│ ▌ ● exit-fra-1   ✓ served                              │
+╰────────────────────────────────────────────────────────╯

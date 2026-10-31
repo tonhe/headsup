@@ -6,6 +6,15 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Users: list with machine and key counts, create, rename, delete (blocked
+  while the user owns machines, with a jump to them), and jumps to the user's
+  machines and keys.
+- Routes: subnet routes grouped by prefix into HA sets, a separate exit-node
+  section, overlap highlighting, approve/revoke/approve-all, a pending badge,
+  and primary/failover markers in host mode.
+- Keys: pre-auth and API key tabs with create (one-time secret reveal, QR),
+  expire and delete, an expiry colour ramp, and a lockout warning before
+  expiring the API key this app uses.
 - Host mode asks to restart under sudo when this user can't reach headscale,
   instead of only printing the fix.
 

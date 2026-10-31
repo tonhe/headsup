@@ -1,0 +1,37 @@
+╭ Users • 4 ───────────────────────────────────────────────────────────────────────╮╭ alice ─ ID 1 ────────────────────────────────────────╮
+│   NAME ▲    DISPLAY NAME      EMAIL                 PROVIDER CREATED    MACHINES ││ Name           alice                                 │
+│ ▌ alice     Alice Liddell     alice@example.com     oidc     25w ago           5 ││ Display name   Alice Liddell                         │
+│   bob       Bob Builder       bob@example.com       oidc     21w ago           4 ││ Email          alice@example.com                     │
+│   carol     Carol Danvers     carol@example.com     local    17w ago           4 ││ Provider       oidc                                  │
+│   ops       Platform Ops      ops@example.com       local    30w ago          38 ││ Created        2026-05-01 (25w ago)                  │
+│                                                                                  ││ Machines       5  laptop-alice, phone-alice, ipad-a… │
+│                                                                                  ││ Pre-auth keys  2                                     │
+│                                                                                  ││ Provider ID    https://sso.example.com/a1f3          │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+│                                                                                  ││                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────╯╰──────────────────────────────────────────────────────╯

@@ -210,9 +210,9 @@ command contains the right login server and key.
 
 ## Phase 6: User Story 4, Users (P2)
 
-- [ ] T098 [P] [US4] Test that delete is blocked while NodeCount > 0 and offers "show machines", in internal/modules/users/users_test.go
-- [ ] T099 [US4] Users module: list (name, display name, email, provider, created, machine and key counts), create, rename, and delete, in internal/modules/users/users.go
-- [ ] T100 [US4] Navigation to machines filtered by `user:<name>` and to keys filtered by user, through Context.Navigate, in internal/modules/users/users.go
+- [X] T098 [P] [US4] Test that delete is blocked while NodeCount > 0 and offers "show machines", in internal/modules/users/users_test.go
+- [X] T099 [US4] Users module: list (name, display name, email, provider, created, machine and key counts), create, rename, and delete, in internal/modules/users/users.go
+- [X] T100 [US4] Navigation to machines filtered by `user:<name>` and to keys filtered by user, through Context.Navigate, in internal/modules/users/users.go
 
 ## Phase 7: User Story 5, Access Controls (P2)
 
@@ -241,16 +241,16 @@ command contains the right login server and key.
 
 ## Phase 8: User Story 6, Routes and Exit Nodes (P2)
 
-- [ ] T114 [P] [US6] Test that approving one prefix sends the full approved list with the prefix added and nothing else changed, in internal/modules/routes/routes_test.go
-- [ ] T115 [US6] Routes module: group by prefix (HA sets), show approved and served state, a separate exit-node section, overlap highlighting, and approve, revoke, and approve-all. In internal/modules/routes/routes.go.
-- [ ] T116 [US6] Sidebar badge with the count of pending routes in internal/modules/routes/routes.go
-- [ ] T117 [US6] Primary and failover markers for HA sets from /debug/routes in host mode, in internal/modules/routes/routes.go
+- [X] T114 [P] [US6] Test that approving one prefix sends the full approved list with the prefix added and nothing else changed, in internal/modules/routes/routes_test.go
+- [X] T115 [US6] Routes module: group by prefix (HA sets), show approved and served state, a separate exit-node section, overlap highlighting, and approve, revoke, and approve-all. In internal/modules/routes/routes.go.
+- [X] T116 [US6] Sidebar badge with the count of pending routes in internal/modules/routes/routes.go
+- [X] T117 [US6] Primary and failover markers for HA sets from /debug/routes in host mode, in internal/modules/routes/routes.go
 
 ## Phase 9: User Story 7, Keys (P2)
 
-- [ ] T118 [P] [US7] Test that expiring the API key matching the active profile's prefix triggers the self-lockout warning, in internal/modules/keys/keys_test.go
-- [ ] T119 [US7] Keys module with pre-auth and API tabs: list, create, expire, and delete (delete gated by cap), with masked secrets and API keys addressed by prefix. In internal/modules/keys/keys.go.
-- [ ] T120 [US7] Expiring badge and an "expires in" colour ramp in internal/modules/keys/keys.go
+- [X] T118 [P] [US7] Test that expiring the API key matching the active profile's prefix triggers the self-lockout warning, in internal/modules/keys/keys_test.go
+- [X] T119 [US7] Keys module with pre-auth and API tabs: list, create, expire, and delete (delete gated by cap), with masked secrets and API keys addressed by prefix. In internal/modules/keys/keys.go.
+- [X] T120 [US7] Expiring badge and an "expires in" colour ramp in internal/modules/keys/keys.go
 
 ## Phase 10: User Story 8, Look and Feel (P2)
 
