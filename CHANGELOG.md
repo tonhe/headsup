@@ -6,6 +6,15 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Activity (`9`): this app's changes (with targets, results, backup IDs and
+  diff stats) and a live feed of tailnet events: machines coming online or
+  going offline, keys nearing expiry, new advertised routes. Filter with `/`,
+  export to JSON with `x`. Events can also raise toasts, the terminal bell or
+  desktop notifications (`[notify]`).
+- Access preview in Access Controls (`p`): pick a source and see what it can
+  reach under the current (or unsaved) policy. Best-effort.
+- Quitting with unsaved edits in Access Controls, Server Settings, DNS or
+  DERP now asks first. The statusbar shows the service state in host mode.
 - Server page (`8`): version and health, a capability matrix by mode with
   explanations for config-file-only features, and backfill IPs. In host
   mode: a doctor (permissions, socket, server_url reachability, TLS expiry,
