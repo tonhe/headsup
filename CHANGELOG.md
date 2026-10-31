@@ -29,6 +29,14 @@ All notable changes to this project are documented here.
   density, sidebar, mouse, time format, refresh intervals and columns.
 - Optional mouse support (`ui.mouse`): click the sidebar, scroll lists.
 - The High Contrast theme now clears 7:1 contrast for all text colours.
+- Server Settings (host mode, `g s`): edit headscale's config.yaml by section,
+  with value, default, restart-needed and danger markers per field and
+  type-aware editors. Changes go through validation (schema plus
+  `headscale configtest`), a diff, confirmation, an atomic write with a
+  backup, and an offer to restart, with restore-and-restart if headscale
+  comes back unhealthy. Comments are preserved. Also `$EDITOR` with a
+  three-way merge when the file changed on disk, and a one-key migration of
+  0.29's flat TLS keys to 0.30's `tls.*`.
 - Host mode asks to restart under sudo when this user can't reach headscale,
   instead of only printing the fix.
 - Host mode: run with no flags on the headscale server. It finds headscale's

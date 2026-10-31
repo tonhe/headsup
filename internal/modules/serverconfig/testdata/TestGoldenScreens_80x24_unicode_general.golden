@@ -1,0 +1,24 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●             42 online / 51 
+ 1 Server Settings                                                              
+╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ─────────────╮
+│  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features   │
+│     KEY                    VALUE                               EFFECT        │
+│ ▸   server_url             https://hs.demo.example.com       ⊡ needs restart │
+│     listen_addr            0.0.0.0:8080                      ⊡ needs restart │
+│     metrics_listen_addr    127.0.0.1:9090                      needs restart │
+│     trusted_proxies        []                                  needs restart │
+│     noise.private_key_path /var/lib/headscale/noise_private… ⊡ needs restart │
+│     prefixes.v4            100.64.0.0/10                     ⊡ needs restart │
+│     prefixes.v6            fd7a:115c:a1e0::/48               ⊡ needs restart │
+│     prefixes.allocation    sequential                        ⊡ needs restart │
+│     disable_check_updates  false                               needs restart │
+│     unix_socket            /var/run/headscale/headscale.sock   needs restart │
+│     unix_socket_permission 0770                                needs restart │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ server_url ──────────────────────────────────────────────────────────────────╮
+│ URL clients connect to                                                       │
+│ default http://127.0.0.1:8080 • string • needs restart • since 0.29          │
+│ ⊡ Critical: saving asks you to type the file name to confirm.                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ enter edit  tab section  E $EDITOR  ? help  : commands        updated 12:00:00 

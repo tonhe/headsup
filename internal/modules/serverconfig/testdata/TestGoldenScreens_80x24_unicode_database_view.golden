@@ -1,0 +1,24 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●             42 online / 51 
+ 1 Server Settings                                                              
+╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ─────────────╮
+│  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features   │
+│ ⊡ View only: database settings are changed by hand ($EDITOR, E).             │
+│     KEY                            VALUE                       EFFECT        │
+│ ▸   database.type                  sqlite                    ⊡ needs restart │
+│     database.debug                 false                     ⊡ needs restart │
+│     database.sqlite.path           /var/lib/headscale/db.sq… ⊡ needs restart │
+│     database.sqlite.write_ahead_l… true                      ⊡ needs restart │
+│     database.sqlite.wal_autocheck… 1000                      ⊡ needs restart │
+│     database.postgres.host         unset, default (empty)    ⊡ needs restart │
+│     database.postgres.port         unset, default 5432       ⊡ needs restart │
+│     database.postgres.name         unset, default headscale  ⊡ needs restart │
+│     database.postgres.user         unset, default (empty)    ⊡ needs restart │
+│     database.postgres.pass         unset, default (empty)    ⊡ needs restart │
+│     database.postgres.ssl          unset, default false      ⊡ needs restart │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ database.type ───────────────────────────────────────────────────────────────╮
+│ Database backend                                                             │
+│ default sqlite • enum • needs restart • since 0.29                           │
+│ ⊡ View only.                                                                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ enter edit  tab section  E $EDITOR  ? help  : commands        updated 12:00:00 

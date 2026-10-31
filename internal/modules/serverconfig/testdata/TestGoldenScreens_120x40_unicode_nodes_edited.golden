@@ -1,0 +1,40 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
+▸ 1 ⚙ Server Set…   * ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────── unsaved changes ─╮
+                      │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
+                      │     KEY                               VALUE               DEFAULT                EFFECT        │
+                      │ ▸ • node.expiry                       180d                0                      needs restart │
+                      │     node.ephemeral.inactivity_timeout 30m                 30m                    needs restart │
+                      │     node.routes.ha.probe_interval     10s                 10s                    needs restart │
+                      │     node.routes.ha.probe_timeout      5s                  5s                     needs restart │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ node.expiry ───────────────────────────────────────────────────────────────────────────────────╮
+                      │ Default key expiry for non-tagged nodes; 0 = never                                             │
+                      │ default 0 • duration • needs restart • since 0.29                                              │
+                      │ • Changed, not saved yet (d diff, ctrl+s save).                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ enter edit  tab section  E $EDITOR  d diff  ctrl+s save  ? help  : commands  q quit                   updated 12:00:00 
