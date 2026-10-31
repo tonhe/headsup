@@ -15,16 +15,14 @@ All notable changes to this project are documented here.
 - Keys: pre-auth and API key tabs with create (one-time secret reveal, QR),
   expire and delete, an expiry colour ramp, and a lockout warning before
   expiring the API key this app uses.
+- Service and logs (host mode, `g l`): status panel (state, since, PID,
+  memory, version) with start, stop (type the hostname), restart and reload.
+  Start and restart run `headscale configtest` first and refuse on failure.
+  Live log viewer with a 10k-line buffer, level filter, regex search, pause,
+  jump to error, field expansion and links to machines. The dashboard and
+  sidebar show the service state.
 - Host mode asks to restart under sudo when this user can't reach headscale,
   instead of only printing the fix.
-
-### Fixed
-
-- Host mode on headscale 0.27+: `headscale version` no longer gets `-c`, which
-  that command rejects, so the CLI transport connects again.
-- A socket hidden behind an unreadable directory is now reported as missing
-  access (with the group fix), not as "does not exist (is headscale running?)".
-
 - Host mode: run with no flags on the headscale server. It finds headscale's
   config, connects over the local socket (0.30) or CLI (0.29) without an API
   key, and adds OS, client version, DERP and endpoint detail, route primaries,
@@ -41,3 +39,10 @@ All notable changes to this project are documented here.
 - 61 built-in themes plus user theme files (TOML or Base16 YAML); Unicode,
   Nerd Font and ASCII icon sets; read-only mode; activity log.
 - `--demo` mode with realistic data (`--demo --host` for host mode).
+
+### Fixed
+
+- Host mode on headscale 0.27+: `headscale version` no longer gets `-c`, which
+  that command rejects, so the CLI transport connects again.
+- A socket hidden behind an unreadable directory is now reported as missing
+  access (with the group fix), not as "does not exist (is headscale running?)".
