@@ -226,9 +226,8 @@ $XDG_STATE_HOME/headsup/backups/<timestamp>/<path of the file>
 
 (`~/.local/state/headsup/backups/` when `XDG_STATE_HOME` isn't set) with a
 `manifest.json` that records the path, SHA-256, owner, group and mode. The
-last 50 backups of each file are kept. Per-write backups always use this
-default location for now: `[host] backup_dir` and `[host] backup_keep` in
-the config aren't applied to them yet. `backup_dir` does move bundles.
+last 50 backups of each file are kept. Set `[host] backup_dir` to put them
+somewhere else and `[host] backup_keep` to keep more or fewer.
 
 Rollback (`u` on the page that made the change) restores the backup, but only
 if the file hasn't changed again since, and it backs up the current content
