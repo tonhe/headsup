@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"path/filepath"
+	"path"
 	"slices"
 	"strings"
 
@@ -30,7 +30,7 @@ func (m *Model) newFileAction() module.Action {
 			return true, ""
 		},
 		Params: func(module.Context) *module.FormSpec {
-			def := filepath.Join(filepath.Dir(m.cfg.Path), "derp.yaml")
+			def := path.Join(path.Dir(m.cfg.Path), "derp.yaml") // a POSIX path on the headscale host
 			fs := []module.Field{{ID: "path", Label: "New file", Value: def, Required: true, Validate: checkAbs,
 				Help: "The extension picks the format: .yaml (headscale's keys) or .json/.hujson (Tailscale's)"}}
 			fs = append(fs, regionFields(derpmap.Region{RegionID: 900})...)
@@ -38,7 +38,7 @@ func (m *Model) newFileAction() module.Action {
 			return &module.FormSpec{Title: "New DERP map file", Submit: "Stage", Fields: fs}
 		},
 		Run: func(ctx module.Context, v module.Values) tea.Cmd {
-			path := filepath.Clean(strings.TrimSpace(v["path"]))
+			path := path.Clean(strings.TrimSpace(v["path"]))
 			r := regionFrom(v)
 			r.Nodes = []derpmap.Node{nodeFrom(v, r.RegionID)}
 			h := ctx.Host()
