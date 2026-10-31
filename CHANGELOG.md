@@ -110,6 +110,9 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- `[host] backup_dir` and `backup_keep` now apply to the per-write backups
+  of config, policy, records and DERP files; they were ignored (backups
+  always went to the default state directory and kept 50 per file).
 - DNS: removing a split DNS domain is now discoverable (`D remove domain`
   on a split row, or clear its servers in the edit form), works when the
   split map is written inline, and leaves `split: {}` when the last domain

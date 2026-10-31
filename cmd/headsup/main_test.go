@@ -69,3 +69,13 @@ func TestCLIVerbs(t *testing.T) {
 		t.Fatalf("config path: %d", code)
 	}
 }
+
+func TestHostOptionsFromConfig(t *testing.T) {
+	if o := hostOptions(config.Host{}); o.BackupDir != "" || o.Keep != 0 {
+		t.Errorf("empty [host] should keep the adapter defaults: %+v", o)
+	}
+	o := hostOptions(config.Host{BackupDir: "~/hs-backups", BackupKeep: 7})
+	if o.Keep != 7 || strings.HasPrefix(o.BackupDir, "~") || !strings.HasSuffix(o.BackupDir, "hs-backups") {
+		t.Errorf("backup settings not passed through: %+v", o)
+	}
+}

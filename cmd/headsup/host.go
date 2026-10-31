@@ -61,10 +61,20 @@ func hostConnect(res config.Resolved, f config.Flags) (connection, error) {
 	}
 	return connection{
 		backend:   b,
-		host:      local.New(env, local.Options{}),
+		host:      local.New(env, hostOptions(res.HostConfig)),
 		label:     "host:" + env.Hostname,
 		serverURL: serverURL,
 	}, nil
+}
+
+// hostOptions passes [host] settings to the host adapter: where per-write
+// backups go and how many to keep per file. Zero values keep its defaults.
+func hostOptions(hc config.Host) local.Options {
+	o := local.Options{Keep: hc.BackupKeep}
+	if hc.BackupDir != "" {
+		o.BackupDir = config.ExpandHome(hc.BackupDir)
+	}
+	return o
 }
 
 // hostUnavailable explains why host mode can't be used and how to fix it.

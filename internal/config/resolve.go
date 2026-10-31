@@ -99,6 +99,7 @@ type Resolved struct {
 	Explicit   bool
 	UI         UI
 	Host       HostPreference
+	HostConfig Host // [host]: backup settings and the like for host mode
 	HSConfig   string
 	Demo       bool
 	NoColor    bool
@@ -118,7 +119,7 @@ func Resolve(cfg Config, f Flags, env func(string) string) (Resolved, error) {
 	if env == nil {
 		env = getenv
 	}
-	r := Resolved{UI: cfg.UI, Demo: f.Demo, ConfigPath: f.ConfigPath}
+	r := Resolved{UI: cfg.UI, HostConfig: cfg.Host, Demo: f.Demo, ConfigPath: f.ConfigPath}
 	if r.ConfigPath == "" {
 		r.ConfigPath = ConfigFile()
 	}
