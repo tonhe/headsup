@@ -15,6 +15,7 @@ import (
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/modules/registry"
 	"github.com/tonhe/headsup/internal/store"
+	"github.com/tonhe/headsup/internal/ui/badge"
 	"github.com/tonhe/headsup/internal/ui/humanize"
 	"github.com/tonhe/headsup/internal/ui/pane"
 	"github.com/tonhe/headsup/internal/ui/sparkline"
@@ -202,6 +203,10 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 	srvBody := fmt.Sprintf("headscale %s  %s", s.Strong.Render(orUnknown(st.Info.Version)), health)
 	if !st.UpdatedAt.IsZero() {
 		srvBody += "\n" + s.Muted.Render("updated "+humanize.Ago(st.UpdatedAt, now))
+	}
+	if st.Service != nil {
+		p := badge.ServicePhaseOf(st.Service.State, st.Service.Running, "")
+		srvBody += s.Muted.Render("  service ") + badge.Service(s, ic, p, p.String())
 	}
 	srvRowH := 4
 	var srvRow string

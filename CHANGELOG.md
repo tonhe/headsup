@@ -15,6 +15,12 @@ All notable changes to this project are documented here.
 - Keys: pre-auth and API key tabs with create (one-time secret reveal, QR),
   expire and delete, an expiry colour ramp, and a lockout warning before
   expiring the API key this app uses.
+- Service and logs (host mode, `g l`): status panel (state, since, PID,
+  memory, version) with start, stop (type the hostname), restart and reload.
+  Start and restart run `headscale configtest` first and refuse on failure.
+  Live log viewer with a 10k-line buffer, level filter, regex search, pause,
+  jump to error, field expansion and links to machines. The dashboard and
+  sidebar show the service state.
 - Host mode asks to restart under sudo when this user can't reach headscale,
   instead of only printing the fix.
 

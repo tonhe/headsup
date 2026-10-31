@@ -41,6 +41,7 @@ type Snapshot struct {
 	// them but not list them (real headscale's debug cache); -1 if unknown.
 	RegCount int
 	Metrics  *host.MetricsSample
+	Service  *host.ServiceStatus
 	Errs     map[Slice]error
 	At       time.Time
 }
@@ -59,7 +60,8 @@ type Store struct {
 	Extras        map[uint64]host.NodeExtras
 	Routes        []host.RouteState
 	Registrations []host.RegistrationEntry
-	RegCount      int // pending logins the server counted but could not list; 0 if none or unknown
+	RegCount      int                 // pending logins the server counted but could not list; 0 if none or unknown
+	Service       *host.ServiceStatus // nil when there is no service manager or it could not be read
 	Metrics       Ring
 	OnlineHistory Ring
 	LastErr       error
@@ -116,6 +118,7 @@ func (s *Store) Apply(sn Snapshot) {
 		if sn.Metrics != nil {
 			s.Metrics.Push(sn.Metrics.MapResponsesTotal)
 		}
+		s.Service = sn.Service
 	}
 	s.LastErr = nil
 	for _, e := range sn.Errs {
@@ -257,6 +260,11 @@ func Fetch(ctx context.Context, b api.Backend, h host.Host, slices Slice) Snapsh
 		}
 		if m, err := h.Metrics(c); err == nil {
 			sn.Metrics = &m
+		}
+		if sm := h.Service(); sm != nil {
+			if st, err := sm.Status(c); err == nil {
+				sn.Service = &st
+			}
 		}
 	}
 	return sn

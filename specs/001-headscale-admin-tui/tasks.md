@@ -294,13 +294,13 @@ client without a restart.
 **Independent Test**: With a fake service and log source: filter to errors, pause, and resume.
 A restart with an invalid config is refused before the service is touched.
 
-- [ ] T140 [P] [US14] teatest flow: logs follow, level filter, pause and resume, restart and start refused on a configtest failure, and stop requiring a typed hostname, in internal/modules/service/flow_test.go
-- [ ] T141 [US14] Service status panel (state, since, PID, memory, version) with start, stop, restart, and reload actions. Danger levels:
+- [X] T140 [P] [US14] teatest flow: logs follow, level filter, pause and resume, restart and start refused on a configtest failure, and stop requiring a typed hostname, in internal/modules/service/flow_test.go
+- [X] T141 [US14] Service status panel (state, since, PID, memory, version) with start, stop, restart, and reload actions. Danger levels:
   - Stop is Critical (type the hostname) and warns that every client loses the control plane.
   - Restart is Confirm, with a "clients will reconnect" note, and runs configtest first.
   - Start runs configtest first and is refused if it fails.
   - Reload is Confirm and notes that it reloads the policy only. In internal/modules/service/status.go.
-- [ ] T142 [US14] Log viewer: a virtualised ring buffer of 10k lines, level filter, regex search, pause, jump to next error, structured-field expansion, and a node link to machines, in internal/modules/service/logs.go
+- [X] T142 [US14] Log viewer: a virtualised ring buffer of 10k lines, level filter, regex search, pause, jump to next error, structured-field expansion, and a node link to machines, in internal/modules/service/logs.go
 - [ ] T143 [US14] Dashboard and statusbar service badge (● running, ○ stopped, ◐ restarting) in internal/modules/service/badge.go
 
 ## Phase 15: User Story 11, Scriptable CLI (P3)
