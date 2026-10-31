@@ -3,6 +3,7 @@ package serverconfig
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -22,6 +23,9 @@ func TestEditorArgv(t *testing.T) {
 }
 
 func TestEditorSessionRoundTrip(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses a /bin/sh editor script and Unix mode bits")
+	}
 	dir := t.TempDir()
 	script := filepath.Join(dir, "ed.sh")
 	if err := os.WriteFile(script, []byte("#!/bin/sh\nprintf 'log:\\n  level: debug\\n' > \"$1\"\n"), 0o700); err != nil {
