@@ -16,7 +16,7 @@ func newConnector(cfg *config.Config, cfgPath string, f config.Flags, hostUsable
 		if target == "host" {
 			hf := f
 			hf.Host = true
-			c, err = hostConnect(config.Resolved{}, hf)
+			c, err = hostConnect(config.Resolved{HostConfig: cfg.Host}, hf)
 		} else {
 			var res config.Resolved
 			res, err = config.Resolve(*cfg, config.Flags{Profile: target, ConfigPath: cfgPath}, os.Getenv)
