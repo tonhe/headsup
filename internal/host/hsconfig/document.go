@@ -519,6 +519,48 @@ func (d *Doc) SetListPath(segs []string, items []string) error {
 	return d.insert(path, rest, func(indent int) string { return render(indent+2, false) })
 }
 
+// SetMapList sets key to a block sequence of mappings, one per row, each
+// with the given field names in order (e.g. dns.extra_records). A row
+// shorter than fields leaves the missing fields out. No rows writes [].
+func (d *Doc) SetMapList(key string, fields []string, rows [][]string) error {
+	path, rest := d.find(strings.Split(key, "."))
+	render := func(indent int) string {
+		if len(rows) == 0 {
+			return " []"
+		}
+		var b strings.Builder
+		for _, r := range rows {
+			for j, f := range fields {
+				if j >= len(r) {
+					break
+				}
+				lead := "  "
+				if j == 0 {
+					lead = "- "
+				}
+				v := formatItem(r[j], false)
+				if v == r[j] && !resolvesAsString(v) {
+					v = doubleQuote(v)
+				}
+				b.WriteString("\n" + strings.Repeat(" ", indent) + lead + formatKey(f) + ": " + v)
+			}
+		}
+		return b.String()
+	}
+	if len(rest) == 0 && len(path) > 0 {
+		h := path[len(path)-1]
+		if h.parent != nil && isFlow(h.parent) {
+			return ErrFlowStyle
+		}
+		indent := h.key.Column - 1 + 2
+		if h.val.Kind == yaml.SequenceNode && !isFlow(h.val) && len(h.val.Content) > 0 {
+			indent = h.val.Column - 1
+		}
+		return d.replaceValue(h, render(indent))
+	}
+	return d.insert(path, rest, func(indent int) string { return render(indent + 2) })
+}
+
 func (d *Doc) replaceValue(h hit, text string) error {
 	start := d.afterColon(h.key)
 	end := d.lineEnd(d.lastLine(h.key, h.val))

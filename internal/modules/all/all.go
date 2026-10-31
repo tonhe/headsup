@@ -4,6 +4,8 @@ package all
 
 import (
 	_ "github.com/tonhe/headsup/internal/modules/dashboard"
+	_ "github.com/tonhe/headsup/internal/modules/derp"
+	_ "github.com/tonhe/headsup/internal/modules/dns"
 	_ "github.com/tonhe/headsup/internal/modules/keys"
 	_ "github.com/tonhe/headsup/internal/modules/machines"
 	_ "github.com/tonhe/headsup/internal/modules/pending"

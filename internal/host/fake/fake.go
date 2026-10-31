@@ -7,17 +7,20 @@ package fake
 import (
 	"context"
 	_ "embed"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
 	"net/netip"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/tonhe/headsup/internal/brand"
 	"github.com/tonhe/headsup/internal/host"
+	"github.com/tonhe/headsup/internal/host/derpmap"
 	"github.com/tonhe/headsup/internal/host/files"
 	"github.com/tonhe/headsup/internal/host/hsconfig"
 	"github.com/tonhe/headsup/internal/host/local"
@@ -351,6 +354,17 @@ func (h *Host) Apply(ctx context.Context, c *host.Change) (host.Applied, error) 
 	if err := h.permErr(needW(f.Kind), "write "+f.Path); err != nil {
 		return host.Applied{}, err
 	}
+	if f.New {
+		if cur, ok := h.files[f.Path]; ok {
+			return host.Applied{}, &host.ErrChangedOnDisk{Path: f.Path, Current: slices.Clone(cur.data)}
+		}
+		mode := f.Mode
+		if mode == 0 {
+			mode = 0o640
+		}
+		h.files[f.Path] = &memFile{data: slices.Clone(c.Next), mode: mode, uid: f.UID, gid: f.GID}
+		return host.Applied{File: f, NewSHA256: files.Sum(c.Next), At: h.now()}, nil
+	}
 	cur, ok := h.files[f.Path]
 	if !ok {
 		return host.Applied{}, fmt.Errorf("apply %s: %w", f.Path, fs.ErrNotExist)
@@ -373,6 +387,18 @@ func (h *Host) Rollback(ctx context.Context, a host.Applied) error {
 	}
 	if err := h.permErr(needW(a.File.Kind), "write "+a.File.Path); err != nil {
 		return err
+	}
+	if a.File.New {
+		cur := h.files[a.File.Path]
+		if cur == nil {
+			return fs.ErrNotExist
+		}
+		if files.Sum(cur.data) != a.NewSHA256 {
+			return &host.ErrChangedOnDisk{Path: a.File.Path, Current: slices.Clone(cur.data)}
+		}
+		h.backups[fmt.Sprintf("mem://backups/removed-%d%s", len(h.backups), a.File.Path)] = slices.Clone(cur.data)
+		delete(h.files, a.File.Path)
+		return nil
 	}
 	old, ok := h.backups[a.BackupPath]
 	if !ok {
@@ -692,4 +718,75 @@ func (d *Debug) Ping(ctx context.Context, id uint64) (time.Duration, error) {
 		return 0, fmt.Errorf("ping failed: node %d is not connected", id)
 	}
 	return time.Duration(8+(id*7)%40) * time.Millisecond, nil
+}
+
+// defaultDERP is a small stand-in for Tailscale's default DERP map; its
+// region IDs match the PreferredDERP values NodeExtras reports.
+var defaultDERP = []derpmap.Region{
+	{RegionID: 1, RegionCode: "nyc", RegionName: "New York City", Nodes: []derpmap.Node{{Name: "1f", RegionID: 1, HostName: "derp1f.tailscale.com", IPv4: "199.38.181.104"}}},
+	{RegionID: 2, RegionCode: "sfo", RegionName: "San Francisco", Nodes: []derpmap.Node{{Name: "2d", RegionID: 2, HostName: "derp2d.tailscale.com", IPv4: "192.73.252.65"}}},
+	{RegionID: 3, RegionCode: "fra", RegionName: "Frankfurt", Nodes: []derpmap.Node{{Name: "4f", RegionID: 3, HostName: "derp4f.tailscale.com", IPv4: "185.40.234.219"}}},
+}
+
+// DERPMap serves /debug/derp: the default regions, every region in the
+// derp.paths files, and the embedded server's region when
+// derp.server.enabled, as tailcfg.DERPMap JSON.
+func (d *Debug) DERPMap(ctx context.Context) ([]byte, string, error) {
+	if !d.Available() {
+		return nil, "", host.ErrNoHost
+	}
+	d.h.mu.Lock()
+	defer d.h.mu.Unlock()
+	regions := map[int]derpmap.Region{}
+	for _, r := range defaultDERP {
+		regions[r.RegionID] = r
+	}
+	if cf, ok := d.h.files[d.h.env.ConfigPath]; ok {
+		if doc, err := hsconfig.Parse(cf.data); err == nil {
+			paths, _ := doc.List("derp.paths")
+			for _, p := range paths {
+				if mf, ok := d.h.files[p]; ok {
+					if f, err := derpmap.ParseFile(p, mf.data); err == nil {
+						for _, r := range f.Map.Regions {
+							regions[r.RegionID] = r
+						}
+					}
+				}
+			}
+			if on, _ := doc.Get("derp.server.enabled"); on == "true" {
+				id := 999
+				if v, _ := doc.Get("derp.server.region_id"); v != "" {
+					if n, err := strconv.Atoi(v); err == nil {
+						id = n
+					}
+				}
+				code, _ := doc.Get("derp.server.region_code")
+				name, _ := doc.Get("derp.server.region_name")
+				regions[id] = derpmap.Region{RegionID: id, RegionCode: code, RegionName: name,
+					Nodes: []derpmap.Node{{Name: strconv.Itoa(id) + "a", RegionID: id, HostName: strings.TrimPrefix(d.h.env.ServerURL, "https://")}}}
+			}
+		}
+	}
+	type node struct {
+		Name     string
+		RegionID int
+		HostName string
+		IPv4     string `json:",omitempty"`
+	}
+	type region struct {
+		RegionID   int
+		RegionCode string
+		RegionName string
+		Nodes      []node
+	}
+	out := map[string]map[string]region{"Regions": {}}
+	for id, r := range regions {
+		rr := region{RegionID: id, RegionCode: r.RegionCode, RegionName: r.RegionName}
+		for _, n := range r.Nodes {
+			rr.Nodes = append(rr.Nodes, node{Name: n.Name, RegionID: id, HostName: n.HostName, IPv4: n.IPv4})
+		}
+		out["Regions"][strconv.Itoa(id)] = rr
+	}
+	b, err := json.Marshal(out)
+	return b, "application/json", err
 }

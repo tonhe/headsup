@@ -227,6 +227,9 @@ func (m *Manager) Apply(ctx context.Context, c *host.Change) (host.Applied, erro
 		return host.Applied{}, err
 	}
 	f := c.File
+	if f.New {
+		return m.create(f, c.Next)
+	}
 	cur, err := os.ReadFile(m.real(f.Path))
 	if err != nil {
 		if os.IsPermission(err) {
@@ -257,6 +260,9 @@ func (m *Manager) Rollback(ctx context.Context, a host.Applied) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if a.File.New {
+		return m.uncreate(a)
+	}
 	old, err := os.ReadFile(a.BackupPath)
 	if err != nil {
 		return fmt.Errorf("rollback: read backup: %w", err)
@@ -275,6 +281,97 @@ func (m *Manager) Rollback(ctx context.Context, a host.Applied) error {
 		return err
 	}
 	return m.writeAtomic(a.File, old)
+}
+
+// create writes a file that did not exist when the change was planned,
+// refusing if something appeared at the path since.
+func (m *Manager) create(f *host.File, data []byte) (host.Applied, error) {
+	rp := m.real(f.Path)
+	if cur, err := os.ReadFile(rp); err == nil {
+		return host.Applied{}, &host.ErrChangedOnDisk{Path: f.Path, Current: cur}
+	} else if !errors.Is(err, fs.ErrNotExist) {
+		if os.IsPermission(err) {
+			return host.Applied{}, permErr(f.Kind, "read "+f.Path)
+		}
+		return host.Applied{}, err
+	}
+	mode := f.Mode.Perm()
+	if mode == 0 {
+		mode = 0o640
+	}
+	dir := filepath.Dir(rp)
+	if fi, err := os.Stat(dir); err != nil || !fi.IsDir() {
+		return host.Applied{}, fmt.Errorf("create %s: directory %s does not exist", f.Path, filepath.Dir(f.Path))
+	}
+	tmp := filepath.Join(dir, "."+filepath.Base(rp)+"."+brand.Name+"-tmp")
+	_ = os.Remove(tmp)
+	t, err := os.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if err != nil {
+		if os.IsPermission(err) {
+			return host.Applied{}, permErr(f.Kind, "create "+f.Path)
+		}
+		return host.Applied{}, err
+	}
+	fail := func(e error) (host.Applied, error) { t.Close(); os.Remove(tmp); return host.Applied{}, e }
+	if _, err := t.Write(data); err != nil {
+		return fail(err)
+	}
+	if err := t.Sync(); err != nil {
+		return fail(err)
+	}
+	if err := t.Chmod(mode); err != nil {
+		return fail(err)
+	}
+	// Match the owner the caller asked for (normally the config file's);
+	// without root, settle for the group so headscale can still read it.
+	if fi, err := t.Stat(); err == nil {
+		if uid, gid, ok := Owner(fi); ok && (uid != f.UID || gid != f.GID) {
+			if m.o.Chown(tmp, f.UID, f.GID) != nil {
+				_ = m.o.Chown(tmp, -1, f.GID)
+			}
+		}
+	}
+	if err := t.Close(); err != nil {
+		os.Remove(tmp)
+		return host.Applied{}, err
+	}
+	// Link refuses to replace a file that appeared since the check above.
+	if err := os.Link(tmp, rp); err != nil {
+		os.Remove(tmp)
+		if cur, rerr := os.ReadFile(rp); rerr == nil {
+			return host.Applied{}, &host.ErrChangedOnDisk{Path: f.Path, Current: cur}
+		}
+		return host.Applied{}, err
+	}
+	os.Remove(tmp)
+	if d, err := os.Open(dir); err == nil {
+		_ = d.Sync()
+		d.Close()
+	}
+	return host.Applied{File: f, NewSHA256: Sum(data), At: m.o.Now()}, nil
+}
+
+// uncreate removes a file Apply created, after backing up its current
+// content, refusing if it changed since.
+func (m *Manager) uncreate(a host.Applied) error {
+	rp := m.real(a.File.Path)
+	cur, err := os.ReadFile(rp)
+	if err != nil {
+		return err
+	}
+	if a.NewSHA256 != "" && Sum(cur) != a.NewSHA256 {
+		return &host.ErrChangedOnDisk{Path: a.File.Path, Current: cur}
+	}
+	if _, err := m.backup(a.File, cur, m.o.Now()); err != nil {
+		return err
+	}
+	if err := os.Remove(rp); err != nil {
+		if os.IsPermission(err) {
+			return permErr(a.File.Kind, "remove "+a.File.Path)
+		}
+		return err
+	}
+	return nil
 }
 
 // CheckBackupRoot refuses a backup root that is a symlink, grants any group
