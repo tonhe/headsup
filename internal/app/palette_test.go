@@ -262,15 +262,15 @@ func TestSwitchAppliesProfileTheme(t *testing.T) {
 
 func TestSetUIPrefsRejectsInvalid(t *testing.T) {
 	d := newDriver(t, 120, 40, Options{})
-	d.exec(d.m.SetUIPrefs(func(u *config.UI) { u.Icons = "emoji" }), 0)
+	d.Do(func() tea.Cmd { return d.m.SetUIPrefs(func(u *config.UI) { u.Icons = "emoji" }) })
 	if d.m.UIPrefs().Icons == "emoji" {
 		t.Error("invalid icons must be rejected")
 	}
-	d.exec(d.m.SetUIPrefs(func(u *config.UI) { u.Theme = "no-such" }), 0)
+	d.Do(func() tea.Cmd { return d.m.SetUIPrefs(func(u *config.UI) { u.Theme = "no-such" }) })
 	if d.m.UIPrefs().Theme == "no-such" {
 		t.Error("unknown theme must be rejected")
 	}
-	d.exec(d.m.SetUIPrefs(func(u *config.UI) { u.Sidebar = "never"; u.Refresh = "9s" }), 0)
+	d.Do(func() tea.Cmd { return d.m.SetUIPrefs(func(u *config.UI) { u.Sidebar = "never"; u.Refresh = "9s" }) })
 	if d.m.useSidebar() || d.m.opt.Refresh.Seconds() != 9 {
 		t.Error("sidebar and refresh should apply live")
 	}

@@ -13,14 +13,15 @@ import (
 	"github.com/tonhe/headsup/internal/modules/dashboard"
 	"github.com/tonhe/headsup/internal/modules/machines"
 	"github.com/tonhe/headsup/internal/modules/pending"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
-// driver runs a Model headlessly: it executes commands synchronously, drops
-// any that block (ticks, blinks), and feeds results back in.
+// driver runs a Model headlessly on the shared flow-test driver (fake clock,
+// no dropped commands); see uitest.Driver.
 type driver struct {
-	t    *testing.T
-	m    *Model
-	wait time.Duration // how long a command may run before it counts as a timer
+	*uitest.Driver
+	t *testing.T
+	m *Model
 }
 
 func newDriver(t *testing.T, w, h int, opt Options) *driver {
@@ -32,68 +33,17 @@ func newDriver(t *testing.T, w, h int, opt Options) *driver {
 		opt.Modules = []module.Module{dashboard.New(), machines.New(), pending.New()}
 	}
 	opt.Refresh = time.Hour
-	d := &driver{t: t, m: New(opt), wait: 150 * time.Millisecond}
-	d.send(tea.WindowSizeMsg{Width: w, Height: h})
-	d.exec(d.m.Init(), 0)
-	return d
+	m := New(opt)
+	return &driver{Driver: uitest.NewDriver(t, m, w, h), t: t, m: m}
 }
 
-func (d *driver) send(msg tea.Msg) {
-	_, cmd := d.m.Update(msg)
-	d.exec(cmd, 0)
-}
-
-func (d *driver) exec(cmd tea.Cmd, depth int) {
-	if cmd == nil || depth > 20 {
-		return
-	}
-	done := make(chan tea.Msg, 1)
-	go func() { done <- cmd() }()
-	var msg tea.Msg
-	select {
-	case msg = <-done:
-	case <-time.After(d.wait):
-		return // a timer or blink: not needed for a headless render
-	}
-	switch msg := msg.(type) {
-	case nil:
-	case tea.BatchMsg:
-		for _, c := range msg {
-			d.exec(c, depth+1)
-		}
-	case tea.QuitMsg:
-	default:
-		_, next := d.m.Update(msg)
-		d.exec(next, depth+1)
-	}
-}
-
-func (d *driver) key(keys ...string) {
-	for _, k := range keys {
-		var msg tea.KeyMsg
-		switch k {
-		case "enter":
-			msg = tea.KeyMsg{Type: tea.KeyEnter}
-		case "esc":
-			msg = tea.KeyMsg{Type: tea.KeyEsc}
-		case "tab":
-			msg = tea.KeyMsg{Type: tea.KeyTab}
-		case "right":
-			msg = tea.KeyMsg{Type: tea.KeyRight}
-		case "space":
-			msg = tea.KeyMsg{Type: tea.KeySpace, Runes: []rune{' '}}
-		default:
-			msg = tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune(k)}
-		}
-		d.send(msg)
-	}
-}
+func (d *driver) send(msg tea.Msg)   { d.Send(msg) }
+func (d *driver) key(keys ...string) { d.Key(keys...) }
+func (d *driver) view() string       { return d.View() }
 
 func windowSize(w, h int) tea.WindowSizeMsg { return tea.WindowSizeMsg{Width: w, Height: h} }
 
 func ctrlS() tea.KeyMsg { return tea.KeyMsg{Type: tea.KeyCtrlS} }
-
-func (d *driver) view() string { return d.m.View() }
 
 func checkFrame(t *testing.T, out string, w, h int) {
 	t.Helper()
