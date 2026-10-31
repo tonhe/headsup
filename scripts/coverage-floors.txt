@@ -49,3 +49,4 @@ github.com/tonhe/headsup/internal/modules/server 80
 github.com/tonhe/headsup/internal/watch 90
 github.com/tonhe/headsup/internal/modules/activity 80
 github.com/tonhe/headsup/internal/cli 78
+github.com/tonhe/headsup/internal/capsdoc 90
