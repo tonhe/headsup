@@ -1,5 +1,6 @@
 # High Contrast: pure black background with bright, saturated accents.
-# Intended for low-vision use and washed-out projectors. The slug is
+# Intended for low-vision use and washed-out projectors: text, muted text
+# and status colours all clear WCAG AAA (7:1) against the background. The slug is
 # derived from the name ("high-contrast").
 name  = "High Contrast"
 light = false
@@ -12,7 +13,7 @@ base04 = "#d0d0d0"
 base05 = "#ffffff"  # foreground
 base06 = "#ffffff"
 base07 = "#ffffff"
-base08 = "#ff5555"  # red
+base08 = "#ff6b6b"  # red
 base09 = "#ffaa00"  # orange
 base0A = "#ffff55"  # yellow
 base0B = "#55ff55"  # green

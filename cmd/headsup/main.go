@@ -123,6 +123,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		KeyOverrides: cfg.Keys,
 		Activity:     logger,
 		Connector:    newConnector(&cfg, cfgPath, f, conn.host != nil),
+		Config:       &cfg,
+		ConfigPath:   cfgPath,
+		ThemesDir:    config.ThemesDir(),
+		Mouse:        res.UI.Mouse,
 	})
 	opts := []tea.ProgramOption{tea.WithAltScreen()}
 	if res.UI.Mouse {

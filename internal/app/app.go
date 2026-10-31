@@ -14,6 +14,7 @@ import (
 	"github.com/tonhe/headsup/internal/activity"
 	"github.com/tonhe/headsup/internal/api"
 	"github.com/tonhe/headsup/internal/brand"
+	"github.com/tonhe/headsup/internal/config"
 	"github.com/tonhe/headsup/internal/host"
 	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/keys"
@@ -25,10 +26,12 @@ import (
 	"github.com/tonhe/headsup/internal/ui/header"
 	"github.com/tonhe/headsup/internal/ui/help"
 	"github.com/tonhe/headsup/internal/ui/modal"
+	"github.com/tonhe/headsup/internal/ui/palette"
 	"github.com/tonhe/headsup/internal/ui/sidebar"
 	"github.com/tonhe/headsup/internal/ui/statusbar"
 	"github.com/tonhe/headsup/internal/ui/styles"
 	"github.com/tonhe/headsup/internal/ui/tabs"
+	"github.com/tonhe/headsup/internal/ui/themepicker"
 	"github.com/tonhe/headsup/internal/ui/toast"
 )
 
@@ -58,6 +61,18 @@ type Options struct {
 	KeyOverrides map[string][]string
 	Activity     activity.Logger
 	Connector    Connector
+	// Config is the loaded config file. Preference changes (theme, icons,
+	// per-profile theme, ...) are written into it and saved to ConfigPath.
+	// nil means built-in defaults.
+	Config *config.Config
+	// ConfigPath is where Config is saved; empty keeps changes for this
+	// session only.
+	ConfigPath string
+	// ThemesDir is the user theme directory, reloaded from the theme picker.
+	ThemesDir string
+	// Mouse says mouse reporting is on (ui.mouse); the program must have
+	// been started with mouse support for clicks to arrive.
+	Mouse bool
 	// Now is injectable for tests.
 	Now func() time.Time
 }
@@ -78,6 +93,10 @@ type Model struct {
 	form    *form.Model
 	confirm *confirm.Model
 	help    *help.Model
+	palette *palette.Model
+	picker  *themepicker.Model
+	recent  []string // palette item IDs, most recent first
+	mouse   bool
 
 	formID    string // app-owned form in progress (connection editor, switcher)
 	pending   *module.Action
@@ -110,6 +129,17 @@ func New(opt Options) *Model {
 		t = theme.ByName(theme.Default)
 	}
 	theme.Set(*t)
+	if opt.Config == nil {
+		c := config.Default()
+		c.UI.Theme, c.UI.Mouse = t.Slug, opt.Mouse
+		if opt.Icons != "" {
+			c.UI.Icons = opt.Icons
+		}
+		if opt.Sidebar != "" {
+			c.UI.Sidebar = opt.Sidebar
+		}
+		opt.Config = &c
+	}
 	ic := icons.ByName(opt.Icons)
 	m := &Model{
 		opt:      opt,
@@ -120,6 +150,7 @@ func New(opt Options) *Model {
 		started:  map[string]time.Time{},
 		targets:  map[string][]module.Target{},
 		showSide: opt.Sidebar != "never",
+		mouse:    opt.Mouse,
 	}
 	m.toasts = toast.New(m.styles, ic)
 	m.keymap, _ = keys.Merge(m.defaultBindings(), opt.KeyOverrides)
@@ -205,6 +236,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.help != nil {
 			m.help.SetSize(m.w-8, m.h-6)
 		}
+		m.sizeModals()
 		return m, nil
 
 	case connectedMsg:
@@ -289,6 +321,12 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		return m, m.handleKey(msg)
+
+	case tea.MouseMsg:
+		return m, m.handleMouse(msg)
+	}
+	if cmd, ok := m.updateOverlays(msg); ok {
+		return m, cmd
 	}
 
 	// Unknown messages go to the active module (results of its own commands)
@@ -334,6 +372,10 @@ func (m *Model) handleKey(k tea.KeyMsg) tea.Cmd {
 		return m.form.Update(k)
 	case m.help != nil:
 		return m.help.Update(k)
+	case m.palette != nil:
+		return m.palette.Update(k)
+	case m.picker != nil:
+		return m.picker.Update(k)
 	}
 	if k.String() == "ctrl+c" {
 		m.quitting = true
@@ -394,15 +436,9 @@ func (m *Model) findAction(id string) (module.Action, bool) {
 type Chorder interface{ Chord() string }
 
 func (m *Model) defaultBindings() map[string][]string {
-	b := map[string][]string{
-		"app.quit":    {"q"},
-		"app.help":    {"?"},
-		"app.refresh": {"R", "ctrl+r"},
-		"app.sidebar": {"ctrl+b"},
-		"app.next":    {"]"},
-		"app.switch":  {"P"},
-		"app.conn":    {"C"},
-		"app.prev":    {"["},
+	b := map[string][]string{}
+	for _, a := range appActions {
+		b[a.id] = a.keys
 	}
 	for i, mod := range m.modules {
 		var ks []string
@@ -411,6 +447,9 @@ func (m *Model) defaultBindings() map[string][]string {
 		}
 		if c, ok := mod.(Chorder); ok && c.Chord() != "" {
 			ks = append(ks, "g "+c.Chord())
+		}
+		if j, ok := mod.(Jumper); ok {
+			ks = append(ks, j.JumpKeys()...)
 		}
 		if len(ks) > 0 {
 			b["app.goto."+mod.ID()] = ks
@@ -433,6 +472,12 @@ func (m *Model) global(id string) (tea.Cmd, bool) {
 		m.help = help.New(m.styles, m.helpSections())
 		m.help.SetSize(m.w-8, m.h-6)
 		return nil, true
+	case id == "app.palette":
+		return m.openPalette(), true
+	case id == "app.theme":
+		return m.openThemePicker(), true
+	case strings.HasPrefix(id, "app.theme."):
+		return m.chooseTheme(strings.TrimPrefix(id, "app.theme."), false), true
 	case id == "app.refresh":
 		m.fetching = false
 		return m.fetch(store.SliceAll), true
@@ -456,37 +501,6 @@ func (m *Model) global(id string) (tea.Cmd, bool) {
 		return m.Navigate(strings.TrimPrefix(id, "app.goto."), nil), true
 	}
 	return nil, false
-}
-
-func (m *Model) helpSections() []help.Section {
-	var secs []help.Section
-	if cur := m.current(); cur != nil {
-		var hs []module.Hint
-		for _, a := range cur.Actions() {
-			if ks := m.keymap.Keys(a.ID); len(ks) > 0 {
-				hs = append(hs, module.Hint{Key: strings.Join(ks, " / "), Desc: a.Title})
-			}
-		}
-		if len(hs) > 0 {
-			secs = append(secs, help.Section{Title: cur.Title(), Keys: hs})
-		}
-	}
-	nav := []module.Hint{{Key: "1-9", Desc: "jump to module"}, {Key: "[ / ]", Desc: "previous / next module"}}
-	for _, mod := range m.modules {
-		if c, ok := mod.(Chorder); ok && c.Chord() != "" {
-			nav = append(nav, module.Hint{Key: "g " + c.Chord(), Desc: mod.Title()})
-		}
-	}
-	secs = append(secs, help.Section{Title: "Navigation", Keys: nav})
-	secs = append(secs, help.Section{Title: "Global", Keys: []module.Hint{
-		{Key: strings.Join(m.keymap.Keys("app.refresh"), " / "), Desc: "refresh now"},
-		{Key: strings.Join(m.keymap.Keys("app.sidebar"), " / "), Desc: "toggle sidebar"},
-		{Key: "P", Desc: "switch connection"},
-		{Key: "C", Desc: "edit connection"},
-		{Key: "?", Desc: "this help"},
-		{Key: "q / ctrl+c", Desc: "quit"},
-	}})
-	return secs
 }
 
 // --- action pipeline --------------------------------------------------------
@@ -615,7 +629,7 @@ func (m *Model) View() string {
 	if cur != nil {
 		hints = cur.Hints()
 	}
-	hints = append(hints, module.Hint{Key: "?", Desc: "help"}, module.Hint{Key: "q", Desc: "quit"})
+	hints = append(hints, m.globalHints()...)
 	foot := statusbar.Render(m.styles, hints, m.footerRight(), m.w)
 
 	bodyH := m.h - 2
@@ -642,6 +656,13 @@ func (m *Model) View() string {
 		screen = modal.Center(m.styles, screen, m.form.View(min(72, m.w-4)), m.w, m.h)
 	case m.help != nil:
 		screen = modal.Center(m.styles, screen, m.styles.Modal.Render(m.help.View()), m.w, m.h)
+	case m.palette != nil:
+		screen = m.placeTop(screen, m.palette.View())
+	case m.picker != nil:
+		// Not dimmed: the screen behind is the live preview.
+		box := m.picker.View()
+		bw, bh := lipgloss.Width(box), lipgloss.Height(box)
+		screen = modal.Place(screen, box, (m.w-bw)/2, (m.h-bh)/2, m.w, m.h)
 	}
 	if m.toasts.Len() > 0 {
 		screen = toast.Overlay(screen, m.toasts.View(toast.MaxWidth), m.w, m.h-1)
