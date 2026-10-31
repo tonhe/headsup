@@ -717,12 +717,21 @@ func (o *Options) socketPerm(env *host.Env, g groupDB, socketOK bool, svcStart s
 		return host.Perm{OK: true}
 	}
 	fi, err := o.Stat(env.SocketPath)
+	if errors.Is(err, fs.ErrPermission) {
+		// The socket's directory is closed to us; we can't tell whether it exists.
+		dir := path.Dir(env.SocketPath)
+		gname := "headscale"
+		if di, derr := o.Stat(dir); derr == nil {
+			gname = nonEmpty(g.byGID[di.GID], gname)
+		}
+		return host.Perm{Reason: "no access to " + dir + " (where the socket lives)", FixCommand: groupFix(gname), Denied: true}
+	}
 	if err != nil {
 		return host.Perm{Reason: "socket " + env.SocketPath + " does not exist (is headscale running?)", FixCommand: svcStart}
 	}
 	if !files.Allowed(o.ident(), fi.Mode, fi.UID, fi.GID, files.AccessRead|files.AccessWrite) {
 		gname := nonEmpty(g.byGID[fi.GID], "headscale")
-		return host.Perm{Reason: fmt.Sprintf("no access to %s (group %s, mode %#o)", env.SocketPath, gname, uint32(fi.Mode.Perm())), FixCommand: groupFix(gname)}
+		return host.Perm{Reason: fmt.Sprintf("no access to %s (group %s, mode %#o)", env.SocketPath, gname, uint32(fi.Mode.Perm())), FixCommand: groupFix(gname), Denied: true}
 	}
 	return host.Perm{Reason: "socket " + env.SocketPath + " refused the connection (is headscale running?)", FixCommand: svcStart}
 }

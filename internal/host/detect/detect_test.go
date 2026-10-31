@@ -332,3 +332,31 @@ func TestParseConfigDefaults(t *testing.T) {
 		t.Errorf("disabled metrics %+v", c)
 	}
 }
+
+func TestSocketPermHiddenDir(t *testing.T) {
+	env := &host.Env{SocketPath: "/var/run/headscale/headscale.sock"}
+	g := groupDB{byName: map[string]int{"hsgrp": 117}, byGID: map[int]string{117: "hsgrp"}}
+	tests := []struct {
+		name    string
+		sockErr error
+		want    string
+		fix     string
+	}{
+		{"denied", fs.ErrPermission, "no access to /var/run/headscale", "sudo usermod -aG hsgrp $USER && newgrp hsgrp"},
+		{"missing", fs.ErrNotExist, "does not exist", "sudo systemctl start headscale"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := Options{Uid: 1000, Stat: func(p string) (FileInfo, error) {
+				if p == env.SocketPath {
+					return FileInfo{}, &fs.PathError{Op: "stat", Path: p, Err: tt.sockErr}
+				}
+				return FileInfo{Mode: fs.ModeDir | 0o750, GID: 117}, nil
+			}}
+			pm := o.socketPerm(env, g, false, "sudo systemctl start headscale")
+			if pm.OK || !strings.Contains(pm.Reason, tt.want) || pm.FixCommand != tt.fix || pm.Denied != (tt.sockErr == fs.ErrPermission) {
+				t.Errorf("got %+v", pm)
+			}
+		})
+	}
+}

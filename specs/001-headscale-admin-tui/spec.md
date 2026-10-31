@@ -65,9 +65,9 @@ numbers match what the server reports.
    **When** it starts with no flags, **Then** it connects with no API key and the header shows
    "host mode".
 3. **Given** host mode but a user without permission on the socket or files, **When** it starts,
-   **Then** it explains exactly which permission is missing. It shows the command to fix it
-   (for example, add the user to the `headscale` group, or rerun with sudo) and offers remote
-   mode.
+   **Then** it explains exactly which permission is missing and asks whether to restart under
+   sudo. On yes it reruns itself through sudo; on no it shows the command to fix it for good
+   (for example, add the user to the `headscale` group) and offers remote mode.
 4. **Given** an unreachable server or a rejected key, **When** the app starts, **Then** a clear
    error says which one it was and how to fix it, and offers to edit the connection.
 5. **Given** several saved profiles, **When** the user opens the profile switcher, **Then** they
@@ -442,8 +442,8 @@ The backup bundle contains every expected file. The capability matrix is accurat
 - Read-only mode: mutating actions are hidden or disabled with a reason, never silently
   ignored. In host mode this covers file writes and service control too.
 - Not enough permission in host mode, for example being able to read the config but not write
-  it: editing is disabled with the exact reason and a fix command. The app never runs sudo by
-  itself.
+  it: editing is disabled with the exact reason and a fix command. Apart from the startup
+  offer to restart under sudo (which asks first), the app never runs sudo.
 - headscale runs in a container: the container is detected, the CLI, logs, and restart go
   through the container runtime, and the config is found through its mounted path. If it cannot
   be found, the app asks for the path.

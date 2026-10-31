@@ -124,7 +124,9 @@ func (b *Backend) argv(sub ...string) []string {
 		a = append(a, b.binary)
 	}
 	a = append(a, sub...)
-	if b.config != "" {
+	// headscale skips registering its global flags when argv[1] is "version",
+	// so `-c` is rejected there; version doesn't read the config anyway.
+	if b.config != "" && (len(sub) == 0 || sub[0] != "version") {
 		a = append(a, "-c", b.config)
 	}
 	return append(a, "-o", "json")
