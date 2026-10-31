@@ -438,6 +438,9 @@ func (m *Model) Hints() []module.Hint {
 		return append(h, m.applyHints()...)
 	}
 	h := []module.Hint{{Key: "tab", Desc: "records"}, {Key: "enter", Desc: "edit"}, {Key: "n", Desc: "add split domain"}}
+	if rw, ok := m.currentRow(); ok && rw.kind == rowSplit && rw.domain != "" {
+		h = append(h, module.Hint{Key: "D", Desc: "remove domain"})
+	}
 	return append(h, m.applyHints()...)
 }
 
@@ -712,11 +715,33 @@ func (m *Model) splitForm(domain string, servers []string) *module.FormSpec {
 	if domain == "" {
 		title = "Add split DNS domain"
 	}
+	help := "Queries for the domain go to these servers. Needs a restart."
+	if domain != "" {
+		help += " Leave empty to remove this domain."
+	}
 	return &module.FormSpec{Title: title, Submit: "Stage", Fields: []module.Field{
 		{ID: "domain", Label: "Domain", Value: domain, Required: true, Validate: dnsrec.ValidName, Placeholder: "corp.example.com"},
-		{ID: "servers", Label: "Nameservers", Value: strings.Join(servers, ", "), Required: true, Validate: eachValid(dnsrec.ValidNameserver),
-			Placeholder: "10.0.0.53", Help: "Queries for the domain go to these servers. Needs a restart."},
+		{ID: "servers", Label: "Nameservers", Value: strings.Join(servers, ", "), Required: domain == "", Validate: eachValid(dnsrec.ValidNameserver),
+			Placeholder: "10.0.0.53", Help: help},
 	}}
+}
+
+// removeSplit stages removing domain from split DNS by rewriting the whole
+// split map without it. Unlike deleting the key, this also works when the
+// map is written inline ({a: [..]}), and leaves "{}" once it is empty.
+func (m *Model) removeSplit(domain string) error {
+	key := strings.Join(splitSegs("")[:3], ".")
+	es, _ := m.doc.Map(key)
+	keep := es[:0:0]
+	for _, e := range es {
+		if e.Key != domain {
+			keep = append(keep, e)
+		}
+	}
+	if len(keep) == len(es) {
+		return nil
+	}
+	return m.doc.SetMap(key, keep)
 }
 
 func splitSegs(domain string) []string {
@@ -738,12 +763,16 @@ func (m *Model) applySetting(rw row, v module.Values) error {
 		return m.doc.SetList(dnsrec.KeySearch, splitList(v["value"]))
 	case rowSplit:
 		dom := strings.TrimSuffix(strings.TrimSpace(v["domain"]), ".")
-		if rw.domain != "" && rw.domain != dom {
-			if err := m.doc.Delete(strings.Join(splitSegs(rw.domain), ".")); err != nil {
+		servers := splitList(v["servers"])
+		if rw.domain != "" && (rw.domain != dom || len(servers) == 0) {
+			if err := m.removeSplit(rw.domain); err != nil {
 				return err
 			}
 		}
-		return m.doc.SetListPath(splitSegs(dom), splitList(v["servers"]))
+		if len(servers) == 0 {
+			return nil // cleared: the domain is removed
+		}
+		return m.doc.SetListPath(splitSegs(dom), servers)
 	}
 	return errors.New("this row is not editable here")
 }
@@ -793,6 +822,9 @@ func (m *Model) Actions() []module.Action {
 				if err := m.applySetting(rw, v); err != nil {
 					return failed("dns.edit", err)
 				}
+				if rw.kind == rowSplit && rw.domain != "" && len(splitList(v["servers"])) == 0 {
+					return tea.Batch(m.staged(ctx), staged("dns.edit", "Staged removing split DNS for "+rw.domain+" (needs a restart)."))
+				}
 				return tea.Batch(m.staged(ctx), staged("dns.edit", "Staged "+rw.label+" (needs a restart)."))
 			},
 		},
@@ -834,7 +866,7 @@ func (m *Model) Actions() []module.Action {
 		},
 		{
 			// Staging only: the write is confirmed at apply.
-			ID: "dns.delete", Title: "Delete record / split domain", Keys: []string{"D"}, Needs: m.addNeed(),
+			ID: "dns.delete", Title: "Delete record / remove split domain", Keys: []string{"D"}, Needs: m.addNeed(),
 			Enabled: func(ctx module.Context) (bool, string) {
 				if ok, why := m.editable(ctx); !ok {
 					return ok, why
@@ -859,7 +891,7 @@ func (m *Model) Actions() []module.Action {
 					return tea.Batch(m.staged(ctx), staged("dns.delete", "Staged deleting "+r.Name+"."))
 				}
 				rw, _ := m.currentRow()
-				if err := m.doc.Delete(strings.Join(splitSegs(rw.domain), ".")); err != nil {
+				if err := m.removeSplit(rw.domain); err != nil {
 					return failed("dns.delete", err)
 				}
 				return tea.Batch(m.staged(ctx), staged("dns.delete", "Staged removing split DNS for "+rw.domain+"."))

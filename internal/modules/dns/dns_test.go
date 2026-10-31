@@ -526,3 +526,45 @@ func TestDiffView(t *testing.T) {
 		t.Error("esc closes the diff")
 	}
 }
+
+func TestRemoveSplitDomain(t *testing.T) {
+	cfg := strings.Replace(string(fake.SeedConfig), "split: {}",
+		"split:\n      corp.example.com:\n        - 10.0.0.53\n      lab.example.com:\n        - 10.1.0.53", 1)
+	x := newHarness(t, fake.WithFile(fake.ConfigPath, []byte(cfg)))
+	x.selectRow(rowSplit, "corp.example.com")
+	hinted := false
+	for _, h := range x.m.Hints() {
+		if h.Key == "D" && strings.Contains(h.Desc, "remove") {
+			hinted = true
+		}
+	}
+	if !hinted {
+		t.Errorf("a split row should hint D to remove it: %+v", x.m.Hints())
+	}
+	// Clearing the servers in the edit form removes the domain.
+	if r := x.invoke("dns.edit", map[string]string{"domain": "corp.example.com", "servers": ""}); r.Err != nil || !strings.Contains(r.Message, "removing split DNS for corp.example.com") {
+		t.Fatalf("clear servers: %+v", r)
+	}
+	x.selectRow(rowSplit, "lab.example.com")
+	if r := x.invoke("dns.delete", nil); r.Err != nil {
+		t.Fatal(r.Err)
+	}
+	x.invoke("dns.apply", nil)
+	if cfg := file(t, x.h, fake.ConfigPath); !strings.Contains(cfg, "split: {}") || strings.Contains(cfg, "corp.example.com") || strings.Contains(cfg, "lab.example.com") {
+		t.Errorf("removing the last domain should leave split: {}:\n%s", cfg)
+	}
+}
+
+func TestRemoveSplitDomainInlineMap(t *testing.T) {
+	cfg := strings.Replace(string(fake.SeedConfig), "split: {}", "split: {corp.example.com: [10.0.0.53], lab.example.com: [10.1.0.53]}", 1)
+	x := newHarness(t, fake.WithFile(fake.ConfigPath, []byte(cfg)))
+	x.selectRow(rowSplit, "corp.example.com")
+	if r := x.invoke("dns.delete", nil); r.Err != nil {
+		t.Fatalf("an inline split map must still allow removal: %v", r.Err)
+	}
+	x.invoke("dns.apply", nil)
+	got := file(t, x.h, fake.ConfigPath)
+	if strings.Contains(got, "corp.example.com") || !strings.Contains(got, "lab.example.com") {
+		t.Errorf("split after removal:\n%s", got)
+	}
+}
