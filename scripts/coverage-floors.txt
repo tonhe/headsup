@@ -22,7 +22,6 @@ github.com/tonhe/headsup/internal/ui/filter 88
 github.com/tonhe/headsup/internal/ui/table 75
 github.com/tonhe/headsup/internal/ui/form 87
 github.com/tonhe/headsup/internal/ui/confirm 86
-github.com/tonhe/headsup/internal/app 78
 github.com/tonhe/headsup/internal/modules/users 78
 github.com/tonhe/headsup/internal/modules/routes 78
 github.com/tonhe/headsup/internal/modules/keys 76
