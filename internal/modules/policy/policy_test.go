@@ -459,6 +459,7 @@ func TestLoadFailureAndRefresh(t *testing.T) {
 	m := New()
 	ctx := &tctx{b: b, st: store.New(), s: uitest.StyleFor("tokyo-night")}
 	hs := &harness{t: t, m: m, ctx: ctx}
+	hs.d = uitest.NewDriver(t, adapter{hs}, 120, 40)
 	hs.send(store.UpdatedMsg{})
 	if m.loaded || m.loadErr == nil {
 		t.Fatal("a failed load is reported")

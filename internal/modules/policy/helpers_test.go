@@ -2,7 +2,6 @@ package policy
 
 import (
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -56,12 +55,30 @@ func (c *tctx) Toast(_ module.ToastLevel, msg string) tea.Cmd {
 	return nil
 }
 
-// harness wires a module to a context and runs commands synchronously.
+// harness wires a module to a context and runs it in the shared fake-clock
+// driver, so slow work is never mistaken for a timer.
 type harness struct {
 	t   *testing.T
 	m   *Model
 	ctx *tctx
+	d   *uitest.Driver
 }
+
+// adapter presents the module as a tea.Model for the driver and records
+// ActionResults the way the app would see them.
+type adapter struct{ hs *harness }
+
+func (a adapter) Init() tea.Cmd { return nil }
+
+func (a adapter) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	if r, ok := msg.(module.ActionResult); ok {
+		a.hs.ctx.results = append(a.hs.ctx.results, r)
+	}
+	_, cmd := a.hs.m.Update(a.hs.ctx, msg)
+	return a, cmd
+}
+
+func (a adapter) View() string { return a.hs.m.View(a.hs.ctx, module.Rect{W: 120, H: 40}) }
 
 func newHarness(t *testing.T, b api.Backend, h host.Host) *harness {
 	t.Helper()
@@ -69,6 +86,7 @@ func newHarness(t *testing.T, b api.Backend, h host.Host) *harness {
 	m.hist = pol.NewHistory(filepath.Join(t.TempDir(), "history"))
 	m.editor = func() []string { return []string{"true"} }
 	hs := &harness{t: t, m: m, ctx: &tctx{b: b, h: h, st: store.New(), s: uitest.StyleFor("tokyo-night")}}
+	hs.d = uitest.NewDriver(t, adapter{hs}, 120, 40)
 	hs.send(module.NavigateMsg{})
 	if !m.loaded {
 		t.Fatalf("policy did not load: %v", m.loadErr)
@@ -76,39 +94,10 @@ func newHarness(t *testing.T, b api.Backend, h host.Host) *harness {
 	return hs
 }
 
-func (hs *harness) send(msg tea.Msg) {
-	_, cmd := hs.m.Update(hs.ctx, msg)
-	hs.run(cmd)
-}
+func (hs *harness) send(msg tea.Msg) { hs.d.Send(msg) }
 
-func (hs *harness) run(cmd tea.Cmd) {
-	if cmd == nil {
-		return
-	}
-	done := make(chan tea.Msg, 1)
-	go func() { done <- cmd() }()
-	var msg tea.Msg
-	select {
-	case msg = <-done:
-	case <-time.After(100 * time.Millisecond):
-		return // a timer (cursor blink): not needed headlessly
-	}
-	if t := reflect.TypeOf(msg); t != nil && strings.Contains(t.PkgPath(), "charmbracelet/bubbles") {
-		return // cursor blinks and other widget timers
-	}
-	switch msg := msg.(type) {
-	case nil:
-	case tea.BatchMsg:
-		for _, c := range msg {
-			hs.run(c)
-		}
-	case module.ActionResult:
-		hs.ctx.results = append(hs.ctx.results, msg)
-		hs.send(msg)
-	default:
-		hs.send(msg)
-	}
-}
+// run feeds a command built by the test into the driver.
+func (hs *harness) run(cmd tea.Cmd) { hs.d.Do(func() tea.Cmd { return cmd }) }
 
 func (hs *harness) action(id string) module.Action {
 	hs.t.Helper()
@@ -134,7 +123,7 @@ func (hs *harness) do(id string) {
 			hs.t.Fatalf("%s disabled: %s", id, why)
 		}
 	}
-	hs.run(a.Run(hs.ctx, nil))
+	hs.d.Do(func() tea.Cmd { return a.Run(hs.ctx, nil) })
 }
 
 func (hs *harness) enabled(id string) (bool, string) {
