@@ -59,6 +59,7 @@ func (m *modCtx) Styles() *styles.Styles    { return m.s }
 func (m *modCtx) Icons() icons.Set          { return icons.ASCII }
 func (m *modCtx) ReadOnly() bool            { return m.c.ReadOnly }
 func (m *modCtx) HostMode() bool            { return m.c.Host != nil }
+func (m *modCtx) Profile() string           { return m.c.Label }
 func (m *modCtx) ServerURL() string         { return m.c.ServerURL }
 func (m *modCtx) Now() time.Time            { return m.r.now() }
 func (m *modCtx) Refresh() tea.Cmd          { return nil }
