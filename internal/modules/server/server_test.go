@@ -311,6 +311,7 @@ func (errSource) Releases(context.Context) ([]upgrade.Release, error) {
 func TestUpgradeCard(t *testing.T) {
 	c := newCtx(t, "0.29.6", true)
 	m := New()
+	m.arch = "amd64" // the golden shows linux_amd64 whatever the runner is
 	m.src = staticSource{
 		{Tag: "v0.29.6", Body: "old"},
 		{Tag: "v0.30.0", Published: testNow.Add(-30 * 24 * time.Hour), Body: "## Breaking\n- `tls_*` keys move under `tls:`"},

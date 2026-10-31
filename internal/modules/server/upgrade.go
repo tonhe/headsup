@@ -45,6 +45,9 @@ func (m *Model) checkUpgrade(ctx module.Context) tea.Cmd {
 		}
 	}
 	target := upgrade.TargetFor(env)
+	if m.arch != "" {
+		target.Arch = m.arch
+	}
 	if h == nil {
 		target = upgrade.Target{Install: upgrade.InstallUnknown}
 	}

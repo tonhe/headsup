@@ -88,6 +88,9 @@ type Model struct {
 	probes *doctor.Probes
 	// root overrides the bundle directory (tests).
 	root string
+	// arch overrides the CPU architecture used in upgrade commands (tests);
+	// "" means this machine's.
+	arch string
 }
 
 // New returns the module.
