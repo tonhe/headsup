@@ -59,7 +59,7 @@ func New() *Model {
 func (m *Model) ID() string               { return "service" }
 func (m *Model) Title() string            { return "Service" }
 func (m *Model) Icon(ic icons.Set) string { return ic.Service }
-func (m *Model) Order() int               { return 110 }
+func (m *Model) Order() int               { return 116 }
 func (m *Model) Modes() module.Modes      { return module.ModeHost }
 func (m *Model) Chord() string            { return "l" }
 func (m *Model) Capturing() bool          { return m.searching }

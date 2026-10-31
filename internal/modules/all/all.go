@@ -3,6 +3,7 @@
 package all
 
 import (
+	_ "github.com/tonhe/headsup/internal/modules/activity"
 	_ "github.com/tonhe/headsup/internal/modules/dashboard"
 	_ "github.com/tonhe/headsup/internal/modules/derp"
 	_ "github.com/tonhe/headsup/internal/modules/dns"

@@ -21,4 +21,4 @@
 │ default 0 - duration - needs restart - since 0.29                            │
 │ - Changed, not saved yet (d diff, ctrl+s save).                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
- enter edit  tab section  E $EDITOR  d diff  ctrl+s save       updated 12:00:00 
+ enter edit  tab section  E $EDITOR  d diff        * running · updated 12:00:00 

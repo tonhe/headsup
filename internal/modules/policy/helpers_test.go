@@ -42,6 +42,7 @@ func (c *tctx) Icons() icons.Set       { return icons.Unicode }
 func (c *tctx) ReadOnly() bool         { return c.readOnly }
 func (c *tctx) HostMode() bool         { return c.h != nil }
 func (c *tctx) ServerURL() string      { return "https://hs.example.com" }
+func (c *tctx) Profile() string        { return "homelab" }
 func (c *tctx) Now() time.Time         { return testNow }
 func (c *tctx) Refresh() tea.Cmd       { return nil }
 func (c *tctx) Navigate(id string, args any) tea.Cmd {

@@ -37,4 +37,4 @@
                       │ default http://127.0.0.1:8080 - string - needs restart - since 0.29                            │
                       │ L Critical: saving asks you to type the file name to confirm.                                  │
                       ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
- enter edit  tab section  E $EDITOR  ? help  : commands  q quit                                        updated 12:00:00 
+ enter edit  tab section  E $EDITOR  ? help  : commands  q quit                            * running · updated 12:00:00 

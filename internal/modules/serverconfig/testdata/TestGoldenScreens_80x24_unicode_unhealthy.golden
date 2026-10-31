@@ -21,4 +21,4 @@
 │ 2026-10-28T11:59:32Z DBG Map request received node.id=2 omitPeers=false str… │
 │ 2026-10-28T11:59:39Z WRN Node did not respond to HA probe node.id=3 prefix=… │
 ╰──────────────────────────────────────────────────────────────────────────────╯
- u restore & restart  X retry restart  esc back  ? help        updated 12:00:00 
+ u restore & restart  X retry restart  esc back    ● running · updated 12:00:00 

@@ -3,6 +3,7 @@
 package module
 
 import (
+	"path/filepath"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -122,6 +123,9 @@ type Action struct {
 	Targets func(Context) []Target
 	// Run performs the action. It must not block; do I/O inside the Cmd.
 	Run func(Context, Values) tea.Cmd
+	// ConfirmText, when set, is the text a DangerCritical confirm makes the
+	// user type (e.g. a full file path) instead of the target's name.
+	ConfirmText func(Context) string
 }
 
 // Context is what the app hands to modules.
@@ -134,6 +138,9 @@ type Context interface {
 	ReadOnly() bool
 	HostMode() bool
 	ServerURL() string
+	// Profile is the active connection profile's name ("homelab", or
+	// "host:<hostname>" in host mode). Use it to key per-profile state.
+	Profile() string
 	// Now is the app clock; modules must use it instead of time.Now so views are deterministic in tests.
 	Now() time.Time
 	Navigate(moduleID string, args any) tea.Cmd
@@ -175,6 +182,63 @@ type ActionResult struct {
 	Refresh store.Slice
 	// Silent suppresses the success toast (e.g. the module shows its own result).
 	Silent bool
+	// BackupID names a backup the action took or restored, for the activity log.
+	BackupID string
+	// Files lists managed files the action wrote, for the activity log.
+	Files []FileWrite
+}
+
+// FileWrite is one managed-file write an action made. It carries no content,
+// only what the activity log records.
+type FileWrite struct {
+	Path     string
+	BackupID string // the backup taken before the write; "" if none
+	Added    int    // diff lines added
+	Removed  int    // diff lines removed
+}
+
+// WriteOf describes an applied change. c may be nil (no diff stats).
+func WriteOf(c *host.Change, a host.Applied) FileWrite {
+	w := FileWrite{BackupID: filepath.Base(a.BackupPath)}
+	if a.BackupPath == "" {
+		w.BackupID = ""
+	}
+	if a.File != nil {
+		w.Path = a.File.Path
+	}
+	if c != nil {
+		if w.Path == "" && c.File != nil {
+			w.Path = c.File.Path
+		}
+		for _, l := range c.Diff {
+			switch l.Op {
+			case '+':
+				w.Added++
+			case '-':
+				w.Removed++
+			}
+		}
+	}
+	return w
+}
+
+// WritesOf pairs the changes of a change set with what applying them did.
+func WritesOf(cs []*host.Change, as []host.Applied) []FileWrite {
+	out := make([]FileWrite, 0, len(as))
+	for i, a := range as {
+		var c *host.Change
+		if i < len(cs) {
+			c = cs[i]
+		}
+		out = append(out, WriteOf(c, a))
+	}
+	return out
+}
+
+// Unsaved is implemented by modules that can hold edits not yet written
+// anywhere. The app asks before quitting while any module reports true.
+type Unsaved interface {
+	Unsaved() bool
 }
 
 // NavigateMsg is sent to a module when it becomes active via Navigate.

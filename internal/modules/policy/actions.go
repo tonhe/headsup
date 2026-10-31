@@ -121,6 +121,7 @@ func (m *Model) Actions() []module.Action {
 			},
 			Run: func(module.Context, module.Values) tea.Cmd { m.openExplore(); return nil },
 		},
+		m.previewAction(),
 		{
 			ID: "policy.filter", Title: "Compiled packet filter", Keys: []string{"f"}, Needs: host.NeedDebug,
 			Run: func(ctx module.Context, _ module.Values) tea.Cmd { return m.openFilter(ctx) },

@@ -126,7 +126,7 @@ func New() *Model { return &Model{} }
 func (m *Model) ID() string               { return "derp" }
 func (m *Model) Title() string            { return "DERP" }
 func (m *Model) Icon(ic icons.Set) string { return ic.DERP }
-func (m *Model) Order() int               { return 65 }
+func (m *Model) Order() int               { return 114 }
 func (m *Model) Modes() module.Modes      { return module.ModeHost }
 func (m *Model) Chord() string            { return "D" }
 func (m *Model) Capturing() bool          { return false }
@@ -211,6 +211,9 @@ func (m *Model) fetchLive(ctx module.Context) tea.Cmd {
 }
 
 func (m *Model) dirty() bool { return len(m.items()) > 0 }
+
+// Unsaved implements module.Unsaved: staged edits not yet applied.
+func (m *Model) Unsaved() bool { return m.dirty() }
 
 // items: new and changed map files first, then the config (which may list
 // a new file in derp.paths).
@@ -330,6 +333,7 @@ func (m *Model) rebuild() {
 type appliedMsg struct {
 	applied []host.Applied
 	err     error
+	changes []*host.Change
 }
 
 type rolledBackMsg struct{ err error }
@@ -367,6 +371,7 @@ func (m *Model) Update(ctx module.Context, msg tea.Msg) (module.Module, tea.Cmd)
 			return m, func() tea.Msg { return res }
 		}
 		m.applied = msg.applied
+		res.Files = module.WritesOf(msg.changes, msg.applied)
 		m.restartAt = msg.applied[len(msg.applied)-1].At
 		res.Message = "Saved. Restart headscale to use the new DERP settings (g l); the live map updates after it."
 		return m, tea.Batch(m.load(ctx), func() tea.Msg { return res })
@@ -1294,7 +1299,7 @@ func (m *Model) applyAction() module.Action {
 				c, cancel := context.WithTimeout(context.Background(), ioTimeout)
 				defer cancel()
 				as, err := changeset.Apply(c, h, cs)
-				return appliedMsg{applied: as, err: err}
+				return appliedMsg{applied: as, changes: cs, err: err}
 			}
 		},
 	}

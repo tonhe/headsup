@@ -42,6 +42,7 @@ const (
 	modeExplore      // tree of groups, tags, hosts, and rules
 	modeHistory      // locally kept revisions
 	modeFilter       // compiled packet filter (host)
+	modePreview      // access preview: who can reach what
 )
 
 // refreshEvery is how often the viewer refetches the policy in the background.
@@ -100,6 +101,7 @@ type Model struct {
 	exp  explorer
 	hst  historyView
 	filt filterView
+	prev previewer
 }
 
 // problem is a validation failure with its position.
@@ -134,6 +136,9 @@ func (m *Model) Capturing() bool { return m.mode == modeEdit }
 // Dirty reports unsaved policy edits, for the app's quit guard.
 func (m *Model) Dirty() bool { return m.hasDraft }
 
+// Unsaved implements module.Unsaved.
+func (m *Model) Unsaved() bool { return m.Dirty() }
+
 func (m *Model) Init(module.Context) tea.Cmd { return nil }
 
 // fileMode is true when this app is on the host and headscale reads the policy from a file.
@@ -141,8 +146,13 @@ func fileMode(ctx module.Context) bool {
 	return ctx.HostMode() && ctx.Host() != nil && ctx.Host().Env().PolicyMode == "file"
 }
 
-// profileKey names this connection's history directory.
+// profileKey names this connection's history directory: the active
+// profile, falling back to the host name or server URL when the app was
+// given no profile name.
 func profileKey(ctx module.Context) string {
+	if p := ctx.Profile(); p != "" {
+		return p
+	}
 	if ctx.HostMode() && ctx.Host() != nil {
 		return "host-" + ctx.Host().Env().Hostname
 	}
@@ -269,6 +279,10 @@ func (m *Model) key(ctx module.Context, k tea.KeyMsg) tea.Cmd {
 		if cmd, ok := m.historyKey(k); ok {
 			return cmd
 		}
+	case modePreview:
+		if cmd, ok := m.previewKey(ctx, k); ok {
+			return cmd
+		}
 	}
 	switch k.String() {
 	case "esc":
@@ -311,6 +325,8 @@ func (m *Model) Hints() []module.Hint {
 		return []module.Hint{{Key: "j/k", Desc: "move"}, {Key: "u", Desc: "restore"}, {Key: "esc", Desc: "back"}}
 	case modeFilter, modeDiff:
 		return []module.Hint{{Key: "j/k", Desc: "scroll"}, {Key: "esc", Desc: "back"}}
+	case modePreview:
+		return []module.Hint{{Key: "j/k", Desc: "source"}, {Key: "ctrl+d/u", Desc: "scroll"}, {Key: "m", Desc: "machines"}, {Key: "esc", Desc: "back"}}
 	}
 	hs := []module.Hint{{Key: "e", Desc: "edit"}, {Key: "E", Desc: "$EDITOR"}, {Key: "v", Desc: "check"}}
 	if m.hasDraft {
@@ -319,5 +335,5 @@ func (m *Model) Hints() []module.Hint {
 	if m.applied != nil {
 		hs = append(hs, module.Hint{Key: "u", Desc: "roll back"})
 	}
-	return append(hs, module.Hint{Key: "x", Desc: "explore"}, module.Hint{Key: "h", Desc: "history"})
+	return append(hs, module.Hint{Key: "x", Desc: "explore"}, module.Hint{Key: "p", Desc: "preview"}, module.Hint{Key: "h", Desc: "history"})
 }

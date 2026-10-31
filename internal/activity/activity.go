@@ -65,6 +65,74 @@ type Entry struct {
 	DurationMS int64          `json:"duration_ms"`
 	BackupID   string         `json:"backup_id,omitempty"`
 	DiffStats  *DiffStats     `json:"diff_stats,omitempty"`
+	// Files lists each host file the action wrote. BackupID and DiffStats
+	// above summarise them (the single backup ID, the summed stats).
+	Files []FileChange `json:"files,omitempty"`
+}
+
+// FileChange is one host file write: its path, the backup taken before it,
+// and line counts. File content is never logged.
+type FileChange struct {
+	Path      string    `json:"path"`
+	BackupID  string    `json:"backup_id,omitempty"`
+	DiffStats DiffStats `json:"diff_stats"`
+}
+
+// AddFiles records host file writes on e: each one in Files, a "file"
+// target per path not already targeted, the summed diff stats, and the
+// backup ID when the writes share one (or there is only one).
+func (e *Entry) AddFiles(fs []FileChange) {
+	if len(fs) == 0 {
+		return
+	}
+	targeted := map[string]bool{}
+	for _, t := range e.Targets {
+		if t.Kind == "file" {
+			targeted[t.ID] = true
+			targeted[t.Name] = true
+		}
+	}
+	sum := DiffStats{}
+	if e.DiffStats != nil {
+		sum = *e.DiffStats
+	}
+	ids := map[string]bool{}
+	for _, f := range fs {
+		e.Files = append(e.Files, f)
+		sum.Added += f.DiffStats.Added
+		sum.Removed += f.DiffStats.Removed
+		sum.Changed += f.DiffStats.Changed
+		if f.BackupID != "" {
+			ids[f.BackupID] = true
+		}
+		if f.Path != "" && !targeted[f.Path] {
+			targeted[f.Path] = true
+			e.Targets = append(e.Targets, Target{Kind: "file", ID: f.Path, Name: f.Path})
+		}
+	}
+	e.DiffStats = &sum
+	if e.BackupID == "" && len(ids) == 1 {
+		for id := range ids {
+			e.BackupID = id
+		}
+	}
+}
+
+// Matches reports whether e mentions q (case-insensitive) in its action,
+// profile, targets, result, or backup ID. An empty q matches everything.
+func (e Entry) Matches(q string) bool {
+	q = strings.ToLower(strings.TrimSpace(q))
+	if q == "" {
+		return true
+	}
+	parts := []string{e.ActionID, e.Profile, e.Result.Status, e.Result.Kind, e.Result.Message, e.BackupID}
+	for _, t := range e.Targets {
+		parts = append(parts, t.Kind, t.ID, t.Name)
+	}
+	for _, f := range e.Files {
+		parts = append(parts, f.Path)
+	}
+	return strings.Contains(strings.ToLower(strings.Join(parts, "\x00")), q)
 }
 
 // Logger records and reads activity.
@@ -78,6 +146,46 @@ type Nop struct{}
 
 func (Nop) Log(Entry) error             { return nil }
 func (Nop) Recent(int) ([]Entry, error) { return nil, nil }
+
+// Memory keeps entries for this session only (the demo, or when the log
+// file cannot be opened). Entries are redacted like the file's.
+type Memory struct {
+	mu  sync.Mutex
+	es  []Entry
+	Max int // entries kept; <= 0 means 1000
+}
+
+// Log implements Logger.
+func (m *Memory) Log(e Entry) error {
+	if e.Time.IsZero() {
+		e.Time = time.Now()
+	}
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.es = append(m.es, Redact(e))
+	limit := m.Max
+	if limit <= 0 {
+		limit = 1000
+	}
+	if len(m.es) > limit {
+		m.es = append([]Entry(nil), m.es[len(m.es)-limit:]...)
+	}
+	return nil
+}
+
+// Recent implements Logger: up to n entries, newest first; n <= 0 is all.
+func (m *Memory) Recent(n int) ([]Entry, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	out := make([]Entry, 0, len(m.es))
+	for i := len(m.es) - 1; i >= 0; i-- {
+		out = append(out, m.es[i])
+		if n > 0 && len(out) == n {
+			break
+		}
+	}
+	return out, nil
+}
 
 // File is the JSONL implementation.
 type File struct {
@@ -193,6 +301,15 @@ func Redact(e Entry) Entry {
 			ts[i] = t
 		}
 		e.Targets = ts
+	}
+	e.BackupID = RedactString(e.BackupID)
+	if len(e.Files) > 0 {
+		fs := make([]FileChange, len(e.Files))
+		for i, f := range e.Files {
+			f.Path, f.BackupID = RedactString(f.Path), RedactString(f.BackupID)
+			fs[i] = f
+		}
+		e.Files = fs
 	}
 	return e
 }

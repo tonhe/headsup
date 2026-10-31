@@ -301,7 +301,7 @@ A restart with an invalid config is refused before the service is touched.
   - Start runs configtest first and is refused if it fails.
   - Reload is Confirm and notes that it reloads the policy only. In internal/modules/service/status.go.
 - [X] T142 [US14] Log viewer: a virtualised ring buffer of 10k lines, level filter, regex search, pause, jump to next error, structured-field expansion, and a node link to machines, in internal/modules/service/logs.go
-- [ ] T143 [US14] Dashboard and statusbar service badge (● running, ○ stopped, ◐ restarting) in internal/modules/service/badge.go
+- [X] T143 [US14] Dashboard and statusbar service badge (● running, ○ stopped, ◐ restarting) in internal/modules/service/badge.go
 
 ## Phase 15: User Story 11, Scriptable CLI (P3)
 
@@ -313,12 +313,12 @@ A restart with an invalid config is refused before the service is touched.
 
 ## Phase 16: User Story 12, Activity and Watch (P3)
 
-- [ ] T149 [P] [US12] Snapshot differ tests (online, offline, key expiring, route advertised) in internal/watch/watch_test.go
-- [ ] T150 [US12] Snapshot differ emitting events in internal/watch/watch.go
-- [ ] T151 [US12] Activity module: a filterable log of this app's mutations plus a live event feed, with export to JSON, in internal/modules/activity/activity.go
-- [ ] T152 [US12] Record host file writes and service actions in the activity log, with backup ID and diff stats and secrets redacted, in internal/activity/activity.go
-- [ ] T153 [US12] Desktop and bell notifications driven by `[notify]` in internal/app/notify.go
-- [ ] T154 [US12] Access preview: expand groups, tags, and autogroups, evaluate acls and grants for a chosen source, and label the result best-effort. In internal/policy/preview.go, with the view in internal/modules/policy/preview.go and table tests in internal/policy/preview_test.go.
+- [X] T149 [P] [US12] Snapshot differ tests (online, offline, key expiring, route advertised) in internal/watch/watch_test.go
+- [X] T150 [US12] Snapshot differ emitting events in internal/watch/watch.go
+- [X] T151 [US12] Activity module: a filterable log of this app's mutations plus a live event feed, with export to JSON, in internal/modules/activity/activity.go
+- [X] T152 [US12] Record host file writes and service actions in the activity log, with backup ID and diff stats and secrets redacted, in internal/activity/activity.go
+- [X] T153 [US12] Desktop and bell notifications driven by `[notify]` in internal/app/notify.go
+- [X] T154 [US12] Access preview: expand groups, tags, and autogroups, evaluate acls and grants for a chosen source, and label the result best-effort. In internal/policy/preview.go, with the view in internal/modules/policy/preview.go and table tests in internal/policy/preview_test.go.
 
 ## Phase 17: User Story 15, DERP (P3) [host]
 

@@ -317,6 +317,7 @@ const (
 
 type fileAppliedMsg struct {
 	next      string
+	change    *host.Change
 	applied   *host.Applied
 	err       error
 	reloadErr error
@@ -327,7 +328,7 @@ func (m *Model) applyFile(ctx module.Context) tea.Cmd {
 	rv, next := m.review, m.draft
 	b, h, hist, prof, now := ctx.Backend(), ctx.Host(), m.hist, profileKey(ctx), ctx.Now()
 	return func() tea.Msg {
-		r := fileAppliedMsg{next: next}
+		r := fileAppliedMsg{next: next, change: rv.change}
 		var a host.Applied
 		r.err = call(func(c context.Context) (err error) { a, err = h.Apply(c, rv.change); return })
 		if r.err != nil {
@@ -391,6 +392,7 @@ func (m *Model) onFileApplied(ctx module.Context, msg fileAppliedMsg) tea.Cmd {
 		}
 		return result(res)
 	}
+	res.Files = []module.FileWrite{module.WriteOf(msg.change, *msg.applied)}
 	m.clearDraft()
 	m.cur = msg.next
 	m.doc, m.docErr = pol.Parse([]byte(msg.next))

@@ -48,6 +48,8 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 		body = m.historyView(ctx, r.W, h)
 	case modeFilter:
 		body = m.filterView(ctx, r.W, h)
+	case modePreview:
+		body = m.previewView(ctx, r.W, h)
 	default:
 		body = m.codePane(s, "Policy", m.cur, r.W, h, codeview.Options{Cursor: m.cursor})
 	}
