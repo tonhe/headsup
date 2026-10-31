@@ -317,7 +317,7 @@ func write(ctx context.Context, h host.Host, env host.Env, o Options, id, dir st
 		f, err := h.Open(fileKind(t.Kind), t.Path)
 		if err != nil {
 			if errors.Is(err, fs.ErrNotExist) {
-				m.Missing = append(m.Missing, t.Path)
+				m.Missing = append(m.Missing, filepath.ToSlash(t.Path))
 				continue
 			}
 			return res, fmt.Errorf("back up %s: %w", t.Path, err)
@@ -329,7 +329,9 @@ func write(ctx context.Context, h host.Host, env host.Env, o Options, id, dir st
 		if err := files.WritePrivate(dst, f.Raw); err != nil {
 			return res, err
 		}
-		m.Files = append(m.Files, ManifestFile{Path: t.Path, Kind: t.Kind, SHA256: files.Sum(f.Raw),
+		// Manifests hold slash-form paths on every OS, so a bundle reads the
+		// same wherever it was made.
+		m.Files = append(m.Files, ManifestFile{Path: filepath.ToSlash(t.Path), Kind: t.Kind, SHA256: files.Sum(f.Raw),
 			UID: f.UID, GID: f.GID, Mode: fmt.Sprintf("%#o", uint32(f.Mode.Perm()))})
 	}
 
