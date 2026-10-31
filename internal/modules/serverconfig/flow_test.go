@@ -20,12 +20,15 @@ import (
 var flowNow = time.Date(2026, 10, 28, 12, 0, 0, 0, time.UTC)
 
 // driver runs the real app headlessly with only this module: commands run
-// synchronously, timers (blinks, ticks) are dropped, results are fed back.
+// synchronously and results are fed back. A command still running after
+// 150ms (a timer, or slow I/O on a loaded CI runner) is parked: its result
+// lands in late and is applied only while want is waiting for the screen.
 type driver struct {
-	t   *testing.T
-	m   *app.Model
-	mod *Model
-	h   *hostfake.Host
+	t    *testing.T
+	m    *app.Model
+	mod  *Model
+	h    *hostfake.Host
+	late chan tea.Msg
 }
 
 func newDriver(t *testing.T, h *hostfake.Host, readOnly bool) *driver {
@@ -46,7 +49,7 @@ func newSizedDriver(t *testing.T, h *hostfake.Host, readOnly bool, w, ht int, ic
 		Now: clock, Refresh: time.Hour, ReadOnly: readOnly, Theme: "tokyo-night", Profile: "host:hs-demo",
 		ServerURL: "https://hs.demo.example.com", Icons: ic,
 	})
-	d := &driver{t: t, m: m, mod: mod, h: h}
+	d := &driver{t: t, m: m, mod: mod, h: h, late: make(chan tea.Msg, 256)}
 	d.send(tea.WindowSizeMsg{Width: w, Height: ht})
 	d.exec(m.Init(), 0)
 	return d
@@ -67,8 +70,14 @@ func (d *driver) exec(cmd tea.Cmd, depth int) {
 	select {
 	case msg = <-done:
 	case <-time.After(150 * time.Millisecond):
+		go func() { d.late <- <-done }()
 		return
 	}
+	d.dispatch(msg, depth)
+}
+
+// dispatch applies one command result and runs what it returns.
+func (d *driver) dispatch(msg tea.Msg, depth int) {
 	switch msg := msg.(type) {
 	case nil, tea.QuitMsg:
 	case tea.BatchMsg:
@@ -106,12 +115,29 @@ func (d *driver) key(keys ...string) {
 
 func (d *driver) view() string { return ansi.Strip(d.m.View()) }
 
+// want waits up to 5s for every sub to be on screen, applying the results
+// of parked commands while it waits.
 func (d *driver) want(subs ...string) {
 	d.t.Helper()
-	out := d.view()
-	for _, s := range subs {
-		if !strings.Contains(out, s) {
-			d.t.Fatalf("screen is missing %q:\n%s", s, out)
+	deadline := time.Now().Add(5 * time.Second)
+	for {
+		out, missing := d.view(), ""
+		for _, s := range subs {
+			if !strings.Contains(out, s) {
+				missing = s
+				break
+			}
+		}
+		if missing == "" {
+			return
+		}
+		if !time.Now().Before(deadline) {
+			d.t.Fatalf("screen is missing %q:\n%s", missing, out)
+		}
+		select {
+		case msg := <-d.late:
+			d.dispatch(msg, 0)
+		case <-time.After(50 * time.Millisecond):
 		}
 	}
 }
