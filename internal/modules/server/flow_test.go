@@ -7,7 +7,6 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/x/ansi"
 
 	apifake "github.com/tonhe/headsup/internal/api/fake"
 	"github.com/tonhe/headsup/internal/app"
@@ -15,6 +14,7 @@ import (
 	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/store"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 // configStub stands in for the Server Settings module so the test can see
@@ -39,24 +39,22 @@ func (*configStub) Actions() []module.Action                { return nil }
 func (*configStub) Capturing() bool                         { return false }
 func (*configStub) Hints() []module.Hint                    { return nil }
 
-// driver runs the app headlessly, executing commands synchronously. A
-// command still running after 200ms (slow I/O on a loaded CI runner) is
-// parked, not dropped: its result is applied while want waits for the
-// screen.
+// driver runs the app headlessly in the shared fake-clock driver: slow work
+// is never mistaken for a timer, and every key settles before it returns.
 type driver struct {
-	t    *testing.T
-	m    *app.Model
-	srv  *Model
-	cfg  *configStub
-	h    *hostfake.Host
-	b    *apifake.Backend
-	late chan tea.Msg
+	*uitest.Driver
+	t   *testing.T
+	m   *app.Model
+	srv *Model
+	cfg *configStub
+	h   *hostfake.Host
+	b   *apifake.Backend
 }
 
 func newDriver(t *testing.T, w, ht int) *driver {
 	t.Helper()
 	clock := func() time.Time { return testNow }
-	d := &driver{t: t, srv: New(), cfg: &configStub{}, late: make(chan tea.Msg, 256)}
+	d := &driver{t: t, srv: New(), cfg: &configStub{}}
 	d.srv.root = filepath.Join(t.TempDir(), "backups", "bundles")
 	d.srv.src = staticSource{{Tag: "v0.30.0"}, {Tag: "v0.30.1", Body: "## Fixes\n- Fewer crashes"}}
 	d.b = apifake.Demo(apifake.WithClock(clock))
@@ -64,101 +62,18 @@ func newDriver(t *testing.T, w, ht int) *driver {
 	d.h = hostfake.New(hostfake.WithClock(clock), hostfake.WithLogInterval(time.Hour), hostfake.WithFile(hostfake.ConfigPath, cfg))
 	d.m = app.New(app.Options{Backend: d.b, Host: d.h, Modules: []module.Module{d.srv, d.cfg}, Now: clock,
 		Refresh: time.Hour, Theme: "tokyo-night", Icons: "unicode", Profile: "host:hs-demo", ServerURL: "https://hs.demo.example.com"})
-	d.send(tea.WindowSizeMsg{Width: w, Height: ht})
-	d.exec(d.m.Init(), 0)
+	d.Driver = uitest.NewDriver(t, d.m, w, ht)
 	return d
 }
 
-func (d *driver) send(msg tea.Msg) {
-	_, cmd := d.m.Update(msg)
-	d.exec(cmd, 0)
-}
+func (d *driver) send(msg tea.Msg)   { d.Send(msg) }
+func (d *driver) key(keys ...string) { d.Key(keys...) }
+func (d *driver) typeText(s string)  { d.Type(s) }
+func (d *driver) view() string       { return d.Screen() }
+func (d *driver) want(sub string)    { d.t.Helper(); d.Want(sub) }
 
-func (d *driver) exec(cmd tea.Cmd, depth int) {
-	if cmd == nil || depth > 30 {
-		return
-	}
-	done := make(chan tea.Msg, 1)
-	go func() { done <- cmd() }()
-	var msg tea.Msg
-	select {
-	case msg = <-done:
-	case <-time.After(200 * time.Millisecond):
-		go func() { d.late <- <-done }()
-		return
-	}
-	d.dispatch(msg, depth)
-}
-
-func (d *driver) dispatch(msg tea.Msg, depth int) {
-	switch msg := msg.(type) {
-	case nil, tea.QuitMsg:
-	case tea.BatchMsg:
-		for _, c := range msg {
-			d.exec(c, depth+1)
-		}
-	default:
-		_, next := d.m.Update(msg)
-		d.exec(next, depth+1)
-	}
-}
-
-func (d *driver) key(keys ...string) {
-	for _, k := range keys {
-		var msg tea.KeyMsg
-		switch k {
-		case "enter":
-			msg = tea.KeyMsg{Type: tea.KeyEnter}
-		case "esc":
-			msg = tea.KeyMsg{Type: tea.KeyEsc}
-		case "tab":
-			msg = tea.KeyMsg{Type: tea.KeyTab}
-		default:
-			msg = tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune(k)}
-		}
-		d.send(msg)
-	}
-}
-
-func (d *driver) typeText(s string) {
-	for _, r := range s {
-		d.send(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{r}})
-	}
-}
-
-func (d *driver) view() string { return ansi.Strip(d.m.View()) }
-
-// want waits up to 10s for sub on screen, applying parked results meanwhile.
-func (d *driver) want(sub string) {
-	d.t.Helper()
-	deadline := time.Now().Add(10 * time.Second)
-	for {
-		out := d.view()
-		if strings.Contains(out, sub) {
-			return
-		}
-		if !time.Now().Before(deadline) {
-			d.t.Fatalf("view missing %q:\n%s", sub, out)
-		}
-		select {
-		case msg := <-d.late:
-			d.dispatch(msg, 0)
-		case <-time.After(50 * time.Millisecond):
-		}
-	}
-}
-
-// settle applies parked results until none arrive for a moment.
-func (d *driver) settle() {
-	for {
-		select {
-		case msg := <-d.late:
-			d.dispatch(msg, 0)
-		case <-time.After(300 * time.Millisecond):
-			return
-		}
-	}
-}
+// settle is a no-op: the shared driver settles after every operation.
+func (d *driver) settle() {}
 
 func TestFlowDoctorBackupRestoreUpgrade(t *testing.T) {
 	d := newDriver(t, 120, 40)
