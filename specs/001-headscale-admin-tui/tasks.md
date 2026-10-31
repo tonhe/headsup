@@ -355,7 +355,7 @@ A restart with an invalid config is refused before the service is touched.
 - [X] T167 [P] docs/CAPABILITIES.md: a capability matrix generated from the endpoint table, covering parity with the Tailscale console and headscale gaps
 - [X] T168 [P] docs/HOST-MODE.md: permissions model (root vs the `headscale` group), container setup, what each managed file does and when changes take effect, and the backup and restore story
 - [ ] T169 [P] Integration test job against dockerised headscale 0.29.6 and main: run quickstart V1–V12 in remote mode, and H1–H11 in host mode by running headsup inside the headscale container image, in test/integration/ Add a shape-drift check that re-records the /debug/* and /metrics responses from both images and fails if the parsers return ErrUnsupportedShape. Schedule it weekly against headscale main.
-- [ ] T170 Performance check: 2,000-node fake, filter keystroke to frame time under 16ms, as a benchmark in internal/ui/table/bench_test.go
+- [X] T170 Performance check: 2,000-node fake, filter keystroke to frame time under 16ms, as a benchmark in internal/ui/table/bench_test.go
 - [ ] T171 Accessibility pass: the ascii icon set, and a 16-colour plus NO_COLOR run of every golden test
 - [ ] T172 Run the quickstart.md validation end to end and update CHANGELOG.md for v0.1.0
 - [X] T173 Ask-first restart under sudo when host mode lacks access (constitution 2.0.0, US1 scenario 3), in cmd/headsup/elevate.go, with the escalation lint extended to cmd/ in internal/host/lint_test.go
