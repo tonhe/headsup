@@ -42,3 +42,7 @@ github.com/tonhe/headsup/internal/policy 90
 github.com/tonhe/headsup/internal/ui/codeview 92
 github.com/tonhe/headsup/internal/ui/diffview 95
 github.com/tonhe/headsup/internal/modules/policy 82
+github.com/tonhe/headsup/internal/host/doctor 85
+github.com/tonhe/headsup/internal/host/backup 75
+github.com/tonhe/headsup/internal/host/upgrade 95
+github.com/tonhe/headsup/internal/modules/server 80

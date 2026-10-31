@@ -1,0 +1,24 @@
+╭ Server ──────────────────────────────────────────────────────────────────────╮
+│ Version  0.29.6  ✓ supported                                                 │
+│ Health   ● healthy                                                           │
+│ API      REST over HTTPS • remote mode                                       │
+│ URL      https://hs.example.com                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ Capabilities │ Doctor │ Backups │ Upgrade                                      
+╭ Capabilities ─ 0.29.6 • remote mode ─────────────────────────────────────────╮
+│  Feature                            Remote  Host   Here                      │
+│▌ Health endpoint                    ✓       ✓      ✓                         │
+│  Policy check                       ✓       ✓      ✓                         │
+│  Policy writable via API            ✓       ✓      ✓                         │
+│  Web-auth approval                  ✓       ✓      ✓                         │
+│  Pre-auth key delete                ✓       ✓      ✓                         │
+│  API key delete                     ✓       ✓      ✓                         │
+│  OAuth clients (planned)            ✗       ✗      ✗ planned                 │
+│  Problem+json errors                ✓       ✓      ✗ needs headscale 0.30    │
+│  Tag-only pre-auth keys             ✓       ✓      ✗ needs headscale 0.30    │
+│  Backfill node IPs                  ✓       ✓      ✓                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ About ───────────────────────────────────────────────────────────────────────╮
+│ GET /health answers when headscale and its database are up.                  │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯

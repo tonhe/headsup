@@ -328,23 +328,23 @@ A restart with an invalid config is refused before the service is touched.
 
 ## Phase 18: User Story 16, Server Health, Backup, and Upgrades (P3) [api+host]
 
-- [ ] T158 [US16] Server module: version, health, API flavour, a capability matrix table, config-file-only explanations with doc links, backfill IPs at Danger=Critical, and "open local config" when the config is found on disk. In internal/modules/server/server.go.
-- [ ] T159 [P] [US16] Doctor tests over host/fake: an expired certificate, a deprecated key, no socket permission, WAL growth, and an unreachable server_url, each producing a Finding with a Fix. In internal/host/doctor/doctor_test.go.
-- [ ] T160 [US16] Doctor checks: permissions, socket, server_url reachability, TLS certificate expiry (from cert files and the ACME cache), deprecated keys, database and WAL size, disk space, and clock skew. In internal/host/doctor/doctor.go. Use the spec US16 default thresholds, configurable under `[host.doctor]`.
-- [ ] T161 [US16] Backup bundle in internal/host/backup/backup.go:
+- [X] T158 [US16] Server module: version, health, API flavour, a capability matrix table, config-file-only explanations with doc links, backfill IPs at Danger=Critical, and "open local config" when the config is found on disk. In internal/modules/server/server.go.
+- [X] T159 [P] [US16] Doctor tests over host/fake: an expired certificate, a deprecated key, no socket permission, WAL growth, and an unreachable server_url, each producing a Finding with a Fix. In internal/host/doctor/doctor_test.go.
+- [X] T160 [US16] Doctor checks: permissions, socket, server_url reachability, TLS certificate expiry (from cert files and the ACME cache), deprecated keys, database and WAL size, disk space, and clock skew. In internal/host/doctor/doctor.go. Use the spec US16 default thresholds, configurable under `[host.doctor]`.
+- [X] T161 [US16] Backup bundle in internal/host/backup/backup.go:
   - the config, policy file, extra records, DERP files, and noise and DERP keys;
   - the database copied with the SQLite online backup API, or pg_dump instructions for Postgres;
   - a manifest, retention, and restore for files only, with database restore given as steps;
   - directories created with mode 0700 and files with 0600 under a 0077 umask;
   - refusing an insecure backup root with ErrInsecureBackupDir and a fix command;
   - manifests holding only paths, hashes, ownership, and mode (FR-064).
-- [ ] T162 [P] [US16] Backup tests, in internal/host/backup/backup_test.go:
+- [X] T162 [P] [US16] Backup tests, in internal/host/backup/backup_test.go:
   - the manifest hashes match, restore is byte-exact, and the database is never written;
   - created directories and files are 0700 and 0600;
   - a 0755, symlinked, or foreign-owned backup root is refused;
   - no secret bytes (the noise key or the OIDC secret) appear in the manifest or the activity log.
-- [ ] T163 [US16] Upgrade assistant: latest release vs installed version, enforcing one minor version at a time with no downgrade and 0.30 only from 0.29.x, rendering release notes, offering a backup first, and printing package-manager commands without running them. In internal/host/upgrade/upgrade.go.
-- [ ] T164 [US16] Server module UI: capability matrix by mode, doctor list with fix actions, backups list, and upgrade card, in internal/modules/server/{doctor,backup,upgrade}.go
+- [X] T163 [US16] Upgrade assistant: latest release vs installed version, enforcing one minor version at a time with no downgrade and 0.30 only from 0.29.x, rendering release notes, offering a backup first, and printing package-manager commands without running them. In internal/host/upgrade/upgrade.go.
+- [X] T164 [US16] Server module UI: capability matrix by mode, doctor list with fix actions, backups list, and upgrade card, in internal/modules/server/{doctor,backup,upgrade}.go
 
 ---
 

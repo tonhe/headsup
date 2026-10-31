@@ -6,6 +6,14 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Server page (`8`): version and health, a capability matrix by mode with
+  explanations for config-file-only features, and backfill IPs. In host
+  mode: a doctor (permissions, socket, server_url reachability, TLS expiry,
+  deprecated keys, database and WAL size, disk space, clock skew), each
+  finding with a fix; backup bundles of the config, policy, records, DERP
+  files, keys and an online SQLite copy, with file-only restore; and an
+  upgrade assistant that enforces one minor version at a time and prints the
+  commands to run without running them.
 - DNS (host mode, `g d`): MagicDNS, base domain, override local DNS,
   nameservers, split DNS, search domains and a records table. Records in a
   records file go live without a restart; everything else is marked
@@ -73,6 +81,8 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Policies written through the local host no longer lose their comments
+  (the schema check was rewriting its input).
 - Flow tests no longer flake on loaded CI runners. One shared headless driver
   (`uitest.Driver`) runs the app in a `testing/synctest` bubble with a fake
   clock: real work always finishes, timers are parked instead of guessed by
