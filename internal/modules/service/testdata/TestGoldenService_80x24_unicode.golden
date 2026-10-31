@@ -1,0 +1,24 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●             42 online / 51 
+ 1 Service (●) │ 2 Machines                                                     
+╭ Service ─────────────────────────────────────────────────────────────────────╮
+│ ● active  since 2026-10-27 10:00 (26h ago)  PID 812  memory 48.2 MiB         │
+│ version 0.30.0  manager systemd  logs journald  host hs-demo                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ Logs • 200 ─ following ──────────────────────────────────────────────────────╮
+│ 11:58:15 DBG Map response sent node.id=33 type=patch                         │
+│ 11:58:22 INF Sending keepalive node.id=34                                    │
+│ 11:58:29 DBG Map request received node.id=35 omitPeers=false stream=true     │
+│ 11:58:36 WRN Node did not respond to HA probe node.id=36 prefix=10.0.0.0/24  │
+│ 11:58:43 INF Node disconnected node.id=37                                    │
+│ 11:58:50 INF Policy reloaded path=/etc/headscale/policy.hujson               │
+│ 11:58:57 DBG Map response sent node.id=39 type=patch                         │
+│ 11:59:04 INF Node connected node.id=40                                       │
+│ 11:59:11 DBG Map response sent node.id=41 type=patch                         │
+│ 11:59:18 INF Sending keepalive node.id=42                                    │
+│ 11:59:25 DBG Map request received node.id=43 omitPeers=false stream=true     │
+│ 11:59:32 WRN Node did not respond to HA probe node.id=44 prefix=10.0.0.0/24  │
+│ 11:59:39 INF Node disconnected node.id=45                                    │
+│ 11:59:46 INF Policy reloaded path=/etc/headscale/policy.hujson               │
+│ 11:59:53 DBG Map response sent node.id=47 type=patch                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ X restart  H reload  f follow  l level  / search  space pause updated 12:00:00 

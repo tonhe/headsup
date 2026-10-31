@@ -26,3 +26,4 @@ github.com/tonhe/headsup/internal/app 78
 github.com/tonhe/headsup/internal/modules/users 78
 github.com/tonhe/headsup/internal/modules/routes 78
 github.com/tonhe/headsup/internal/modules/keys 76
+github.com/tonhe/headsup/internal/modules/service 85

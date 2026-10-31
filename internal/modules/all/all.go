@@ -8,5 +8,6 @@ import (
 	_ "github.com/tonhe/headsup/internal/modules/machines"
 	_ "github.com/tonhe/headsup/internal/modules/pending"
 	_ "github.com/tonhe/headsup/internal/modules/routes"
+	_ "github.com/tonhe/headsup/internal/modules/service"
 	_ "github.com/tonhe/headsup/internal/modules/users"
 )
