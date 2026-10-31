@@ -6,6 +6,14 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- DNS (host mode, `g d`): MagicDNS, base domain, override local DNS,
+  nameservers, split DNS, search domains and a records table. Records in a
+  records file go live without a restart; everything else is marked
+  "needs restart". One confirmed action moves inline records into a file.
+  Record files keep their JSON, HuJSON or YAML format and comments.
+- DERP (host mode, `g D`): embedded server settings, map URLs and files, a
+  region and node editor for map files, and a live map with per-region
+  machine counts and latency.
 - Users: list with machine and key counts, create, rename, delete (blocked
   while the user owns machines, with a jump to them), and jumps to the user's
   machines and keys.

@@ -284,10 +284,10 @@ line, comments survive, and a backup exists. An invalid value is refused before 
 **Independent Test**: Add an A record. The file is written atomically and resolves from a
 client without a restart.
 
-- [ ] T136 [P] [US13] Model and validator tests: Record Type is one of A or AAAA; the Value family matches the type; BaseDomain differs from the server_url host; extra_records and extra_records_path are mutually exclusive. In internal/host/dnsrec/dnsrec_test.go.
-- [ ] T137 [US13] Extra-records file model (keeping its existing JSON, YAML, or HuJSON format) and inline-records model in internal/host/dnsrec/dnsrec.go
-- [ ] T138 [US13] DNS module: MagicDNS, base domain, override local DNS, global nameservers, split DNS (domain → servers), search domains, and a records table (add, edit, delete), with effect badges (records are live, everything else needs a restart). In internal/modules/dns/dns.go.
-- [ ] T139 [US13] "Move inline records to a file" action that creates the file and updates `dns.extra_records_path` in one confirmed change set, in internal/modules/dns/migrate.go
+- [X] T136 [P] [US13] Model and validator tests: Record Type is one of A or AAAA; the Value family matches the type; BaseDomain differs from the server_url host; extra_records and extra_records_path are mutually exclusive. In internal/host/dnsrec/dnsrec_test.go.
+- [X] T137 [US13] Extra-records file model (keeping its existing JSON, YAML, or HuJSON format) and inline-records model in internal/host/dnsrec/dnsrec.go
+- [X] T138 [US13] DNS module: MagicDNS, base domain, override local DNS, global nameservers, split DNS (domain → servers), search domains, and a records table (add, edit, delete), with effect badges (records are live, everything else needs a restart). In internal/modules/dns/dns.go.
+- [X] T139 [US13] "Move inline records to a file" action that creates the file and updates `dns.extra_records_path` in one confirmed change set, in internal/modules/dns/migrate.go
 
 ## Phase 14: User Story 14, Service and Logs (P2) [host]
 
@@ -322,9 +322,9 @@ A restart with an invalid config is refused before the service is touched.
 
 ## Phase 17: User Story 15, DERP (P3) [host]
 
-- [ ] T155 [P] [US15] DERP map model and validator tests (custom region ID 1–999, unique codes, ports, at least one node per region) in internal/host/derpmap/derpmap_test.go
-- [ ] T156 [US15] DERP map file model (json, yaml, or hujson, keeping the format) in internal/host/derpmap/derpmap.go
-- [ ] T157 [US15] DERP module: an embedded server form (`derp.server.*`), a URLs and paths list, a region and node editor for map files, a live map from /debug/derp, and per-region machine preference and latency from NodeExtras. In internal/modules/derp/derp.go.
+- [X] T155 [P] [US15] DERP map model and validator tests (custom region ID 1–999, unique codes, ports, at least one node per region) in internal/host/derpmap/derpmap_test.go
+- [X] T156 [US15] DERP map file model (json, yaml, or hujson, keeping the format) in internal/host/derpmap/derpmap.go
+- [X] T157 [US15] DERP module: an embedded server form (`derp.server.*`), a URLs and paths list, a region and node editor for map files, a live map from /debug/derp, and per-region machine preference and latency from NodeExtras. In internal/modules/derp/derp.go.
 
 ## Phase 18: User Story 16, Server Health, Backup, and Upgrades (P3) [api+host]
 
