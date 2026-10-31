@@ -18,6 +18,12 @@ github.com/tonhe/headsup/internal/host/logs 82
 github.com/tonhe/headsup/internal/host/debug 85
 github.com/tonhe/headsup/internal/host/db 70
 github.com/tonhe/headsup/internal/host/local 64
+github.com/tonhe/headsup/internal/host/doctree 80
+github.com/tonhe/headsup/internal/host/dnsrec 88
+github.com/tonhe/headsup/internal/host/derpmap 85
+github.com/tonhe/headsup/internal/host/changeset 88
+github.com/tonhe/headsup/internal/modules/dns 78
+github.com/tonhe/headsup/internal/modules/derp 78
 github.com/tonhe/headsup/internal/ui/filter 88
 github.com/tonhe/headsup/internal/ui/table 75
 github.com/tonhe/headsup/internal/ui/form 87
