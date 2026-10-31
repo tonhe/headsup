@@ -272,12 +272,12 @@ command contains the right login server and key.
 **Independent Test**: Change `node.expiry` in a commented sample config. The diff shows one
 line, comments survive, and a backup exists. An invalid value is refused before writing.
 
-- [ ] T130 [P] [US10] teatest flow: edit a field, see the diff, confirm, see the restart offer, and on an unhealthy restart get a restore offer, over host/fake, in internal/modules/serverconfig/flow_test.go
-- [ ] T131 [US10] Server settings module with section navigation (General, Nodes, DNS→link, DERP→link, TLS, OIDC, Policy, Database (view), Logging, Features). Each field row shows value, default, effect badge, and help, driven by the catalog. In internal/modules/serverconfig/serverconfig.go.
-- [ ] T132 [US10] Field editors by catalog type (duration, enum, list, map, path, secret masked, quoted octal), with validation messages, in internal/modules/serverconfig/fields.go
-- [ ] T133 [US10] Apply flow: run the pipeline with `headscale configtest -c <tmp>`, show the diff, confirm according to field Danger, write, then offer a restart, with a post-restart health check and log tail and a restore offer if unhealthy. In internal/modules/serverconfig/apply.go.
-- [ ] T134 [US10] `$EDITOR` escape hatch through tea.ExecProcess, going through the same pipeline, plus a three-way diff when the file changed on disk, in internal/modules/serverconfig/editor.go
-- [ ] T135 [US10] Deprecated-key detection and one-key migration (`m`), for example 0.29's flat TLS keys → 0.30's `tls.*`, in internal/modules/serverconfig/migrate.go
+- [X] T130 [P] [US10] teatest flow: edit a field, see the diff, confirm, see the restart offer, and on an unhealthy restart get a restore offer, over host/fake, in internal/modules/serverconfig/flow_test.go
+- [X] T131 [US10] Server settings module with section navigation (General, Nodes, DNS→link, DERP→link, TLS, OIDC, Policy, Database (view), Logging, Features). Each field row shows value, default, effect badge, and help, driven by the catalog. In internal/modules/serverconfig/serverconfig.go.
+- [X] T132 [US10] Field editors by catalog type (duration, enum, list, map, path, secret masked, quoted octal), with validation messages, in internal/modules/serverconfig/fields.go
+- [X] T133 [US10] Apply flow: run the pipeline with `headscale configtest -c <tmp>`, show the diff, confirm according to field Danger, write, then offer a restart, with a post-restart health check and log tail and a restore offer if unhealthy. In internal/modules/serverconfig/apply.go.
+- [X] T134 [US10] `$EDITOR` escape hatch through tea.ExecProcess, going through the same pipeline, plus a three-way diff when the file changed on disk, in internal/modules/serverconfig/editor.go
+- [X] T135 [US10] Deprecated-key detection and one-key migration (`m`), for example 0.29's flat TLS keys → 0.30's `tls.*`, in internal/modules/serverconfig/migrate.go
 
 ## Phase 13: User Story 13, DNS (P2) [host]
 
