@@ -24,7 +24,7 @@ func TestCreateNewFile(t *testing.T) {
 	}
 	rp := filepath.Join(e.root, "etc/headscale/extra.json")
 	fi, err := os.Stat(rp)
-	if err != nil || fi.Mode().Perm() != 0o640 {
+	if err != nil || (unixModes && fi.Mode().Perm() != 0o640) {
 		t.Fatalf("created file: %v %v", err, fi)
 	}
 	if _, err := os.Stat(filepath.Join(e.root, "etc/headscale/.extra.json."+"headsup-tmp")); err == nil {
@@ -49,6 +49,7 @@ func TestCreateNewFile(t *testing.T) {
 }
 
 func TestCreateInReadOnlyDir(t *testing.T) {
+	skipWithoutUnixModes(t, "a 0555 directory is still writable")
 	if os.Getuid() == 0 {
 		t.Skip("root ignores directory permissions")
 	}

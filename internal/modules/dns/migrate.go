@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"path/filepath"
+	"path"
 
 	tea "github.com/charmbracelet/bubbletea"
 
@@ -17,11 +17,12 @@ import (
 // SQLite database (a directory headscale owns and can read), else next to
 // the config.
 func (m *Model) defaultRecordsPath() string {
-	dir := filepath.Dir(m.cfg.Path)
-	if db, _ := m.doc.Get("database.sqlite.path"); db != "" && filepath.IsAbs(db) {
-		dir = filepath.Dir(db)
+	// Paths on the headscale host are POSIX, whatever OS headsup runs on.
+	dir := path.Dir(m.cfg.Path)
+	if db, _ := m.doc.Get("database.sqlite.path"); db != "" && path.IsAbs(db) {
+		dir = path.Dir(db)
 	}
-	return filepath.Join(dir, "extra-records.json")
+	return path.Join(dir, "extra-records.json")
 }
 
 type moveCheckedMsg struct {
@@ -55,7 +56,7 @@ func (m *Model) moveAction() module.Action {
 			}}
 		},
 		Run: func(ctx module.Context, v module.Values) tea.Cmd {
-			path := filepath.Clean(v["path"])
+			path := path.Clean(v["path"])
 			h := ctx.Host()
 			return func() tea.Msg {
 				_, err := h.Open(host.FileExtraRecords, path)

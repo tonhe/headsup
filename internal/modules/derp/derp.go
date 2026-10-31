@@ -11,7 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"path/filepath"
+	"path"
 	"slices"
 	"strconv"
 	"strings"
@@ -305,7 +305,7 @@ func (m *Model) rebuild() {
 			}
 		}
 		for _, is := range derpmap.Validate(f.m.Map) {
-			is.Message = filepath.Base(f.path) + ": " + is.Message
+			is.Message = path.Base(f.path) + ": " + is.Message
 			m.checks = append(m.checks, is)
 		}
 		if id, ok := m.embeddedID(); ok {
@@ -651,7 +651,7 @@ func (m *Model) livePane(ctx module.Context, w, h int) string {
 	for _, f := range m.files {
 		if f.m != nil {
 			for _, r := range f.m.Map.Regions {
-				source[r.RegionID] = filepath.Base(f.path)
+				source[r.RegionID] = path.Base(f.path)
 			}
 		}
 	}
@@ -769,11 +769,12 @@ func checkSourceURL(s string) error {
 	return nil
 }
 
+// checkAbs checks a DERP map path on the headscale host (always POSIX).
 func checkAbs(s string) error {
-	if !filepath.IsAbs(s) {
+	if !path.IsAbs(s) {
 		return fmt.Errorf("%q must be an absolute path", s)
 	}
-	switch strings.ToLower(filepath.Ext(s)) {
+	switch strings.ToLower(path.Ext(s)) {
 	case ".json", ".hujson", ".yaml", ".yml":
 		return nil
 	}
@@ -1048,7 +1049,7 @@ func (m *Model) Actions() []module.Action {
 				mr, f, _ := m.curMap()
 				if mr.region == 0 {
 					next := nextRegionID(f.m.Map)
-					return &module.FormSpec{Title: "Add region to " + filepath.Base(f.path), Submit: "Stage",
+					return &module.FormSpec{Title: "Add region to " + path.Base(f.path), Submit: "Stage",
 						Fields: append(regionFields(derpmap.Region{RegionID: next}), nodeFields(derpmap.Node{Name: fmt.Sprintf("%da", next)})...)}
 				}
 				rg, _ := f.m.Map.Region(mr.region)

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"net/netip"
 	"net/url"
-	"path/filepath"
+	"path"
 	"slices"
 	"strings"
 
@@ -309,12 +309,13 @@ func SetInline(d *hsconfig.Doc, rs []Record) error {
 }
 
 // CheckRecordsPath checks a path for a new records file: absolute, with an
-// extension headscale understands.
+// extension headscale understands. It is a path on the headscale host, so it
+// is checked as a POSIX path whatever OS headsup runs on.
 func CheckRecordsPath(p string) error {
-	if !filepath.IsAbs(p) {
+	if !path.IsAbs(p) {
 		return fmt.Errorf("%q must be an absolute path", p)
 	}
-	switch strings.ToLower(filepath.Ext(p)) {
+	switch strings.ToLower(path.Ext(p)) {
 	case ".json", ".hujson", ".yaml", ".yml":
 		return nil
 	}
