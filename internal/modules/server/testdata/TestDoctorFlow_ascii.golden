@@ -13,7 +13,7 @@
 │  + ok    server_url       https://hs.demo.example.com is reachable                               │
 │> - info  TLS certificate  No cached ACME certificate for hs.example.com yet                      │
 │  ! warn  Deprecated keys  tls_letsencrypt_hostname is deprecated; use tls.acme.hostname          │
-│  ! warn  Database         The WAL is 1.3 MiB (58% of the 2.3 MiB database)                       │
+│  ! warn  Database         The WAL is 5.3 MiB (58% of the 9.2 MiB database)                       │
 │  + ok    Disk space       38.0 GiB free of 80.0 GiB (48%) on /var/lib/headscale                  │
 │  + ok    Clock            Clock in sync (within 2s)                                              │
 │                                                                                                  │
