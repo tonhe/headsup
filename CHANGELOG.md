@@ -90,6 +90,10 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- DNS: removing a split DNS domain is now discoverable (`D remove domain`
+  on a split row, or clear its servers in the edit form), works when the
+  split map is written inline, and leaves `split: {}` when the last domain
+  goes.
 - Policies written through the local host no longer lose their comments
   (the schema check was rewriting its input).
 - Flow tests no longer flake on loaded CI runners. One shared headless driver
