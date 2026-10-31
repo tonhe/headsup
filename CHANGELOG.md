@@ -14,6 +14,13 @@ All notable changes to this project are documented here.
 - DERP (host mode, `g D`): embedded server settings, map URLs and files, a
   region and node editor for map files, and a live map with per-region
   machine counts and latency.
+- Access Controls (`7`, `g a`): view the policy with syntax highlighting,
+  edit inline or in `$EDITOR`, check, diff and apply with a conflict check;
+  history of the last 50 revisions with rollback; an explorer of groups,
+  tags, hosts and rules with "where used"; and the compiled filter in host
+  mode. In file mode on the host, apply writes the policy file through the
+  managed-file pipeline, reloads headscale and confirms the new policy is
+  active, offering rollback if not.
 - Users: list with machine and key counts, create, rename, delete (blocked
   while the user owns machines, with a jump to them), and jumps to the user's
   machines and keys.

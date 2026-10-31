@@ -216,14 +216,14 @@ command contains the right login server and key.
 
 ## Phase 7: User Story 5, Access Controls (P2)
 
-- [ ] T101 [P] [US5] Policy parser tests with comments, trailing commas, all sections, and byte-for-byte round trips, in internal/policy/parse_test.go, plus a fuzz test
-- [ ] T102 [P] [US5] Diff tests: adding one rule yields a one-hunk diff, in internal/policy/diff_test.go
-- [ ] T103 [US5] HuJSON parse into a Document (groups, tagOwners, hosts, acls, grants, ssh, autoApprovers, tests) in internal/policy/document.go
-- [ ] T104 [US5] Line diff in internal/policy/diff.go, plus the diffview component in internal/ui/diffview/diffview.go
-- [ ] T105 [P] [US5] chroma codeview with a theme-derived style, line numbers, and an error-line marker in internal/ui/codeview/codeview.go
-- [ ] T106 [US5] Policy history store (last 50 per profile, sha256 dedupe) in internal/policy/history.go
-- [ ] T107 [US5] Policy module viewer, inline editor (bubbles/textarea), and `$EDITOR` round-trip via tea.ExecProcess, in internal/modules/policy/{view,edit}.go
-- [ ] T108 [US5] The apply flow, in internal/modules/policy/apply.go:
+- [X] T101 [P] [US5] Policy parser tests with comments, trailing commas, all sections, and byte-for-byte round trips, in internal/policy/parse_test.go, plus a fuzz test
+- [X] T102 [P] [US5] Diff tests: adding one rule yields a one-hunk diff, in internal/policy/diff_test.go
+- [X] T103 [US5] HuJSON parse into a Document (groups, tagOwners, hosts, acls, grants, ssh, autoApprovers, tests) in internal/policy/document.go
+- [X] T104 [US5] Line diff in internal/policy/diff.go, plus the diffview component in internal/ui/diffview/diffview.go
+- [X] T105 [P] [US5] chroma codeview with a theme-derived style, line numbers, and an error-line marker in internal/ui/codeview/codeview.go
+- [X] T106 [US5] Policy history store (last 50 per profile, sha256 dedupe) in internal/policy/history.go
+- [X] T107 [US5] Policy module viewer, inline editor (bubbles/textarea), and `$EDITOR` round-trip via tea.ExecProcess, in internal/modules/policy/{view,edit}.go
+- [X] T108 [US5] The apply flow, in internal/modules/policy/apply.go:
   1. CheckPolicy, or a local parse when the check is unavailable.
   2. Show the error with line and column, keeping the buffer.
   3. Show the diff.
@@ -233,11 +233,11 @@ command contains the right login server and key.
   7. Record history.
 
   When the server is in file mode, explain that the policy is view-only.
-- [ ] T109 [US5] Explorer: a tree of groups, tags, hosts, and rules with "where used" cross-links, in internal/modules/policy/explore.go
-- [ ] T110 [US5] Rollback from history with a diff and confirm, in internal/modules/policy/history.go
-- [ ] T111 [US5] File-mode policy apply in host mode through the managed-file pipeline, with `headscale policy check` as the validator, then Service().Reload(), then a refetch to confirm the policy is active, with rollback on failure. In internal/modules/policy/apply.go.
-- [ ] T112 [P] [US5] Tests for file mode: invalid → file untouched; valid → written, reload called, active; reload failure → rollback offered. In internal/modules/policy/filemode_test.go.
-- [ ] T113 [US5] Compiled filter view (host) from /debug/filter, next to the access preview, in internal/modules/policy/filter.go
+- [X] T109 [US5] Explorer: a tree of groups, tags, hosts, and rules with "where used" cross-links, in internal/modules/policy/explore.go
+- [X] T110 [US5] Rollback from history with a diff and confirm, in internal/modules/policy/history.go
+- [X] T111 [US5] File-mode policy apply in host mode through the managed-file pipeline, with `headscale policy check` as the validator, then Service().Reload(), then a refetch to confirm the policy is active, with rollback on failure. In internal/modules/policy/apply.go.
+- [X] T112 [P] [US5] Tests for file mode: invalid → file untouched; valid → written, reload called, active; reload failure → rollback offered. In internal/modules/policy/filemode_test.go.
+- [X] T113 [US5] Compiled filter view (host) from /debug/filter, next to the access preview, in internal/modules/policy/filter.go
 
 ## Phase 8: User Story 6, Routes and Exit Nodes (P2)
 
