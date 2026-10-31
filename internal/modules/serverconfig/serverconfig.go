@@ -104,6 +104,9 @@ func (m *Model) dirty() bool {
 	return m.file != nil && !bytes.Equal(m.staged, m.file.Raw)
 }
 
+// Unsaved implements module.Unsaved: edits not yet written to the file.
+func (m *Model) Unsaved() bool { return m.dirty() }
+
 func (m *Model) setFile(f *host.File) {
 	m.file, m.loadErr = f, nil
 	m.base, _ = hsconfig.Parse(f.Raw)
@@ -205,7 +208,8 @@ func (m *Model) written(ctx module.Context, msg writtenMsg) tea.Cmd {
 	} else {
 		m.mode = modeBrowse
 	}
-	return result(id, nil, text, false)
+	r := module.ActionResult{ActionID: id, Message: text, Files: []module.FileWrite{module.WriteOf(msg.change, a)}}
+	return func() tea.Msg { return r }
 }
 
 func (m *Model) restartDone(ctx module.Context, msg restartedMsg) tea.Cmd {

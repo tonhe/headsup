@@ -58,6 +58,7 @@ func (c *testCtx) Icons() icons.Set       { return c.ic }
 func (c *testCtx) ReadOnly() bool         { return false }
 func (c *testCtx) HostMode() bool         { return false }
 func (c *testCtx) ServerURL() string      { return "https://hs.example.com" }
+func (c *testCtx) Profile() string        { return "test" }
 func (c *testCtx) Now() time.Time         { return testNow }
 func (c *testCtx) Refresh() tea.Cmd       { return nil }
 func (c *testCtx) Navigate(id string, args any) tea.Cmd {

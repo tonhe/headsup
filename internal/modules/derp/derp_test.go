@@ -37,6 +37,7 @@ func (c *tctx) Icons() icons.Set                        { return icons.Unicode }
 func (c *tctx) ReadOnly() bool                          { return c.ro }
 func (c *tctx) HostMode() bool                          { return c.h != nil }
 func (c *tctx) ServerURL() string                       { return "https://hs.demo.example.com" }
+func (c *tctx) Profile() string                         { return "test" }
 func (c *tctx) Now() time.Time                          { return time.Date(2026, 10, 28, 12, 0, 0, 0, time.UTC) }
 func (c *tctx) Navigate(string, any) tea.Cmd            { return nil }
 func (c *tctx) Toast(module.ToastLevel, string) tea.Cmd { return nil }

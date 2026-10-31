@@ -46,3 +46,5 @@ github.com/tonhe/headsup/internal/host/doctor 85
 github.com/tonhe/headsup/internal/host/backup 75
 github.com/tonhe/headsup/internal/host/upgrade 95
 github.com/tonhe/headsup/internal/modules/server 80
+github.com/tonhe/headsup/internal/watch 90
+github.com/tonhe/headsup/internal/modules/activity 80

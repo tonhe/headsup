@@ -21,6 +21,7 @@ import (
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/store"
 	"github.com/tonhe/headsup/internal/theme"
+	"github.com/tonhe/headsup/internal/ui/badge"
 	"github.com/tonhe/headsup/internal/ui/confirm"
 	"github.com/tonhe/headsup/internal/ui/form"
 	"github.com/tonhe/headsup/internal/ui/header"
@@ -33,6 +34,7 @@ import (
 	"github.com/tonhe/headsup/internal/ui/tabs"
 	"github.com/tonhe/headsup/internal/ui/themepicker"
 	"github.com/tonhe/headsup/internal/ui/toast"
+	"github.com/tonhe/headsup/internal/watch"
 )
 
 // MinWidth and MinHeight are the smallest supported terminal size (SC-006).
@@ -73,6 +75,9 @@ type Options struct {
 	// Mouse says mouse reporting is on (ui.mouse); the program must have
 	// been started with mouse support for clicks to arrive.
 	Mouse bool
+	// Notifier delivers [notify] desktop and bell notifications; nil uses
+	// SystemNotifier.
+	Notifier Notifier
 	// Now is injectable for tests.
 	Now func() time.Time
 }
@@ -102,12 +107,14 @@ type Model struct {
 	pending   *module.Action
 	pendVals  module.Values
 	started   map[string]time.Time
+	mutating  map[string]bool // started actions: whether each one mutates
 	targets   map[string][]module.Target
 	fetching  bool
 	connected bool
 	connErr   error
 	showSide  bool
 	quitting  bool
+	watcher   *watch.Watcher
 }
 
 // New builds the root model.
@@ -121,8 +128,13 @@ func New(opt Options) *Model {
 	if opt.ExpiryWarn <= 0 {
 		opt.ExpiryWarn = 7 * 24 * time.Hour
 	}
-	if opt.Activity == nil {
-		opt.Activity = activity.Nop{}
+	// Without a persistent log (the demo passes Nop) keep this session's
+	// entries in memory so the Activity page still lists them.
+	if _, nop := opt.Activity.(activity.Nop); nop || opt.Activity == nil {
+		opt.Activity = &activity.Memory{}
+	}
+	if opt.Notifier == nil {
+		opt.Notifier = SystemNotifier{}
 	}
 	t := theme.ByName(opt.Theme)
 	if t == nil {
@@ -148,9 +160,11 @@ func New(opt Options) *Model {
 		store:    store.New(),
 		modules:  opt.Modules,
 		started:  map[string]time.Time{},
+		mutating: map[string]bool{},
 		targets:  map[string][]module.Target{},
 		showSide: opt.Sidebar != "never",
 		mouse:    opt.Mouse,
+		watcher:  watch.New(opt.ExpiryWarn),
 	}
 	m.toasts = toast.New(m.styles, ic)
 	m.keymap, _ = keys.Merge(m.defaultBindings(), opt.KeyOverrides)
@@ -167,8 +181,15 @@ func (m *Model) Icons() icons.Set       { return m.icons }
 func (m *Model) ReadOnly() bool         { return m.opt.ReadOnly }
 func (m *Model) HostMode() bool         { return m.opt.Host != nil }
 func (m *Model) ServerURL() string      { return m.opt.ServerURL }
-func (m *Model) Now() time.Time         { return m.opt.Now() }
-func (m *Model) Refresh() tea.Cmd       { return m.fetch(store.SliceAll) }
+func (m *Model) Profile() string        { return m.opt.Profile }
+
+// Activity is the activity logger, for the activity module.
+func (m *Model) Activity() activity.Logger { return m.opt.Activity }
+
+// HostSettings hands the [host] config to the server module.
+func (m *Model) HostSettings() config.Host { return m.opt.Config.Host }
+func (m *Model) Now() time.Time            { return m.opt.Now() }
+func (m *Model) Refresh() tea.Cmd          { return m.fetch(store.SliceAll) }
 func (m *Model) Toast(l module.ToastLevel, msg string) tea.Cmd {
 	return m.toasts.Push(l, msg)
 }
@@ -266,7 +287,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.fetching = false
 		m.store.Apply(msg.sn)
 		m.store.UpdatedAt = m.opt.Now()
-		return m, m.broadcast(store.UpdatedMsg{Slices: msg.sn.Slices})
+		evs := m.watcher.Observe(m.store, msg.sn.Slices, m.opt.Now())
+		return m, tea.Batch(m.broadcast(store.UpdatedMsg{Slices: msg.sn.Slices}), m.onEvents(evs))
 
 	case tickMsg:
 		return m, tea.Batch(m.fetch(store.SliceAll), m.tick())
@@ -309,6 +331,13 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case confirm.ResultMsg:
 		m.confirm = nil
+		if msg.ID == quitConfirmID {
+			if msg.OK {
+				m.quitting = true
+				return m, tea.Quit
+			}
+			return m, nil
+		}
 		if m.pending == nil || !msg.OK {
 			m.pending = nil
 			return m, nil
@@ -378,8 +407,7 @@ func (m *Model) handleKey(k tea.KeyMsg) tea.Cmd {
 		return m.picker.Update(k)
 	}
 	if k.String() == "ctrl+c" {
-		m.quitting = true
-		return tea.Quit
+		return m.quit()
 	}
 	cur := m.current()
 	if cur != nil && cur.Capturing() {
@@ -466,8 +494,7 @@ func (m *Model) defaultBindings() map[string][]string {
 func (m *Model) global(id string) (tea.Cmd, bool) {
 	switch {
 	case id == "app.quit":
-		m.quitting = true
-		return tea.Quit, true
+		return m.quit(), true
 	case id == "app.help":
 		m.help = help.New(m.styles, m.helpSections())
 		m.help.SetSize(m.w-8, m.h-6)
@@ -548,13 +575,17 @@ func (m *Model) confirmOrRun() tea.Cmd {
 	if !confirm.Needed(d) {
 		return m.run()
 	}
-	m.confirm = confirm.New(m.styles, m.icons, confirm.Request{
+	req := confirm.Request{
 		ID:          a.ID,
 		Title:       a.Title,
 		Danger:      d,
 		Targets:     m.targets[a.ID],
 		Consequence: a.Consequence,
-	})
+	}
+	if a.ConfirmText != nil && d == module.DangerCritical {
+		req.Expect = a.ConfirmText(m)
+	}
+	m.confirm = confirm.New(m.styles, m.icons, req)
 	return m.confirm.Init()
 }
 
@@ -565,6 +596,7 @@ func (m *Model) run() tea.Cmd {
 		return nil
 	}
 	m.started[a.ID] = m.opt.Now()
+	m.mutating[a.ID] = a.Mutating
 	return a.Run(m, m.pendVals)
 }
 
@@ -573,6 +605,11 @@ func (m *Model) finishAction(r module.ActionResult) tea.Cmd {
 	delete(m.started, r.ActionID)
 	targets := m.targets[r.ActionID]
 	delete(m.targets, r.ActionID)
+	mut, known := m.mutating[r.ActionID]
+	delete(m.mutating, r.ActionID)
+	// The activity log is for changes (FR-037): skip results of actions known
+	// not to mutate, unless they still report a file write or a backup.
+	record := !known || mut || len(r.Files) > 0 || r.BackupID != ""
 
 	e := activity.Entry{Time: m.opt.Now(), Profile: m.opt.Profile, ActionID: r.ActionID, Result: activity.OK()}
 	if ok {
@@ -581,6 +618,8 @@ func (m *Model) finishAction(r module.ActionResult) tea.Cmd {
 	for _, t := range targets {
 		e.Targets = append(e.Targets, activity.Target{Kind: t.Kind, ID: t.ID, Name: t.Name})
 	}
+	e.BackupID = r.BackupID
+	e.AddFiles(fileChanges(r.Files)) // files written even when the action then failed
 	var cmds []tea.Cmd
 	if r.Err != nil {
 		ae := api.AsError(r.Err)
@@ -597,8 +636,10 @@ func (m *Model) finishAction(r module.ActionResult) tea.Cmd {
 		}
 		cmds = append(cmds, m.toasts.Push(module.ToastSuccess, text))
 	}
-	if err := m.opt.Activity.Log(e); err != nil {
-		cmds = append(cmds, m.toasts.Push(module.ToastWarn, "Could not write activity log: "+err.Error()))
+	if record {
+		if err := m.opt.Activity.Log(e); err != nil {
+			cmds = append(cmds, m.toasts.Push(module.ToastWarn, "Could not write activity log: "+err.Error()))
+		}
 	}
 	if r.Refresh != 0 {
 		m.fetching = false
@@ -749,5 +790,74 @@ func (m *Model) footerRight() string {
 	if !m.store.UpdatedAt.IsZero() {
 		parts = append(parts, "updated "+m.store.UpdatedAt.Format("15:04:05"))
 	}
-	return strings.Join(parts, " · ")
+	out := m.styles.Muted.Render(strings.Join(parts, " · "))
+	if b := m.serviceBadge(); b != "" {
+		if len(parts) > 0 {
+			out = b + m.styles.Muted.Render(" · ") + out
+		} else {
+			out = b
+		}
+	}
+	return out
+}
+
+// serviceBadge is the headscale service state for the status bar in host
+// mode (● running, ○ stopped, ◐ restarting); "" when unknown.
+func (m *Model) serviceBadge() string {
+	st := m.store.Service
+	if !m.HostMode() || st == nil {
+		return ""
+	}
+	p := badge.ServicePhaseOf(st.State, st.Running, "")
+	if p == badge.ServiceUnknown {
+		return ""
+	}
+	return badge.Service(m.styles, m.icons, p, p.String())
+}
+
+// --- quit guard -------------------------------------------------------------
+
+const quitConfirmID = "app.quit"
+
+// unsavedModules lists the titles of modules holding unsaved edits.
+func (m *Model) unsavedModules() []string {
+	var out []string
+	for _, mod := range m.modules {
+		if u, ok := mod.(module.Unsaved); ok && u.Unsaved() {
+			out = append(out, mod.Title())
+		}
+	}
+	return out
+}
+
+// quit exits at once, or asks first while any module has unsaved edits.
+func (m *Model) quit() tea.Cmd {
+	names := m.unsavedModules()
+	if len(names) == 0 {
+		m.quitting = true
+		return tea.Quit
+	}
+	targets := make([]module.Target, len(names))
+	for i, n := range names {
+		targets[i] = module.Target{Kind: "module", ID: n, Name: n}
+	}
+	m.confirm = confirm.New(m.styles, m.icons, confirm.Request{
+		ID:          quitConfirmID,
+		Title:       "Quit with unsaved changes?",
+		Danger:      module.DangerConfirm,
+		Targets:     targets,
+		Consequence: "Unsaved edits in " + strings.Join(names, ", ") + " are lost.",
+		Confirm:     "Quit",
+	})
+	return m.confirm.Init()
+}
+
+// fileChanges converts an action's file writes for the activity log.
+func fileChanges(ws []module.FileWrite) []activity.FileChange {
+	out := make([]activity.FileChange, 0, len(ws))
+	for _, w := range ws {
+		out = append(out, activity.FileChange{Path: w.Path, BackupID: w.BackupID,
+			DiffStats: activity.DiffStats{Added: w.Added, Removed: w.Removed}})
+	}
+	return out
 }

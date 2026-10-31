@@ -21,4 +21,4 @@
 │ 11:59:46 INF Policy reloaded path=/etc/headscale/policy.hujson               │
 │ 11:59:53 DBG Map response sent node.id=47 type=patch                         │
 ╰──────────────────────────────────────────────────────────────────────────────╯
- X restart  H reload  f follow  l level  / search  space pause updated 12:00:00 
+ X restart  H reload  f follow  l level  / search  ● running · updated 12:00:00 

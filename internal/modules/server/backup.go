@@ -132,7 +132,8 @@ func (m *Model) onBackup(msg backupMsg) tea.Cmd {
 	m.bkBusy = ""
 	m.bks.SetCursorKey(r.Manifest.ID)
 	text := r.Summary()
-	return tea.Batch(list, func() tea.Msg { return module.ActionResult{ActionID: id, Message: text} })
+	bid := r.Manifest.ID
+	return tea.Batch(list, func() tea.Msg { return module.ActionResult{ActionID: id, Message: text, BackupID: bid} })
 }
 
 // restoreRun is the host and options captured when a restore starts.
@@ -210,7 +211,11 @@ func (m *Model) onRestore(msg restoreMsg) tea.Cmd {
 			err = fmt.Errorf("restored %d files from %s; %d failed: %s", len(msg.res.Restored), msg.id, len(paths), strings.Join(paths, ", "))
 		}
 	}
-	return func() tea.Msg { return module.ActionResult{ActionID: "server.restore", Err: err, Message: text} }
+	r := module.ActionResult{ActionID: "server.restore", Err: err, Message: text, BackupID: msg.id}
+	for _, p := range msg.res.Restored {
+		r.Files = append(r.Files, module.FileWrite{Path: p, BackupID: msg.id})
+	}
+	return func() tea.Msg { return r }
 }
 
 func (m *Model) bundle() (backup.Bundle, bool) {
