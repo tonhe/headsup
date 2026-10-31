@@ -13,11 +13,13 @@ import (
 	"github.com/tonhe/headsup/internal/modules/machines"
 	"github.com/tonhe/headsup/internal/modules/pending"
 	"github.com/tonhe/headsup/internal/modules/prefs"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
-// driver runs the app headlessly, teatest style: commands run synchronously,
-// ones that block (ticks, toast timers) are dropped, results are fed back.
+// driver runs the app headlessly on the shared flow-test driver (fake clock,
+// no dropped commands); see uitest.Driver.
 type driver struct {
+	*uitest.Driver
 	t *testing.T
 	m *app.Model
 }
@@ -34,67 +36,21 @@ func newDriver(t *testing.T, w, h int, opt app.Options) *driver {
 	}
 	opt.Now = clock
 	opt.Refresh = time.Hour
-	d := &driver{t: t, m: app.New(opt)}
-	d.send(tea.WindowSizeMsg{Width: w, Height: h})
-	d.exec(d.m.Init(), 0)
-	return d
+	m := app.New(opt)
+	return &driver{Driver: uitest.NewDriver(t, m, w, h), t: t, m: m}
 }
 
-func (d *driver) send(msg tea.Msg) {
-	_, cmd := d.m.Update(msg)
-	d.exec(cmd, 0)
-}
+func (d *driver) send(msg tea.Msg) { d.Send(msg) }
 
-func (d *driver) exec(cmd tea.Cmd, depth int) {
-	if cmd == nil || depth > 20 {
-		return
-	}
-	done := make(chan tea.Msg, 1)
-	go func() { done <- cmd() }()
-	var msg tea.Msg
-	select {
-	case msg = <-done:
-	case <-time.After(150 * time.Millisecond):
-		return
-	}
-	switch msg := msg.(type) {
-	case nil:
-	case tea.BatchMsg:
-		for _, c := range msg {
-			d.exec(c, depth+1)
-		}
-	case tea.QuitMsg:
-	default:
-		_, next := d.m.Update(msg)
-		d.exec(next, depth+1)
-	}
-}
-
-var named = map[string]tea.KeyType{
-	"enter": tea.KeyEnter, "esc": tea.KeyEsc, "tab": tea.KeyTab, "up": tea.KeyUp, "down": tea.KeyDown,
-	"left": tea.KeyLeft, "right": tea.KeyRight, "backspace": tea.KeyBackspace,
-	"ctrl+r": tea.KeyCtrlR, "ctrl+t": tea.KeyCtrlT, "ctrl+s": tea.KeyCtrlS, "ctrl+u": tea.KeyCtrlU,
-}
-
-// key sends named keys, or each rune of any other string as one key.
+// key sends named keys, or types each rune of any other string as one key.
 func (d *driver) key(keys ...string) {
 	for _, k := range keys {
-		if kt, ok := named[k]; ok {
-			d.send(tea.KeyMsg{Type: kt})
+		if uitest.KeyMsg(k).Type != tea.KeyRunes {
+			d.Key(k)
 			continue
 		}
-		if k == "space" {
-			d.send(tea.KeyMsg{Type: tea.KeySpace, Runes: []rune{' '}})
-			continue
-		}
-		for _, r := range k {
-			if r == ' ' {
-				d.send(tea.KeyMsg{Type: tea.KeySpace, Runes: []rune{' '}})
-				continue
-			}
-			d.send(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{r}})
-		}
+		d.Type(k)
 	}
 }
 
-func (d *driver) view() string { return d.m.View() }
+func (d *driver) view() string { return d.View() }

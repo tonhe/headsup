@@ -66,6 +66,10 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Flow tests no longer flake on loaded CI runners. One shared headless driver
+  (`uitest.Driver`) runs the app in a `testing/synctest` bubble with a fake
+  clock: real work always finishes, timers are parked instead of guessed by
+  wall-clock duration, and the suites run several times faster.
 - Host mode on headscale 0.27+: `headscale version` no longer gets `-c`, which
   that command rejects, so the CLI transport connects again.
 - A socket hidden behind an unreadable directory is now reported as missing
