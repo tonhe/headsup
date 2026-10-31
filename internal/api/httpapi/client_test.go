@@ -425,3 +425,13 @@ func TestFixtures(t *testing.T) {
 		}
 	}
 }
+
+func TestSelfAPIKey(t *testing.T) {
+	c, err := New("https://hs.example.com", api.NewSecret("hskey-api-abcdefabcdef-secret"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := c.SelfAPIKey().Reveal(); got != "hskey-api-abcdefabcdef-secret" {
+		t.Fatalf("SelfAPIKey = %q", got)
+	}
+}

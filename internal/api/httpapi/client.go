@@ -106,6 +106,10 @@ type Client struct {
 
 var _ api.Backend = (*Client)(nil)
 
+// SelfAPIKey returns the API key this client authenticates with, so the UI
+// can warn before the admin expires or deletes it and locks the app out.
+func (c *Client) SelfAPIKey() api.Secret { return c.key }
+
 // New builds a client for baseURL (e.g. https://hs.example.com). With
 // WithUnixSocket, baseURL may be empty.
 func New(baseURL string, key api.Secret, opts ...Option) (*Client, error) {
