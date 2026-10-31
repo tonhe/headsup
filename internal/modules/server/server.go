@@ -105,6 +105,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Server }
 func (m *Model) Order() int               { return 80 }
 func (m *Model) Modes() module.Modes      { return module.ModeAPIHost }
 func (m *Model) Chord() string            { return "S" }
+func (m *Model) Section() module.Section  { return module.SectionServer }
 func (m *Model) Capturing() bool          { return false }
 
 // Badge is the number of doctor findings that need attention.

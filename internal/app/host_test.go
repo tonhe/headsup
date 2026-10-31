@@ -32,7 +32,7 @@ func TestHostModeEnrichesMachines(t *testing.T) {
 	b := fake.Demo()
 	h := demoHostFor(t, b)
 	d := newDriver(t, 160, 50, Options{Backend: b, Host: h, Profile: "host:hs-demo"})
-	d.key("2", "enter") // close the detail pane so the list has room for host columns
+	d.key("1", "m", "enter") // close the detail pane so the list has room for host columns
 	out := d.view()
 	for _, want := range []string{"host", "OS", "CLIENT", "DERP"} {
 		if !strings.Contains(out, want) {
@@ -46,7 +46,7 @@ func TestHostModeEnrichesMachines(t *testing.T) {
 
 func TestRemoteModeHidesHostColumns(t *testing.T) {
 	d := newDriver(t, 160, 50, Options{})
-	d.key("2")
+	d.key("1", "m")
 	if strings.Contains(d.view(), "CLIENT") {
 		t.Error("remote mode must not show host-only columns")
 	}
@@ -57,7 +57,7 @@ func TestHostActionGatedWithFix(t *testing.T) {
 	h := demoHostFor(t, b)
 	h.FailPermission(host.NeedDebug, "sudo usermod -aG headscale $USER")
 	d := newDriver(t, 160, 50, Options{Backend: b, Host: h})
-	d.key("2", "p")
+	d.key("1", "m", "p")
 	if out := d.view(); !strings.Contains(out, "usermod") {
 		t.Errorf("ping without debug access should show the fix command:\n%s", out)
 	}
@@ -65,7 +65,7 @@ func TestHostActionGatedWithFix(t *testing.T) {
 
 func TestPingInRemoteModeExplainsHostMode(t *testing.T) {
 	d := newDriver(t, 160, 50, Options{})
-	d.key("2", "p")
+	d.key("1", "m", "p")
 	if out := d.view(); !strings.Contains(out, "host mode") {
 		t.Errorf("host-only action in remote mode should mention host mode:\n%s", out)
 	}

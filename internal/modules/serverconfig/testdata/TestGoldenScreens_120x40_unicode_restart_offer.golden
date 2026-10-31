@@ -1,6 +1,6 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
-▸ 1 ⚙ Server Set…   ! ╭ Saved ─ /etc/headscale/config.yaml ────────────────────────────────────────────────────────────╮
-                      │ ✓ Wrote /etc/headscale/config.yaml. Backup: mem://backups/20261028T120000Z-0/etc/headscale/co… │
+ 2 SERVER             ╭ Saved ─ /etc/headscale/config.yaml ────────────────────────────────────────────────────────────╮
+▸ ⚙ Server Setti…   ! │ ✓ Wrote /etc/headscale/config.yaml. Backup: mem://backups/20261028T120000Z-0/etc/headscale/co… │
                       │                                                                                                │
                       │ This change takes effect after headscale restarts.                                             │
                       │ ▲ headscale restarts: every connected client loses the control plane for a few seconds and     │

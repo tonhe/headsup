@@ -5,11 +5,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 
 	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/sidebar"
 )
 
 // Optional mouse support (T129), on when ui.mouse is true:
 //
-//   - clicking a sidebar entry or a tab switches module;
+//   - clicking a sidebar entry or a tab switches module; clicking a section
+//     header goes to that section's first page;
 //   - the wheel scrolls the active module (sent as up/down keys, so every
 //     list works) and the help, palette and theme picker;
 //   - a click in the module area is forwarded to the module as a tea.MouseMsg
@@ -44,15 +46,13 @@ func (m *Model) handleMouse(msg tea.MouseMsg) tea.Cmd {
 
 	// Navigation.
 	if click {
+		m.jump = 0
 		if m.useSidebar() && msg.X < sidebarWidth && msg.Y >= 1 && msg.Y < m.h-1 {
-			if i := msg.Y - 1; i < len(m.modules) {
-				return m.Navigate(m.modules[i].ID(), nil)
-			}
-			return nil
+			return m.sidebarClick(msg.Y - 1)
 		}
 		if !m.useSidebar() && msg.Y == 1 {
 			if i := m.tabAt(msg.X); i >= 0 {
-				return m.Navigate(m.modules[i].ID(), nil)
+				return m.Navigate(m.tabItems()[i].ID, nil)
 			}
 			return nil
 		}
@@ -83,7 +83,7 @@ func (m *Model) handleMouse(msg tea.MouseMsg) tea.Cmd {
 // tabs.Render's layout: " key title (badge) " segments joined by a
 // one-cell separator, scrolled so the active tab is visible.
 func (m *Model) tabAt(x int) int {
-	items := m.navItems()
+	items := m.tabItems()
 	n := len(items)
 	if n == 0 {
 		return -1
@@ -151,3 +151,15 @@ func (m *Model) tabAt(x int) int {
 func (m *Model) MouseEnabled() bool { return m.mouse }
 
 var _ module.Context = (*Model)(nil)
+
+// sidebarClick handles a click on sidebar row y (0 is the first row).
+func (m *Model) sidebarClick(y int) tea.Cmd {
+	groups, _ := m.navGroups()
+	rows := sidebar.Rows(groups)
+	if y < 0 || y >= len(rows) || rows[y].Group < 0 {
+		return nil
+	}
+	g := groups[rows[y].Group]
+	i := max(0, rows[y].Item)
+	return m.Navigate(g.Items[i].ID, nil)
+}

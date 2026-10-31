@@ -1,8 +1,8 @@
  headsup ─ remote ─ headscale v0.30.0 ●                                                                  42 online / 51 
-  1 ◫ Dashboard     7 ╭ Waiting to join • 0 ───────────────────────────────────────────────────────────────────────────╮
-  2 ▣ Machines        │ No devices waiting.                                                                            │
-▸ 3 ◌ Add device      │                                                                                                │
-                      │ Press p to register a device by the URL or key it printed, or n for a pre-auth key.            │
+ 1 TAILNET            ╭ Waiting to join • 0 ───────────────────────────────────────────────────────────────────────────╮
+  ◫ Dashboard  7  g h │ No devices waiting.                                                                            │
+  ▣ Machines      g m │                                                                                                │
+▸ ◌ Add device    g p │ Press p to register a device by the URL or key it printed, or n for a pre-auth key.            │
                       │                                                                                                │
                       │                                                                                                │
                       │                                                                                                │

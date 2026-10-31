@@ -1,6 +1,6 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
-▸ 1 ⚙ Server Set…   * ╭ Review config.yaml ─ /etc/headscale/config.yaml ─────────────────────────────────────── +1 -1 ─╮
-                      │ ✓ Valid. Needs a restart to take effect. ctrl+s writes (confirm: y/N).                         │
+ 2 SERVER             ╭ Review config.yaml ─ /etc/headscale/config.yaml ─────────────────────────────────────── +1 -1 ─╮
+▸ ⚙ Server Setti…   * │ ✓ Valid. Needs a restart to take effect. ctrl+s writes (confirm: y/N).                         │
                       │                                                                                                │
                       │  151  151     #                                                                                │
                       │  152  152     # Default: 0 (no default expiry)                                                 │

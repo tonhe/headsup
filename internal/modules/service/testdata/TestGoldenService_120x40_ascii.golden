@@ -1,9 +1,9 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 *                                                     42 online / 51 
-> 1 s Service       * ╭ Service ───────────────────────────────────────────────────────────────────────────────────────╮
-  2 Machines          │ * active  since 2026-10-27 10:00 (26h ago)  PID 812  memory 48.2 MiB                           │
+ 1 TAILNET            ╭ Service ───────────────────────────────────────────────────────────────────────────────────────╮
+  Machines            │ * active  since 2026-10-27 10:00 (26h ago)  PID 812  memory 48.2 MiB                           │
                       │ version 0.30.0  manager systemd  logs journald  host hs-demo                                   │
-                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
-                      ╭ Logs - 200 ─ following ────────────────────────────────────────────────────────────────────────╮
+ 2 SERVER             ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+> s Service    *  g l ╭ Logs - 200 ─ following ────────────────────────────────────────────────────────────────────────╮
                       │ 11:56:16 INF Node connected node.id=16                                                         │
                       │ 11:56:23 DBG Map response sent node.id=17 type=patch                                           │
                       │ 11:56:30 INF Sending keepalive node.id=18                                                      │

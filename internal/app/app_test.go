@@ -62,8 +62,8 @@ func TestDemoScreensFit(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}, {160, 50}} {
 		w, h := sz[0], sz[1]
 		d := newDriver(t, w, h, Options{})
-		for _, k := range []string{"1", "2", "3"} {
-			d.key(k)
+		for _, k := range []string{"1 h", "1 m", "1 p"} {
+			d.key(strings.Fields(k)...)
 			out := d.view()
 			checkFrame(t, out, w, h)
 			if strings.Contains(out, "Loading") {
@@ -86,7 +86,7 @@ func TestDashboardShowsCounts(t *testing.T) {
 func TestMachinesFilterAndRename(t *testing.T) {
 	b := fake.Demo()
 	d := newDriver(t, 120, 40, Options{Backend: b})
-	d.key("2", "/")
+	d.key("1", "m", "/")
 	d.key("n", "a", "s")
 	d.key("enter")
 	out := d.view()
@@ -120,7 +120,7 @@ func TestMachinesFilterAndRename(t *testing.T) {
 func TestDeleteNeedsTypedConfirmation(t *testing.T) {
 	b := fake.Demo()
 	d := newDriver(t, 120, 40, Options{Backend: b})
-	d.key("2", "D")
+	d.key("1", "m", "D")
 	if d.m.confirm == nil {
 		t.Fatal("delete must ask for confirmation")
 	}
@@ -137,7 +137,7 @@ func TestDeleteNeedsTypedConfirmation(t *testing.T) {
 func TestDeleteWithTypedName(t *testing.T) {
 	b := fake.Demo()
 	d := newDriver(t, 120, 40, Options{Backend: b})
-	d.key("2", "/")
+	d.key("1", "m", "/")
 	d.key("b", "a", "s", "t", "i", "o", "n", "enter", "D")
 	d.key("bastion", "enter")
 	n := 0
@@ -162,7 +162,7 @@ func TestDeleteWithTypedName(t *testing.T) {
 func TestReadOnlyBlocksMutations(t *testing.T) {
 	b := fake.Demo()
 	d := newDriver(t, 120, 40, Options{Backend: b, ReadOnly: true})
-	d.key("2", "e", "D", "r")
+	d.key("1", "m", "e", "D", "r")
 	if d.m.confirm != nil || d.m.form != nil {
 		t.Fatal("read-only must not open forms or confirmations for mutations")
 	}
@@ -176,7 +176,7 @@ func TestReadOnlyBlocksMutations(t *testing.T) {
 
 func TestPreAuthKeyShownOnce(t *testing.T) {
 	d := newDriver(t, 120, 40, Options{Backend: fake.Demo(), ServerURL: "https://hs.example.com"})
-	d.key("3", "n")
+	d.key("1", "p", "n")
 	if d.m.form == nil {
 		t.Fatal("n should open the new-key form")
 	}

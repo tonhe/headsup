@@ -126,6 +126,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Policy }
 func (m *Model) Order() int               { return 70 }
 func (m *Model) Modes() module.Modes      { return module.ModeAPIHost }
 func (m *Model) Chord() string            { return "a" }
+func (m *Model) Section() module.Section  { return module.SectionTailnet }
 func (m *Model) Badge(*store.Store) string {
 	return ""
 }

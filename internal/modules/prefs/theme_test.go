@@ -107,8 +107,8 @@ func TestThemeFlow(t *testing.T) {
 	}
 
 	// Every view re-renders in the new palette.
-	for _, k := range []string{"1", "2", "3", ","} {
-		d.key(k)
+	for _, k := range []string{"1 h", "1 m", "1 p", ","} {
+		d.key(strings.Fields(k)...)
 		out := d.view()
 		if !usesColour(out, newFg, newBg) {
 			t.Errorf("view %s does not use the new accent", k)

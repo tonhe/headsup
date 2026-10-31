@@ -53,6 +53,7 @@ func (m *Model) Icon(ic icons.Set) string  { return ic.Machine }
 func (m *Model) Order() int                { return 20 }
 func (m *Model) Modes() module.Modes       { return module.ModeAPIHost }
 func (m *Model) Chord() string             { return "m" }
+func (m *Model) Section() module.Section   { return module.SectionTailnet }
 func (m *Model) Capturing() bool           { return m.bar != nil && m.bar.Active() }
 func (m *Model) Badge(*store.Store) string { return "" }
 

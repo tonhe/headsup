@@ -1,5 +1,5 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 *             42 online / 51 
- 1 Server Settings (!)                                                          
+ Server Settings (!)                                                            
 ╭ Restart failed ─ /etc/headscale/config.yaml ─────────────────────────────────╮
 │ x headscale did not come back healthy (state failed).                        │
 │                                                                              │

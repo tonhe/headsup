@@ -62,6 +62,7 @@ func (m *Model) Icon(ic icons.Set) string { return ic.Service }
 func (m *Model) Order() int               { return 116 }
 func (m *Model) Modes() module.Modes      { return module.ModeHost }
 func (m *Model) Chord() string            { return "l" }
+func (m *Model) Section() module.Section  { return module.SectionServer }
 func (m *Model) Capturing() bool          { return m.searching }
 
 func (m *Model) Init(ctx module.Context) tea.Cmd {

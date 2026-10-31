@@ -85,7 +85,7 @@ func TestRemappedKeyWorksAndShowsInHelp(t *testing.T) {
 		"machines.detail": {"o"},
 		"app.palette":     {"ctrl+k"},
 	}})
-	d.key("2")
+	d.key("1", "m")
 	if !helpHas(d.m.helpSections(), "Machines", "Toggle detail pane", "o") {
 		t.Error("help should show the remapped key")
 	}
@@ -166,7 +166,7 @@ func TestPaletteReadOnlyDims(t *testing.T) {
 
 func TestHelpOverlayContextAndFilter(t *testing.T) {
 	d := allModulesDriver(t, Options{})
-	d.key("2", "?")
+	d.key("1", "m", "?")
 	if d.m.help == nil {
 		t.Fatal("? should open help")
 	}
@@ -191,7 +191,7 @@ func TestHelpOverlayContextAndFilter(t *testing.T) {
 
 func TestHelpDimsGatedActions(t *testing.T) {
 	d := allModulesDriver(t, Options{ReadOnly: true})
-	d.key("2")
+	d.key("1", "m")
 	secs := d.m.helpSections()
 	dimmed := false
 	for i, k := range secs[0].Keys {
@@ -210,7 +210,7 @@ func TestPrefsJumpKey(t *testing.T) {
 	if d.m.current().ID() != "prefs" {
 		t.Fatalf(", should open Preferences, on %s", d.m.current().ID())
 	}
-	d.key("1", "g", ",")
+	d.key("1", "h", "g", ",")
 	if d.m.current().ID() != "prefs" {
 		t.Errorf("g , should open Preferences, on %s", d.m.current().ID())
 	}

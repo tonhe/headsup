@@ -359,6 +359,7 @@ A restart with an invalid config is refused before the service is touched.
 - [ ] T171 Accessibility pass: the ascii icon set, and a 16-colour plus NO_COLOR run of every golden test
 - [ ] T172 Run the quickstart.md validation end to end and update CHANGELOG.md for v0.1.0
 - [X] T173 Ask-first restart under sudo when host mode lacks access (constitution 2.0.0, US1 scenario 3), in cmd/headsup/elevate.go, with the escalation lint extended to cmd/ in internal/host/lint_test.go
+- [X] T174 Two-level page navigation (US9): sidebar sections declared by modules (`module.Section`: Tailnet, Server, App) with digit headers; a section digit starts a jump that highlights the section, shows each page's key in the sidebar and a which-key status line, and the next key (page letter, nth digit, `enter` or the digit again) picks the page while any other key cancels without reaching the page; host-only pages hidden in remote mode; `g` chords shown dimmed in the sidebar; help Navigation sections generated from the same data; section-header click opens the first page. In internal/app/nav.go, internal/ui/sidebar, internal/ui/statusbar, with flow tests in internal/app/nav_test.go
 
 ---
 

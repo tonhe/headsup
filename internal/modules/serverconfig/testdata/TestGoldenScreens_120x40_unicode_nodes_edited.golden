@@ -1,6 +1,6 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
-▸ 1 ⚙ Server Set…   * ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────── unsaved changes ─╮
-                      │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
+ 2 SERVER             ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────── unsaved changes ─╮
+▸ ⚙ Server Setti…   * │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
                       │     KEY                               VALUE               DEFAULT                EFFECT        │
                       │ ▸ • node.expiry                       180d                0                      needs restart │
                       │     node.ephemeral.inactivity_timeout 30m                 30m                    needs restart │

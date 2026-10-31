@@ -98,7 +98,7 @@ func TestFlowDoctorBackupRestoreUpgrade(t *testing.T) {
 	if d.cfg.got != 1 {
 		t.Fatalf("fix navigated %d times", d.cfg.got)
 	}
-	d.key("1") // back to the Server page
+	d.key("2", "2") // back to the Server page
 
 	// Backup: one key, listed with a summary toast.
 	d.key("b")

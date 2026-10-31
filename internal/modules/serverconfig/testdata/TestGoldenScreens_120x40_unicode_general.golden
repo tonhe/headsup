@@ -1,6 +1,6 @@
  headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
-▸ 1 ⚙ Server Settings ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────────────────────────╮
-                      │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
+ 2 SERVER             ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────────────────────────╮
+▸ ⚙ Server Settings   │  General  Nodes  DNS  DERP  TLS  OIDC  Policy  Database  Logging  Features                     │
                       │     KEY                    VALUE                          DEFAULT                EFFECT        │
                       │ ▸   server_url             https://hs.demo.example.com    http://127.0.0.1:80… ⊡ needs restart │
                       │     listen_addr            0.0.0.0:8080                   127.0.0.1:8080       ⊡ needs restart │

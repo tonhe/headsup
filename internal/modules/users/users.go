@@ -49,6 +49,7 @@ func (m *Model) Icon(ic icons.Set) string  { return ic.User }
 func (m *Model) Order() int                { return 22 }
 func (m *Model) Modes() module.Modes       { return module.ModeAPI }
 func (m *Model) Chord() string             { return "u" }
+func (m *Model) Section() module.Section   { return module.SectionTailnet }
 func (m *Model) Capturing() bool           { return m.bar != nil && m.bar.Active() }
 func (m *Model) Badge(*store.Store) string { return "" }
 

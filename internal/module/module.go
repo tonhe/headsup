@@ -4,6 +4,7 @@ package module
 
 import (
 	"path/filepath"
+	"strings"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -166,6 +167,54 @@ type Module interface {
 	Capturing() bool
 	// Hints are short key hints shown in the status bar for the current state.
 	Hints() []Hint
+}
+
+// Section is the sidebar group a module belongs to. Each section has a
+// digit key (its value): pressing it starts a two-key jump to one of its pages.
+type Section int
+
+const (
+	SectionTailnet Section = iota + 1 // machines, users, keys, policy
+	SectionServer                     // the headscale server and its files
+	SectionApp                        // client-side pages
+)
+
+// Sections lists every section in display order.
+var Sections = []Section{SectionTailnet, SectionServer, SectionApp}
+
+// Title is the section's display name ("Tailnet").
+func (s Section) Title() string {
+	switch s {
+	case SectionTailnet:
+		return "Tailnet"
+	case SectionServer:
+		return "Server"
+	case SectionApp:
+		return "App"
+	}
+	return "Other"
+}
+
+// Slug is the section's ID in action IDs ("app.section.tailnet").
+func (s Section) Slug() string { return strings.ToLower(s.Title()) }
+
+// Sectioned is implemented by modules that declare their sidebar section.
+type Sectioned interface{ Section() Section }
+
+// SectionOf is the module's declared section, or one derived from its Modes
+// when it declares none: host-only modules go under Server, local ones under
+// App, the rest under Tailnet.
+func SectionOf(m Module) Section {
+	if s, ok := m.(Sectioned); ok && s.Section() >= SectionTailnet && s.Section() <= SectionApp {
+		return s.Section()
+	}
+	switch m.Modes() {
+	case ModeHost:
+		return SectionServer
+	case ModeLocal:
+		return SectionApp
+	}
+	return SectionTailnet
 }
 
 // Hint is a status-bar key hint.

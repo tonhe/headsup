@@ -26,8 +26,8 @@ var appActions = []appAction{
 	{"app.quit", "Quit", []string{"q"}},
 }
 
-// Jumper lets a module declare extra direct jump keys besides 1-9 and its
-// "g x" chord, e.g. "," for Preferences.
+// Jumper lets a module declare extra direct jump keys besides its section
+// jump and its "g x" chord, e.g. "," for Preferences.
 type Jumper interface{ JumpKeys() []string }
 
 // keyLabel joins an action's live keys for display ("R / ctrl+r").
