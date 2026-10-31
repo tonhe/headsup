@@ -53,3 +53,54 @@ func TestViewAndScroll(t *testing.T) {
 		t.Error("esc should close")
 	}
 }
+
+func TestFilterDimAndMouse(t *testing.T) {
+	secs := []Section{
+		{Title: "Machines", Keys: []module.Hint{{Key: "r", Desc: "Rename machine"}, {Key: "D", Desc: "Delete machine"}}, Dim: map[int]bool{1: true}},
+		{Title: "Global", Keys: []module.Hint{{Key: "?", Desc: "Help"}, {Key: "ctrl+b", Desc: "Toggle sidebar"}}},
+	}
+	m := New(uitest.StyleFor(""), secs)
+	m.SetSize(80, 20)
+	if len(m.Sections()) != 2 {
+		t.Fatal("sections")
+	}
+	key := func(s string) { m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune(s)}) }
+	key("/")
+	key("delete")
+	m.Update(tea.KeyMsg{Type: tea.KeySpace})
+	m.Update(tea.KeyMsg{Type: tea.KeyBackspace})
+	out := ansi.Strip(m.View())
+	if m.Query() != "delete" || !strings.Contains(out, "Delete machine") || strings.Contains(out, "Rename") {
+		t.Fatalf("filter %q:\n%s", m.Query(), out)
+	}
+	m.Update(tea.KeyMsg{Type: tea.KeyEnter})
+	if !strings.Contains(ansi.Strip(m.View()), "filter: delete") {
+		t.Error("kept filter should be shown")
+	}
+	key("/")
+	m.Update(tea.KeyMsg{Type: tea.KeyEsc}) // leaves typing and clears
+	key("/")
+	key("global")
+	if out := ansi.Strip(m.View()); !strings.Contains(out, "Toggle sidebar") {
+		t.Errorf("matching a section title keeps the whole section:\n%s", out)
+	}
+	m.Update(tea.KeyMsg{Type: tea.KeyEsc})
+	key("/")
+	key("zzzz")
+	if !strings.Contains(ansi.Strip(m.View()), "No keys match") {
+		t.Error("empty filter result")
+	}
+	m.Update(tea.KeyMsg{Type: tea.KeyEnter})
+	m.Update(tea.KeyMsg{Type: tea.KeyEsc})
+	if m.Query() != "" {
+		t.Error("esc clears a kept filter")
+	}
+	m.Update(tea.MouseMsg{Button: tea.MouseButtonWheelDown})
+	m.Update(tea.MouseMsg{Button: tea.MouseButtonWheelUp})
+	for _, k := range []string{"j", "k", "g"} {
+		key(k)
+	}
+	if _, ok := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("q")})().(CloseMsg); !ok {
+		t.Error("q closes")
+	}
+}

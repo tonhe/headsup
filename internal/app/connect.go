@@ -133,7 +133,7 @@ func (m *Model) switchTo(c Conn) tea.Cmd {
 	m.opt.Profile, m.opt.ServerURL, m.opt.ReadOnly = c.Label, c.ServerURL, c.ReadOnly
 	m.store = store.New()
 	m.connected, m.connErr, m.fetching = false, nil, false
-	cmds := []tea.Cmd{m.connect(), m.toasts.Push(module.ToastInfo, "Connecting to "+c.Label+"…")}
+	cmds := []tea.Cmd{m.connect(), m.toasts.Push(module.ToastInfo, "Connecting to "+c.Label+"…"), m.applyProfileTheme()}
 	for _, mod := range m.modules {
 		cmds = append(cmds, mod.Init(m))
 	}
