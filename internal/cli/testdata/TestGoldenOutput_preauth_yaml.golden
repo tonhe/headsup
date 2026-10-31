@@ -1,0 +1,13 @@
+- id: 4
+  key: hskey-auth-…bb87
+  user:
+    id: 4
+    name: ops
+  reusable: true
+  ephemeral: false
+  used: true
+  state: active
+  expiration: "2026-05-30T12:00:00Z"
+  created_at: "2026-01-30T12:00:00Z"
+  acl_tags:
+    - tag:server

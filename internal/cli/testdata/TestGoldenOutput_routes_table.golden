@@ -1,0 +1,8 @@
+NODE ID  NODE           PREFIX           STATE     EXIT
+32       exit-fra-1     0.0.0.0/0        approved  yes
+32       exit-fra-1     ::/0             approved  yes
+5        homelab-alice  10.20.0.0/16     pending   no
+30       router-ha-a    10.0.0.0/24      approved  no
+31       router-ha-b    10.0.0.0/24      approved  no
+33       vpn-gw-lab     192.168.50.0/24  pending   no
+33       vpn-gw-lab     192.168.51.0/24  approved  no

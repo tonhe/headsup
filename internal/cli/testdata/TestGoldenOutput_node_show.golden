@@ -1,0 +1,14 @@
+id             1
+name           laptop-alice
+hostname       laptop-alice
+user           alice
+ips            100.64.0.2, fd7a:115c:a1e0::1
+tags           -
+status         online
+last_seen      2026-03-01T12:00:00Z
+expiry         2026-07-04T12:00:00Z
+created        2026-01-01T12:00:00Z
+registered_by  oidc
+routes         -
+approved       -
+exit_node      no

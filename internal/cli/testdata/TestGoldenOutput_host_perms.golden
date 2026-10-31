@@ -1,0 +1,10 @@
+PERMISSION         OK   REASON  FIX
+local API          yes  -       -
+read config        yes  -       -
+write config       yes  -       -
+write policy       yes  -       -
+write DNS records  yes  -       -
+control service    yes  -       -
+read logs          yes  -       -
+debug/metrics      yes  -       -
+read database      yes  -       -

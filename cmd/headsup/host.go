@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
 	"net/netip"
 	"strings"
 
@@ -110,57 +109,4 @@ func demoHost() host.Host {
 		o(h)
 	}
 	return h
-}
-
-// hostInfo prints what detection found, with fix commands (`headsup host info`).
-func hostInfo(f config.Flags, w io.Writer) int {
-	env := detectEnv(f)
-	row := func(k, v string) {
-		if v == "" {
-			v = "-"
-		}
-		fmt.Fprintf(w, "%-14s %s\n", k, v)
-	}
-	row("hostname", env.Hostname)
-	row("config", env.ConfigPath)
-	row("version", env.Version)
-	row("transport", env.Transport.String())
-	row("socket", env.SocketPath)
-	row("container", strings.TrimSpace(env.ContainerRuntime+" "+env.Container))
-	row("service", env.Service.String())
-	row("logs", env.LogSource.String())
-	row("database", strings.TrimSpace(env.DB.String()+" "+env.DBPath))
-	row("debug", env.DebugAddr)
-	row("server_url", env.ServerURL)
-	row("policy", strings.TrimSpace(env.PolicyMode+" "+env.PolicyPath))
-	fmt.Fprintln(w)
-	needs := []struct {
-		n    host.Need
-		name string
-	}{
-		{host.NeedSocket, "local API"}, {host.NeedConfigR, "read config"}, {host.NeedConfigW, "write config"},
-		{host.NeedPolicyW, "write policy"}, {host.NeedRecordsW, "write DNS records"}, {host.NeedService, "control service"},
-		{host.NeedLogs, "read logs"}, {host.NeedDebug, "debug/metrics"}, {host.NeedDBRead, "read database"},
-	}
-	for _, n := range needs {
-		p, ok := env.Perms[n.n]
-		switch {
-		case !ok:
-			fmt.Fprintf(w, "  -  %-18s not applicable\n", n.name)
-		case p.OK:
-			fmt.Fprintf(w, "  ok %-18s\n", n.name)
-		default:
-			fmt.Fprintf(w, "  no %-18s %s\n", n.name, p.Reason)
-			if p.FixCommand != "" {
-				fmt.Fprintf(w, "     %-18s fix: %s\n", "", p.FixCommand)
-			}
-		}
-	}
-	for _, n := range env.Notes {
-		fmt.Fprintln(w, "note:", n)
-	}
-	if !env.Usable() {
-		return 8
-	}
-	return 0
 }

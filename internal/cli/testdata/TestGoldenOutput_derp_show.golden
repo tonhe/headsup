@@ -1,0 +1,8 @@
+server_enabled: false
+server_region_id: "999"
+server_region_code: headscale
+stun_listen_addr: 0.0.0.0:3478
+urls:
+  - https://controlplane.tailscale.com/derpmap/default
+paths: []
+auto_update_enabled: "true"
