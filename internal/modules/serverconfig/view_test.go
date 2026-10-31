@@ -63,7 +63,7 @@ func TestGoldenScreens(t *testing.T) {
 					d := newSizedDriver(t, h, false, sz[0], sz[1], ic)
 					sc.run(d)
 					d.dismissToasts()
-					out := d.m.View()
+					out := d.View()
 					checkFrame(t, out, sz[0], sz[1])
 					uitest.Golden(t, out)
 				})

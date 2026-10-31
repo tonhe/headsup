@@ -7,7 +7,6 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/x/ansi"
 
 	"github.com/tonhe/headsup/internal/api/fake"
 	"github.com/tonhe/headsup/internal/app"
@@ -15,20 +14,19 @@ import (
 	"github.com/tonhe/headsup/internal/host"
 	hostfake "github.com/tonhe/headsup/internal/host/fake"
 	"github.com/tonhe/headsup/internal/module"
+	"github.com/tonhe/headsup/internal/ui/uitest"
 )
 
 var flowNow = time.Date(2026, 10, 28, 12, 0, 0, 0, time.UTC)
 
-// driver runs the real app headlessly with only this module: commands run
-// synchronously and results are fed back. A command still running after
-// 150ms (a timer, or slow I/O on a loaded CI runner) is parked: its result
-// lands in late and is applied only while want is waiting for the screen.
+// driver runs the real app headlessly with only this module, on the shared
+// flow-test driver (fake clock, no dropped commands); see uitest.Driver.
 type driver struct {
-	t    *testing.T
-	m    *app.Model
-	mod  *Model
-	h    *hostfake.Host
-	late chan tea.Msg
+	*uitest.Driver
+	t   *testing.T
+	m   *app.Model
+	mod *Model
+	h   *hostfake.Host
 }
 
 func newDriver(t *testing.T, h *hostfake.Host, readOnly bool) *driver {
@@ -49,98 +47,13 @@ func newSizedDriver(t *testing.T, h *hostfake.Host, readOnly bool, w, ht int, ic
 		Now: clock, Refresh: time.Hour, ReadOnly: readOnly, Theme: "tokyo-night", Profile: "host:hs-demo",
 		ServerURL: "https://hs.demo.example.com", Icons: ic,
 	})
-	d := &driver{t: t, m: m, mod: mod, h: h, late: make(chan tea.Msg, 256)}
-	d.send(tea.WindowSizeMsg{Width: w, Height: ht})
-	d.exec(m.Init(), 0)
-	return d
+	return &driver{Driver: uitest.NewDriver(t, m, w, ht), t: t, m: m, mod: mod, h: h}
 }
 
-func (d *driver) send(msg tea.Msg) {
-	_, cmd := d.m.Update(msg)
-	d.exec(cmd, 0)
-}
-
-func (d *driver) exec(cmd tea.Cmd, depth int) {
-	if cmd == nil || depth > 30 {
-		return
-	}
-	done := make(chan tea.Msg, 1)
-	go func() { done <- cmd() }()
-	var msg tea.Msg
-	select {
-	case msg = <-done:
-	case <-time.After(150 * time.Millisecond):
-		go func() { d.late <- <-done }()
-		return
-	}
-	d.dispatch(msg, depth)
-}
-
-// dispatch applies one command result and runs what it returns.
-func (d *driver) dispatch(msg tea.Msg, depth int) {
-	switch msg := msg.(type) {
-	case nil, tea.QuitMsg:
-	case tea.BatchMsg:
-		for _, c := range msg {
-			d.exec(c, depth+1)
-		}
-	default:
-		_, next := d.m.Update(msg)
-		d.exec(next, depth+1)
-	}
-}
-
-func (d *driver) key(keys ...string) {
-	for _, k := range keys {
-		var msg tea.KeyMsg
-		switch k {
-		case "enter":
-			msg = tea.KeyMsg{Type: tea.KeyEnter}
-		case "esc":
-			msg = tea.KeyMsg{Type: tea.KeyEsc}
-		case "tab":
-			msg = tea.KeyMsg{Type: tea.KeyTab}
-		case "backspace":
-			msg = tea.KeyMsg{Type: tea.KeyBackspace}
-		case "ctrl+s":
-			msg = tea.KeyMsg{Type: tea.KeyCtrlS}
-		case "ctrl+u":
-			msg = tea.KeyMsg{Type: tea.KeyCtrlU}
-		default:
-			msg = tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune(k)}
-		}
-		d.send(msg)
-	}
-}
-
-func (d *driver) view() string { return ansi.Strip(d.m.View()) }
-
-// want waits up to 5s for every sub to be on screen, applying the results
-// of parked commands while it waits.
-func (d *driver) want(subs ...string) {
-	d.t.Helper()
-	deadline := time.Now().Add(5 * time.Second)
-	for {
-		out, missing := d.view(), ""
-		for _, s := range subs {
-			if !strings.Contains(out, s) {
-				missing = s
-				break
-			}
-		}
-		if missing == "" {
-			return
-		}
-		if !time.Now().Before(deadline) {
-			d.t.Fatalf("screen is missing %q:\n%s", missing, out)
-		}
-		select {
-		case msg := <-d.late:
-			d.dispatch(msg, 0)
-		case <-time.After(50 * time.Millisecond):
-		}
-	}
-}
+func (d *driver) send(msg tea.Msg)    { d.Send(msg) }
+func (d *driver) key(keys ...string)  { d.Key(keys...) }
+func (d *driver) view() string        { return d.Screen() }
+func (d *driver) want(subs ...string) { d.t.Helper(); d.Want(subs...) }
 
 func (d *driver) config() []byte {
 	b, _ := d.h.File(hostfake.ConfigPath)
