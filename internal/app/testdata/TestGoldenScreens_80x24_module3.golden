@@ -1,0 +1,24 @@
+ headsup ─ remote ─ headscale v0.30.0 ●                          42 online / 51 
+ Dashboard (7) │ Machines │[Add device]                                         
+╭ Waiting to join • 0 ─────────────────────────────────────────────────────────╮
+│ No devices waiting.                                                          │
+│                                                                              │
+│ Press p to register a device by the URL or key it printed, or n for a pre-au │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭ Pre-auth keys ───────────────────────────────────────────────────────────────╮
+│ ⚿ hskey-auth-…6ac0       carol      ephemeral            active   expires i… │
+│ ⚿ hskey-auth-…b84f       bob        reusable             active   expires i… │
+│ ⚿ hskey-auth-…a1d5       alice                           active   expires i… │
+│ ⚿ hskey-auth-…3ed7       alice                           expired  expires 2… │
+│ ⚿ hskey-auth-…746a       bob                             used     expires i… │
+│ ⚿ hskey-auth-…bb87       ops        reusable             active   expires i… │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ n new pre-auth key  p paste key/URL  a approve  x reject      updated 12:00:00 

@@ -38,7 +38,8 @@ const ExpiryWarn = 7 * 24 * time.Hour
 type Model struct {
 	tbl      *table.Model
 	bar      *filter.Bar
-	rows     []row
+	shown    int         // rows passing the filter
+	all      []table.Row // every node's row, rebuilt when the store changes
 	detail   bool
 	hostCols bool
 	ready    bool
@@ -67,17 +68,35 @@ func (m *Model) Init(ctx module.Context) tea.Cmd {
 	return nil
 }
 
+// rebuild re-reads every node from the store, then refilters.
 func (m *Model) rebuild(ctx module.Context) {
-	all := newRows(ctx.Store(), ctx.Styles(), ctx.Icons(), ctx.Now(), ExpiryWarn)
+	rows := newRows(ctx.Store(), ctx.Styles(), ctx.Icons(), ctx.Now(), ExpiryWarn)
+	m.all = make([]table.Row, len(rows))
+	for i, r := range rows {
+		m.all[i] = r
+	}
+	m.refilter(ctx)
+}
+
+// refilter applies the filter bar's query to the cached rows. A filter
+// keystroke only needs this, not a rebuild of every row (T170).
+func (m *Model) refilter(ctx module.Context) {
+	if m.all == nil {
+		m.rebuild(ctx)
+		return
+	}
+	all := m.all
 	q := m.bar.Query()
-	m.rows = m.rows[:0]
-	trows := make([]table.Row, 0, len(all))
-	for _, r := range all {
-		if q.Empty() || q.Match(r) {
-			m.rows = append(m.rows, r)
-			trows = append(trows, r)
+	trows := all
+	if !q.Empty() {
+		trows = make([]table.Row, 0, len(all))
+		for _, r := range all {
+			if q.Match(r.(row)) {
+				trows = append(trows, r)
+			}
 		}
 	}
+	m.shown = len(trows)
 	m.tbl.SetRows(trows)
 	m.bar.SetCounts(len(trows), len(all))
 	m.ready = ctx.Store().Loaded&store.SliceNodes != 0
@@ -97,7 +116,7 @@ func (m *Model) Update(ctx module.Context, msg tea.Msg) (module.Module, tea.Cmd)
 		}
 		return m, nil
 	case filter.ChangedMsg:
-		m.rebuild(ctx)
+		m.refilter(ctx)
 		return m, nil
 	case tea.KeyMsg:
 		if m.bar.Active() || msg.String() == "/" {
@@ -164,7 +183,7 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 		return empty.Render(s, "Loading machines…", "", "", r.W, r.H)
 	}
 	if len(ctx.Store().Nodes) == 0 {
-		return empty.Render(s, "No machines yet", "Add one from Pending (5) or with a pre-auth key.", "", r.W, r.H)
+		return empty.Render(s, "No machines yet", "Add one from Add device (1 p) or with a pre-auth key.", "", r.W, r.H)
 	}
 	showBar := m.bar.Active() || m.bar.Value() != ""
 	h := r.H
@@ -184,7 +203,7 @@ func (m *Model) View(ctx module.Context, r module.Rect) string {
 		split = "below"
 	}
 
-	title := fmt.Sprintf("Machines %s %d", ctx.Icons().Bullet, len(m.rows))
+	title := fmt.Sprintf("Machines %s %d", ctx.Icons().Bullet, m.shown)
 	if sel := len(m.tbl.Selected()); sel > 0 {
 		title += fmt.Sprintf(" %s %d selected", ctx.Icons().Bullet, sel)
 	}

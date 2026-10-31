@@ -1,5 +1,5 @@
  headsup ─ remote ─ headscale v0.30.0 ●                          42 online / 51 
- h Dashboard (7) │ m Machines │ p Add device                                    
+[h Dashboard (7)]│ m Machines │ p Add device                                    
 ╭ Machines ───────╮╭ Users ──────────╮╭ Waiting ────────╮╭ Expiry ─────────────╮
 │ 42 / 51 online  ││ 4 users         ││ 2 routes        ││ 1 machines soon     │
 │ collecting…     ││ 1 exit node(s)  ││ 0 registrations ││ 3 keys soon         │

@@ -131,9 +131,9 @@ func (m *Model) previewView(ctx module.Context, w, h int) string {
 		sub := p.subjects[i]
 		label := fmt.Sprintf("%-8s %s", sub.Kind, sub.Label())
 		if i == p.cursor {
-			rows = append(rows, s.RowSel.Render(pane.Fit(" "+label, iw)))
+			rows = append(rows, s.RowSel.Render(pane.Fit(cursorMark(ctx.Icons())+label, iw)))
 		} else {
-			rows = append(rows, " "+s.Muted.Render(fmt.Sprintf("%-8s", sub.Kind))+" "+sub.Label())
+			rows = append(rows, "  "+s.Muted.Render(fmt.Sprintf("%-8s", sub.Kind))+" "+sub.Label())
 		}
 	}
 	if len(p.subjects) == 0 {

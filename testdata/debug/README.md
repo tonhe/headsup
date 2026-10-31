@@ -1,7 +1,9 @@
 # Debug endpoint fixtures
 
-**These fixtures are hand-built**, pending `scripts/record-debug-fixtures.sh`
-recording them from real headscale v0.29.6 (`v029/`) and main (`v030/`) containers.
+**These fixtures are hand-built** with values the unit tests assert. Their shapes
+are checked against real headscale v0.29.6 (`v029/`) and main (`v030/`) by the
+weekly integration shape-drift check; `scripts/record-debug-fixtures.sh` saves
+the live bodies for comparison.
 
 They were written from the handler source at the two refs:
 

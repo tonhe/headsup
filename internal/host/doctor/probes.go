@@ -115,8 +115,8 @@ func SimulatedProbes(h host.Host, now func() time.Time) Probes {
 	env := h.Env()
 	sizes := map[string]int64{}
 	if env.DBPath != "" {
-		sizes[env.DBPath] = 2_400_000
-		sizes[env.DBPath+"-wal"] = 1_400_000 // over half the database: a demo finding
+		sizes[env.DBPath] = 9_600_000
+		sizes[env.DBPath+"-wal"] = 5_600_000 // over half the database: a demo finding
 	}
 	return Probes{
 		Stat: func(p string) (fs.FileInfo, error) {

@@ -121,7 +121,7 @@ func New(t theme.Theme) *Styles {
 	s.Input = lipgloss.NewStyle().Foreground(r.Fg)
 	s.InputFocus = lipgloss.NewStyle().Foreground(r.FgStrong)
 	s.Button = lipgloss.NewStyle().Foreground(r.Fg).Background(r.Selection).Padding(0, 2)
-	s.ButtonFo = lipgloss.NewStyle().Foreground(r.Bg).Background(r.Accent).Bold(true).Padding(0, 2)
+	s.ButtonFo = lipgloss.NewStyle().Foreground(r.Bg).Background(r.Accent).Bold(true).Padding(0, 1)
 
 	s.Toast = map[int]lipgloss.Style{
 		0: lipgloss.NewStyle().Foreground(r.Fg).Border(lipgloss.RoundedBorder()).BorderForeground(r.Accent).Padding(0, 1),
@@ -134,4 +134,14 @@ func New(t theme.Theme) *Styles {
 		s.Spark[i] = fg(c)
 	}
 	return s
+}
+
+// RenderButton draws a button label. The focused one is bracketed as well as
+// coloured, so focus stays visible under NO_COLOR (T171); both forms are the
+// same width.
+func (s *Styles) RenderButton(label string, focused bool) string {
+	if focused {
+		return s.ButtonFo.Render("[" + label + "]")
+	}
+	return s.Button.Render(label)
 }

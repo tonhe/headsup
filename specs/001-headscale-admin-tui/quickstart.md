@@ -75,5 +75,5 @@ through `docker exec`.
 make test          # unit + golden + teatest (fake backend)
 make test-all      # + race + coverage gate
 make golden-update # after intentional view changes
-make test-integration  # docker headscale 0.29.6 + 0.30 matrix
+make test-integration  # docker headscale (HEADSCALE_IMAGE_TAG: 0.29.6, or development for main)
 ```

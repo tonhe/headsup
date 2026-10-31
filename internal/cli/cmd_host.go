@@ -15,6 +15,7 @@ import (
 
 	"github.com/tonhe/headsup/internal/activity"
 	"github.com/tonhe/headsup/internal/api"
+	"github.com/tonhe/headsup/internal/brand"
 	"github.com/tonhe/headsup/internal/host"
 	"github.com/tonhe/headsup/internal/host/backup"
 	"github.com/tonhe/headsup/internal/host/derpmap"
@@ -511,7 +512,7 @@ func (r *runner) writeFile(f *host.File, next []byte, yes, noRestart bool, actio
 			fmt.Fprintf(r.stderr, "-%s\n", l.Text)
 		}
 	}
-	consequence := "A backup is kept. The change takes effect " + ch.Effect.String() + "."
+	consequence := "A backup is kept. The change takes effect " + effectWhen(ch.Effect) + "."
 	if ch.Effect == host.EffectRestart && !noRestart {
 		consequence += " headscale is restarted afterwards; connected clients reconnect."
 	}
@@ -537,8 +538,16 @@ func (r *runner) writeFile(f *host.File, next []byte, yes, noRestart bool, actio
 	r.logf("Wrote %s (backup: %s).", f.Path, a.BackupPath)
 	if noRestart {
 		if ch.Effect != host.EffectLive {
-			r.logf("The change takes effect %s; it was not applied (--no-restart).", ch.Effect)
+			r.logf("The change takes effect %s; headscale was not %s (--no-restart).", effectWhen(ch.Effect), effectVerb(ch.Effect))
 		}
+		return nil
+	}
+	if ch.Effect == host.EffectRestart && !r.o.Interactive {
+		// A restart can fail to come back healthy, and the way back (restore
+		// the backup and restart again) is offered on a terminal. Without one,
+		// leave the restart to the caller.
+		r.logf("The change takes effect %s; headscale was not restarted (no terminal). Run `%s svc restart --yes` to apply it.",
+			effectWhen(ch.Effect), brand.Name)
 		return nil
 	}
 	switch ch.Effect {
@@ -548,6 +557,24 @@ func (r *runner) writeFile(f *host.File, next []byte, yes, noRestart bool, actio
 		_, _, err = r.runAction("service", false, 0, nil, call{id: "service.reload", confirmed: true})
 	}
 	return err
+}
+
+// effectWhen says when a change with effect e takes effect.
+func effectWhen(e host.Effect) string {
+	switch e {
+	case host.EffectRestart:
+		return "after headscale restarts"
+	case host.EffectReload:
+		return "after headscale reloads"
+	}
+	return "immediately"
+}
+
+func effectVerb(e host.Effect) string {
+	if e == host.EffectReload {
+		return "reloaded"
+	}
+	return "restarted"
 }
 
 func confDiff(r *runner, args []string) error {

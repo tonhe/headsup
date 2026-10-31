@@ -1,4 +1,4 @@
- Pre-auth keys (6) │ API keys (3)                                                                 
+[Pre-auth keys (6)]│ API keys (3)                                                                 
 ╭ Pre-auth keys • 6 ─────────────────────────────────────────────────────────────────────────────╮
 │     KEY                USER       FLAGS          STATE   TAGS          CREATED ▼  EXPIRES      │
 │ ▌ ⚿ hskey-auth-…6ac0   carol      ephemeral      active  -             24h ago    6d           │

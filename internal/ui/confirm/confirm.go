@@ -201,12 +201,8 @@ func (m *Model) View(w int) string {
 		}
 		lines = append(lines, fit(m.s.Muted.Render("enter confirm · esc cancel")))
 	} else {
-		cancel, ok := m.s.Button.Render("Cancel"), m.s.Button.Render(m.req.Confirm)
-		if m.focus == 0 {
-			cancel = m.s.ButtonFo.Render("Cancel")
-		} else {
-			ok = m.s.ButtonFo.Render(m.req.Confirm)
-		}
+		cancel := m.s.RenderButton("Cancel", m.focus == 0)
+		ok := m.s.RenderButton(m.req.Confirm, m.focus != 0)
 		lines = append(lines, fit(cancel+"  "+ok), fit(m.s.Muted.Render("y confirm · n/esc cancel")))
 	}
 	return box.Width(cw + box.GetHorizontalPadding()).Render(strings.Join(lines, "\n"))

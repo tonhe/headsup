@@ -5,7 +5,7 @@
 │ URL      https://hs.demo.example.com                                                             │
 │ Config   /etc/headscale/config.yaml  (o opens Server Settings)                                   │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
- Capabilities │ Doctor (2) │ Backups │ Upgrade                                                      
+ Capabilities │[Doctor (2)]│ Backups │ Upgrade                                                      
 ╭ Doctor ─ 2 warnings ─────────────────────────────────────────────────────────────────────────────╮
 │          Check            Finding                                                                │
 │  ✓ ok    Permissions      This user has every host permission it needs                           │
@@ -13,7 +13,7 @@
 │  ✓ ok    server_url       https://hs.demo.example.com is reachable                               │
 │▌ • info  TLS certificate  No cached ACME certificate for hs.example.com yet                      │
 │  ▲ warn  Deprecated keys  tls_letsencrypt_hostname is deprecated; use tls.acme.hostname          │
-│  ▲ warn  Database         The WAL is 1.3 MiB (58% of the 2.3 MiB database)                       │
+│  ▲ warn  Database         The WAL is 5.3 MiB (58% of the 9.2 MiB database)                       │
 │  ✓ ok    Disk space       38.0 GiB free of 80.0 GiB (48%) on /var/lib/headscale                  │
 │  ✓ ok    Clock            Clock in sync (within 2s)                                              │
 │                                                                                                  │

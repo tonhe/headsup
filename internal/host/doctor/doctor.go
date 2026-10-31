@@ -89,6 +89,10 @@ func DefaultThresholds() Thresholds {
 	}
 }
 
+// walRatioFloor is the WAL size below which the ratio rule never fires: the
+// default wal_autocheckpoint (1000 pages of 4 KiB).
+const walRatioFloor = 4 << 20
+
 // FromConfig applies [host.doctor] over the defaults.
 func FromConfig(d config.Doctor) Thresholds {
 	t := DefaultThresholds()
@@ -260,6 +264,24 @@ func (r *run) socket() {
 	}
 	if path == "" {
 		r.skip("socket", CheckSocket, "No unix socket configured")
+		return
+	}
+	if r.env.Transport == host.TransportContainerExec {
+		// The socket is inside the container; the CLI is reached through
+		// `docker exec`, so what matters is that the container runs.
+		ctx, cancel := context.WithTimeout(r.ctx, 5*time.Second)
+		defer cancel()
+		st, err := r.h.Service().Status(ctx)
+		if err != nil || !st.Running {
+			detail := "container " + r.env.Container + " is not running"
+			if err != nil {
+				detail = err.Error()
+			}
+			r.add(Finding{ID: "socket.unreachable", Check: CheckSocket, Severity: SevError,
+				Title: "The headscale container is not running", Detail: detail, Fix: statusCmd(r.env)})
+			return
+		}
+		r.ok("socket", CheckSocket, "Socket "+path+" in container "+r.env.Container+" is reached through "+r.env.ContainerRuntime+" exec")
 		return
 	}
 	if p, probed := r.env.Perms[host.NeedSocket]; probed && !p.OK {
@@ -571,7 +593,10 @@ func (r *run) database() {
 	if wi, err := r.p.Stat(path + "-wal"); err == nil {
 		wal = wi.Size()
 	}
-	walTooBig := wal > r.t.WALWarnBytes || (size > 0 && float64(wal) > r.t.WALWarnRatio*float64(size))
+	// The ratio rule needs a floor: SQLite checkpoints at about 1000 pages
+	// (4 MiB), so a fresh database's WAL is routinely many times its size.
+	walTooBig := wal > r.t.WALWarnBytes ||
+		(size > 0 && wal > walRatioFloor && float64(wal) > r.t.WALWarnRatio*float64(size))
 	if walTooBig && wal > 0 {
 		pct := 0
 		if size > 0 {

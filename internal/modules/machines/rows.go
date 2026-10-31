@@ -47,6 +47,8 @@ type row struct {
 	ic    icons.Set
 	now   time.Time
 	warn  time.Duration
+	text  string // FilterText, computed once per rebuild
+	name  string // the name sort key
 }
 
 func newRows(st *store.Store, s *styles.Styles, ic icons.Set, now time.Time, warn time.Duration) []row {
@@ -57,6 +59,8 @@ func newRows(st *store.Store, s *styles.Styles, ic icons.Set, now time.Time, war
 			e := e
 			r.extra = &e
 		}
+		r.text = r.filterText()
+		r.name = strings.ToLower(n.DisplayName())
 		out = append(out, r)
 	}
 	return out
@@ -112,7 +116,8 @@ func (r row) Cell(col string) string {
 		case n.Expired(r.now):
 			return r.s.Expired.Render("expired")
 		case n.ExpiresSoon(r.now, r.warn):
-			return r.s.Expiring.Render(humanize.Short(n.Expiry.Sub(r.now)))
+			// The warning glyph marks "soon" without relying on colour (T171).
+			return r.s.Expiring.Render(r.ic.Warn + " " + humanize.Short(n.Expiry.Sub(r.now)))
 		default:
 			return humanize.Short(n.Expiry.Sub(r.now))
 		}
@@ -152,6 +157,9 @@ func (r row) SortValue(col string) string {
 	case "status":
 		return strconv.Itoa(3 - int(n.Status(r.now)))
 	case "name":
+		if r.name != "" {
+			return r.name
+		}
 		return strings.ToLower(n.DisplayName())
 	case "user":
 		return n.User.Name
@@ -182,6 +190,13 @@ func (r row) SortValue(col string) string {
 
 // FilterText is what free-text search matches: name, hostname, IPs, user, tags.
 func (r row) FilterText() string {
+	if r.text != "" {
+		return r.text
+	}
+	return r.filterText()
+}
+
+func (r row) filterText() string {
 	n := r.n
 	parts := []string{n.GivenName, n.Name, n.User.Name}
 	for _, ip := range n.IPAddresses {

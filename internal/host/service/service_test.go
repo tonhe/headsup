@@ -217,7 +217,11 @@ func TestConfigtest(t *testing.T) {
 	if _, err := NewContainer(fr.run, "podman", "hs").Configtest(context.Background(), "/etc/headscale/config.yaml"); err != nil {
 		t.Fatal(err)
 	}
-	if fr.last() != "podman exec hs headscale configtest -c /etc/headscale/config.yaml" {
+	// The host path means nothing inside the container: no -c.
+	if _, err := NewContainer(fr.run, "podman", "hs").Configtest(context.Background(), "/srv/hs/config/config.yaml"); err != nil {
+		t.Fatal(err)
+	}
+	if fr.last() != "podman exec hs headscale configtest" {
 		t.Errorf("ran %q", fr.last())
 	}
 }

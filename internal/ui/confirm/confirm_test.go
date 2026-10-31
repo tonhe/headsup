@@ -6,7 +6,9 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/x/ansi"
+	"github.com/muesli/termenv"
 
 	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
@@ -88,5 +90,21 @@ func TestViewTruncatesTargets(t *testing.T) {
 				t.Errorf("target list wrong:\n%s", plain)
 			}
 		}
+	}
+}
+
+// TestFocusedButtonWithoutColour checks the focused button is bracketed, so
+// focus shows under NO_COLOR, where no SGR attribute survives (T171).
+func TestFocusedButtonWithoutColour(t *testing.T) {
+	old := lipgloss.ColorProfile()
+	defer lipgloss.SetColorProfile(old)
+	lipgloss.SetColorProfile(termenv.Ascii)
+	m := New(uitest.StyleFor(""), icons.Unicode, Request{ID: "x", Title: "Expire", Confirm: "Expire", Danger: module.DangerConfirm})
+	if v := m.View(60); !strings.Contains(v, "[Cancel]") || strings.Contains(v, "[Expire]") {
+		t.Fatalf("cancel should be the bracketed default:\n%s", v)
+	}
+	m.Update(tea.KeyMsg{Type: tea.KeyTab})
+	if v := m.View(60); !strings.Contains(v, "[Expire]") || strings.Contains(v, "[Cancel]") {
+		t.Fatalf("tab should move the brackets to confirm:\n%s", v)
 	}
 }

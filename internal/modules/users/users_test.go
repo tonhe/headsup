@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
 	"github.com/tonhe/headsup/internal/store"
 	"github.com/tonhe/headsup/internal/ui/uitest"
@@ -12,7 +13,13 @@ import (
 
 func setup(t *testing.T) (*Model, *testCtx) {
 	t.Helper()
+	return setupIcons(t, icons.Unicode)
+}
+
+func setupIcons(t *testing.T, ic icons.Set) (*Model, *testCtx) {
+	t.Helper()
 	c := newCtx(t)
+	c.ic = ic
 	m := New()
 	m.Init(c)
 	m.Update(c, store.UpdatedMsg{Slices: store.SliceAll})
@@ -77,14 +84,21 @@ func TestDeleteBlockedWhileUserOwnsMachines(t *testing.T) {
 }
 
 func TestBlockedGolden(t *testing.T) {
-	m, c := setup(t)
-	selectUser(t, m, c, "ops")
-	run(t, c, action(t, m, "users.delete"), nil)
-	out := m.View(c, module.Rect{W: 98, H: 37})
-	if w := uitest.MaxWidth(out); w > 98 {
-		t.Fatalf("view is %d wide", w)
+	blocked := func(t *testing.T, ic icons.Set) (*Model, *testCtx) {
+		m, c := setupIcons(t, ic)
+		selectUser(t, m, c, "ops")
+		run(t, c, action(t, m, "users.delete"), nil)
+		return m, c
 	}
-	uitest.Golden(t, out)
+	uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+		m, c := blocked(t, ic)
+		out := m.View(c, module.Rect{W: 98, H: 37})
+		if w := uitest.MaxWidth(out); w > 98 {
+			t.Fatalf("view is %d wide", w)
+		}
+		return out
+	})
+	m, c := blocked(t, icons.Unicode)
 	// Moving the cursor away drops the notice.
 	m.Update(c, keyMsg("k"))
 	if m.blocked != nil {
@@ -266,16 +280,18 @@ func TestFilterAndCounts(t *testing.T) {
 func TestViewGolden(t *testing.T) {
 	for _, sz := range [][2]int{{98, 37}, {58, 21}, {140, 37}} {
 		t.Run(sizeName(sz), func(t *testing.T) {
-			m, c := setup(t)
-			selectUser(t, m, c, "alice")
-			out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
-			if w := uitest.MaxWidth(out); w > sz[0] {
-				t.Fatalf("view is %d wide, want <= %d", w, sz[0])
-			}
-			if h := len(uitest.Lines(out)); h > sz[1] {
-				t.Fatalf("view is %d tall, want <= %d", h, sz[1])
-			}
-			uitest.Golden(t, out)
+			uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+				m, c := setupIcons(t, ic)
+				selectUser(t, m, c, "alice")
+				out := m.View(c, module.Rect{W: sz[0], H: sz[1]})
+				if w := uitest.MaxWidth(out); w > sz[0] {
+					t.Fatalf("view is %d wide, want <= %d", w, sz[0])
+				}
+				if h := len(uitest.Lines(out)); h > sz[1] {
+					t.Fatalf("view is %d tall, want <= %d", h, sz[1])
+				}
+				return out
+			})
 		})
 	}
 }

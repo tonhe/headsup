@@ -1,0 +1,37 @@
+! ops cannot be deleted: it owns 38 machine(s).  enter show machines  esc dismiss                 
+╭ Users - 4 ─────────────────────────────────────────────────────────────────────────────────────╮
+│   NAME ^       DISPLAY NAME         EMAIL                    PROVIDER CREATED    MACHINES KEYS │
+│   alice        Alice Liddell        alice@example.com        oidc     25w ago           5    2 │
+│   bob          Bob Builder          bob@example.com          oidc     21w ago           4    2 │
+│   carol        Carol Danvers        carol@example.com        local    17w ago           4    1 │
+│ > ops          Platform Ops         ops@example.com          local    30w ago          38    1 │
+│                                                                                                │
+╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭ ops ─ ID 4 ────────────────────────────────────────────────────────────────────────────────────╮
+│ Name           ops                                                                             │
+│ Display name   Platform Ops                                                                    │
+│ Email          ops@example.com                                                                 │
+│ Provider       local                                                                           │
+│ Created        2026-04-01 (30w ago)                                                            │
+│ Machines       38  k8s-node-1, k8s-node-2, k8s-node-3, k8s-node-4, k8s-node-5, k8s-node-6, k8… │
+│ Pre-auth keys  1                                                                               │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+│                                                                                                │
+╰────────────────────────────────────────────────────────────────────────────────────────────────╯

@@ -119,8 +119,9 @@ func TestInvalidEditIsRefusedWithPositionAndKept(t *testing.T) {
 	}
 	// e reopens the editor on the draft.
 	hs.do("policy.edit")
-	if hs.m.ta.Value() != bad || hs.m.ta.Line() == 0 {
-		t.Errorf("editor should hold the draft with the cursor on the error line (line %d)", hs.m.ta.Line())
+	errLine := strings.Count(bad[:strings.Index(bad, "oops")], "\n")
+	if hs.m.ta.Value() != bad || hs.m.ta.Line() != errLine {
+		t.Errorf("editor should hold the draft with the cursor on the error line (line %d, want %d, invalid %+v)", hs.m.ta.Line(), errLine, hs.m.invalid)
 	}
 	hs.key("esc")
 	if hs.m.mode != modeView || !hs.m.hasDraft {

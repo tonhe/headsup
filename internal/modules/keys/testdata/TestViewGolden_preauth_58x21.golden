@@ -1,4 +1,4 @@
- Pre-auth keys (6) │ API keys (3)                         
+[Pre-auth keys (6)]│ API keys (3)                         
 ╭ Pre-auth keys • 6 ─────────────────────────────────────╮
 │     KEY                USER       STATE   EXPIRES      │
 │ ▌ ⚿ hskey-auth-…6ac0   carol      active  6d           │

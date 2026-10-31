@@ -16,6 +16,7 @@ import (
 	"github.com/tonhe/headsup/internal/brand"
 	"github.com/tonhe/headsup/internal/cli"
 	"github.com/tonhe/headsup/internal/config"
+	"github.com/tonhe/headsup/internal/host"
 	"github.com/tonhe/headsup/internal/modules/registry"
 	"github.com/tonhe/headsup/internal/policy"
 	"github.com/tonhe/headsup/internal/theme"
@@ -159,7 +160,7 @@ func subcommand(args []string, cfg config.Config, cfgPath string, f config.Flags
 		Config:           cfg,
 		ConfigPath:       cfgPath,
 		Connect:          cliConnect(cfg, stderr),
-		DetectEnv:        detectEnv,
+		DetectEnv:        func(f config.Flags) host.Env { return detectEnv(f, cfg.Host) },
 		Activity:         logger,
 		PolicyHistoryDir: hist,
 		ThemesDir:        config.ThemesDir(),

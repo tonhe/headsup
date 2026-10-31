@@ -370,17 +370,18 @@ func TestScreensFit(t *testing.T) {
 
 func TestGoldenService(t *testing.T) {
 	for _, sz := range [][2]int{{80, 24}, {120, 40}} {
-		for _, ic := range []string{"unicode", "ascii"} {
-			t.Run(fmt.Sprintf("%dx%d/%s", sz[0], sz[1], ic), func(t *testing.T) {
-				d := newDriver(t, sz[0], sz[1], newHost(t), ic)
-				uitest.Golden(t, d.View())
+		t.Run(fmt.Sprintf("%dx%d", sz[0], sz[1]), func(t *testing.T) {
+			uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+				return newDriver(t, sz[0], sz[1], newHost(t), ic.Name).View()
 			})
-		}
+		})
 	}
 	t.Run("expanded", func(t *testing.T) {
-		d := newDriver(t, 120, 40, newHost(t), "unicode")
-		d.key("n", "enter")
-		uitest.Golden(t, d.View())
+		uitest.Screen(t, func(t *testing.T, ic icons.Set) string {
+			d := newDriver(t, 120, 40, newHost(t), ic.Name)
+			d.key("n", "enter")
+			return d.View()
+		})
 	})
 }
 

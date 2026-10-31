@@ -1,0 +1,40 @@
+ headsup ─ host:hs-demo (host) ─ headscale v0.30.0 ●                                                     42 online / 51 
+ 2 SERVER             ╭ Server Settings ─ /etc/headscale/config.yaml • headscale 0.30.0 ───────────────────────────────╮
+▸ ⚙ Server Settings   │  General  Nodes  DNS  DERP  TLS  OIDC  Policy [Database] Logging  Features                     │
+                      │ ⊡ View only: database settings are changed by hand ($EDITOR, E).                               │
+                      │     KEY                                VALUE              DEFAULT                EFFECT        │
+                      │ ▸   database.type                      sqlite             sqlite               ⊡ needs restart │
+                      │     database.debug                     false              false                ⊡ needs restart │
+                      │     database.sqlite.path               /var/lib/headscal… /var/lib/headscale/… ⊡ needs restart │
+                      │     database.sqlite.write_ahead_log    true               true                 ⊡ needs restart │
+                      │     database.sqlite.wal_autocheckpoint 1000               1000                 ⊡ needs restart │
+                      │     database.postgres.host             unset              (empty)              ⊡ needs restart │
+                      │     database.postgres.port             unset              5432                 ⊡ needs restart │
+                      │     database.postgres.name             unset              headscale            ⊡ needs restart │
+                      │     database.postgres.user             unset              (empty)              ⊡ needs restart │
+                      │     database.postgres.pass             unset              (empty)              ⊡ needs restart │
+                      │     database.postgres.ssl              unset              false                ⊡ needs restart │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      │                                                                                                │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+                      ╭ database.type ─────────────────────────────────────────────────────────────────────────────────╮
+                      │ Database backend                                                                               │
+                      │ default sqlite • enum • needs restart • since 0.29                                             │
+                      │ ⊡ View only.                                                                                   │
+                      ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+ enter edit  tab section  E $EDITOR  ? help  : commands  q quit                            ● running · updated 12:00:00 

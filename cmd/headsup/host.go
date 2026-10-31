@@ -17,11 +17,15 @@ import (
 	"github.com/tonhe/headsup/internal/host/local"
 )
 
-func detectEnv(f config.Flags) host.Env {
+// detectEnv runs host detection with the --hs-config flag and the [host]
+// hints from the config file.
+func detectEnv(f config.Flags, hc config.Host) host.Env {
 	opts := detect.Defaults()
 	if f.HSConfig != "" {
 		opts.ConfigFlag = f.HSConfig
 	}
+	opts.ContainerHint = hc.Container
+	opts.DebugAddr = hc.DebugAddr
 	return detect.Detect(opts)
 }
 
@@ -31,7 +35,7 @@ func hostConnect(res config.Resolved, f config.Flags) (connection, error) {
 	if res.HSConfig != "" && f.HSConfig == "" {
 		f.HSConfig = res.HSConfig
 	}
-	env := detectEnv(f)
+	env := detectEnv(f, res.HostConfig)
 	if !env.Usable() {
 		return connection{}, hostUnavailable(env)
 	}

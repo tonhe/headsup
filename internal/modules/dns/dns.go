@@ -502,10 +502,10 @@ func (m *Model) settingsBody(ctx module.Context, w, h int) string {
 		if rw.kind == rowSplit && i > 0 && m.rows[i-1].kind == rowSplit {
 			label = ""
 		}
-		line := s.Label.Render(fmt.Sprintf("%-*s", lw, label)) + " " + rw.value
+		line := "  " + s.Label.Render(fmt.Sprintf("%-*s", lw, label)) + " " + rw.value
 		line = table.Fit(line, w, lipgloss.Left, ctx.Icons().Ellipsis)
 		if i == m.row && m.focus == focusSettings {
-			line = s.RowSel.Render(table.Fit(fmt.Sprintf("%-*s", lw, label)+" "+rw.value, w, lipgloss.Left, ctx.Icons().Ellipsis))
+			line = s.RowSel.Render(table.Fit(mark(ctx.Icons(), true)+fmt.Sprintf("%-*s", lw, label)+" "+rw.value, w, lipgloss.Left, ctx.Icons().Ellipsis))
 		}
 		lines = append(lines, line)
 	}
@@ -535,12 +535,19 @@ func (m *Model) recordsPane(ctx module.Context, w, h int) string {
 		}
 	default:
 		nw := min(max(20, iw/2), iw-28)
-		lines = append(lines, s.TableHeader.Render(table.Fit(fmt.Sprintf("%-*s %-5s %s", nw, "NAME", "TYPE", "VALUE"), iw, lipgloss.Left, "")))
+		lines = append(lines, s.TableHeader.Render(table.Fit(fmt.Sprintf("   %-*s %-5s %s", nw, "NAME", "TYPE", "VALUE"), iw, lipgloss.Left, "")))
 		top := max(0, m.rec-(ih-2))
 		for i := top; i < len(recs) && len(lines) < ih; i++ {
 			rc := recs[i]
-			line := table.Fit(fmt.Sprintf("%-*s %-5s %s", nw, table.Fit(rc.Name, nw, lipgloss.Left, ic.Ellipsis), rc.Type, rc.Value), iw, lipgloss.Left, ic.Ellipsis)
-			if i == m.rec && m.focus == focusRecords {
+			// Column one marks the cursor, column two an invalid record, so
+			// neither depends on colour (T171).
+			bad := " "
+			if rc.Validate() != nil {
+				bad = table.Fit(ic.Warn, 1, lipgloss.Left, "")
+			}
+			cur := i == m.rec && m.focus == focusRecords
+			line := table.Fit(cell(ic, cur)+bad+" "+fmt.Sprintf("%-*s %-5s %s", nw, table.Fit(rc.Name, nw, lipgloss.Left, ic.Ellipsis), rc.Type, rc.Value), iw, lipgloss.Left, ic.Ellipsis)
+			if cur {
 				line = s.RowSel.Render(line)
 			} else if rc.Validate() != nil {
 				line = s.Danger.Render(line)
@@ -1090,4 +1097,16 @@ func (m *Model) applyAction() module.Action {
 			}
 		},
 	}
+}
+
+// mark is the two-cell cursor column: the arrow on the cursor row, blank
+// otherwise, so the cursor shows without colour.
+func mark(ic icons.Set, on bool) string { return cell(ic, on) + " " }
+
+// cell is the one-cell cursor marker.
+func cell(ic icons.Set, on bool) string {
+	if on {
+		return table.Fit(ic.Arrow, 1, lipgloss.Left, "")
+	}
+	return " "
 }

@@ -33,14 +33,17 @@ func Render(s *styles.Styles, ic icons.Set, items []Item, active string, w int) 
 		if it.Badge != "" {
 			label += " (" + it.Badge + ")"
 		}
-		label = " " + label + " "
 		switch {
 		case it.ID == active:
+			// Brackets, not only colour, mark the active tab (NO_COLOR, T171).
+			label = "[" + label + "]"
 			act = i
 			segs[i] = s.SidebarActive.Render(label)
 		case it.Dim:
+			label = " " + label + " "
 			segs[i] = s.SidebarDim.Render(label)
 		default:
+			label = " " + label + " "
 			segs[i] = s.SidebarItem.Render(label)
 		}
 		widths[i] = lipgloss.Width(label)

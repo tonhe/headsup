@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
+	"github.com/tonhe/headsup/internal/icons"
 	"github.com/tonhe/headsup/internal/module"
 	pol "github.com/tonhe/headsup/internal/policy"
 	"github.com/tonhe/headsup/internal/ui/pane"
@@ -183,7 +184,7 @@ func (m *Model) exploreView(ctx module.Context, w, h int) string {
 		case it.header != "":
 			rows = append(rows, s.TableHeader.Render(it.header))
 		case i == e.cursor:
-			rows = append(rows, s.RowSel.Render(pane.Fit("  "+it.label, iw)))
+			rows = append(rows, s.RowSel.Render(pane.Fit(cursorMark(ctx.Icons())+it.label, iw)))
 		default:
 			rows = append(rows, "  "+it.label)
 		}
@@ -247,3 +248,7 @@ func orKind(n string) string {
 	}
 	return "address"
 }
+
+// cursorMark is the two-cell cursor column for the policy lists, so the
+// cursor row shows without colour (T171).
+func cursorMark(ic icons.Set) string { return pane.Fit(ic.Arrow, 1) + " " }

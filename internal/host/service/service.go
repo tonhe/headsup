@@ -79,7 +79,10 @@ func (h headscaleCmd) argv(args ...string) []string {
 }
 
 func configtest(ctx context.Context, rf RunFunc, hs headscaleCmd, path string) ([]host.Issue, error) {
-	argv := hs.argv("configtest", "-c", path)
+	argv := hs.argv("configtest")
+	if path != "" {
+		argv = append(argv, "-c", path)
+	}
 	res, err := rf(ctx, argv[0], argv[1:]...)
 	if err != nil {
 		return nil, err
@@ -396,8 +399,12 @@ func (c *Container) Reload(ctx context.Context) error {
 }
 
 // Configtest runs configtest inside the container; path is the in-container path.
+//
+// path is where the config is on this machine (the bind-mount source), which
+// means nothing inside the container, so headscale checks the config it was
+// started with instead: the bind-mounted file itself.
 func (c *Container) Configtest(ctx context.Context, path string) ([]host.Issue, error) {
-	return configtest(ctx, c.Run, headscaleCmd{c.Runtime, "exec", c.Name, "headscale"}, path)
+	return configtest(ctx, c.Run, headscaleCmd{c.Runtime, "exec", c.Name, "headscale"}, "")
 }
 
 // Status parses `<runtime> inspect` output.
