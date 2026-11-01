@@ -69,14 +69,14 @@ cd headsup
 make install    # builds and copies to ~/bin/
 ```
 
-### Homebrew, Scoop, deb, rpm and apk
+### Homebrew, deb, rpm and apk
 
 Coming with the first release. The release pipeline (`.goreleaser.yml`)
 builds Linux, macOS and Windows binaries for amd64 and arm64, `.deb`, `.rpm`
-and `.apk` packages, a Homebrew formula and a Scoop manifest. Once a release
-is tagged, the binaries and packages will be on the
+and `.apk` packages, and a Homebrew formula. Once a release is tagged, the
+binaries and packages will be on the
 [releases page](https://github.com/tonhe/headsup/releases), and this section
-will get the tap and bucket commands.
+will get the tap command.
 
 ---
 

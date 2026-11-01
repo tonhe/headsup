@@ -55,14 +55,15 @@ brews:
     description: Terminal UI for administering headscale
     license: MIT
 
-scoops:
-  - name: headsup
-    repository:
-      owner: tonhe
-      name: scoop-bucket
-    homepage: https://github.com/tonhe/headsup
-    description: Terminal UI for administering headscale
-    license: MIT
+# Scoop (Windows) is off until a tonhe/scoop-bucket repo exists.
+# scoops:
+#   - name: headsup
+#     repository:
+#       owner: tonhe
+#       name: scoop-bucket
+#     homepage: https://github.com/tonhe/headsup
+#     description: Terminal UI for administering headscale
+#     license: MIT
 
 release:
   github:
