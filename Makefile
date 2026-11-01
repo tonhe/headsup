@@ -55,6 +55,8 @@ demo: build
 	./bin/$(BINARY) --demo
 
 # Render docs/demo.gif from demo.tape. Needs vhs (github.com/charmbracelet/vhs).
+# VHS_NO_SANDBOX: Ubuntu's AppArmor blocks the user namespaces Chromium's
+# sandbox needs, and the browser only loads vhs's local ttyd page.
 demo-gif: build
 	@command -v vhs >/dev/null || { echo "vhs is not installed: https://github.com/charmbracelet/vhs"; exit 1; }
-	PATH="$(CURDIR)/bin:$$PATH" vhs demo.tape
+	PATH="$(CURDIR)/bin:$$PATH" VHS_NO_SANDBOX=true vhs demo.tape
