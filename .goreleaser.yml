@@ -51,6 +51,8 @@ brews:
     repository:
       owner: tonhe
       name: homebrew-tap
+      # Installation token for the release GitHub App, minted in release.yml.
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     homepage: https://github.com/tonhe/headsup
     description: Terminal UI for administering headscale
     license: MIT
