@@ -3,7 +3,6 @@
   <p><em>A terminal UI and CLI for administering a headscale server</em></p>
 
   [![Go](https://img.shields.io/github/go-mod/go-version/tonhe/headsup)](https://go.dev)
-  [![Tests](https://github.com/tonhe/headsup/actions/workflows/test.yml/badge.svg)](https://github.com/tonhe/headsup/actions/workflows/test.yml)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
   [![GitHub release](https://img.shields.io/github/v/release/tonhe/headsup)](https://github.com/tonhe/headsup/releases)
   [![macOS](https://img.shields.io/badge/macOS-supported-brightgreen?logo=apple)](https://github.com/tonhe/headsup)
@@ -267,8 +266,8 @@ contrast theme.
   parity.
 - [docs/THEMES.md](docs/THEMES.md): writing a theme.
 - [docs/MODULES.md](docs/MODULES.md): adding a page.
-- [CONTRIBUTING.md](CONTRIBUTING.md): workflow, tests and the rules CI
-  enforces.
+- [CONTRIBUTING.md](CONTRIBUTING.md): workflow, tests and the rules the
+  tests enforce.
 - [CHANGELOG.md](CHANGELOG.md).
 
 ## License
