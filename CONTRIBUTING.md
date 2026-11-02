@@ -13,7 +13,7 @@ required: `make demo` runs the TUI against built-in demo data, and
 git clone https://github.com/tonhe/headsup.git
 cd headsup
 make build        # bin/headsup
-make test-all     # must pass before you push
+make test-all     # what CI runs, and it must pass before you push
 make install      # build and copy to ~/bin
 ```
 
@@ -64,11 +64,10 @@ for flow tests.
 change an action, a backend method or a capability, run `make docs` and
 commit the result. A test fails while it's stale.
 
-While the repo is private there's no CI test run: tests run locally, on
-Linux. `make test-all` builds,
-runs the race tests and checks the coverage gate. `make test-integration`
-runs the quickstart flows against real headscale in docker (0.29.6 by
-default; set `HEADSCALE_IMAGE_TAG` to try another tag, such as `development`).
+CI (`.github/workflows/test.yml`) builds and runs the race tests on Linux,
+macOS and Windows, and the coverage gate on Linux. Path handling, file modes
+and line endings differ between them, so a test that passes only on your
+machine isn't done.
 
 ## Rules enforced by tests
 

@@ -1,0 +1,62 @@
+name: Integration
+
+# Quickstart V1-V12 (remote mode) and H1-H11 (host mode, alongside the
+# headscale container) against real headscale in docker, plus the /debug and
+# /metrics shape-drift check. Not run on PRs: it pulls images and joins real
+# tailscale clients, which takes a few minutes.
+
+on:
+  workflow_dispatch:
+    inputs:
+      headscale:
+        description: 'Extra headscale/headscale tag to test (optional)'
+        required: false
+        default: ''
+  schedule:
+    - cron: '0 6 * * 1'   # weekly: catches API and /debug shape drift on headscale main
+
+jobs:
+  integration:
+    strategy:
+      fail-fast: false
+      matrix:
+        # "development" is headscale/headscale built from main.
+        headscale: ['0.29.6', 'development']
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Vet
+        run: go vet -tags integration ./test/integration/...
+      - name: Integration tests (headscale ${{ matrix.headscale }})
+        env:
+          HEADSCALE_IMAGE_TAG: ${{ matrix.headscale }}
+        run: make test-integration
+      - name: Record /debug bodies
+        if: always()
+        env:
+          HEADSCALE_IMAGE_TAG: ${{ matrix.headscale }}
+        run: scripts/record-debug-fixtures.sh "$HEADSCALE_IMAGE_TAG" recorded-debug || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: debug-recordings-${{ matrix.headscale }}
+          path: recorded-debug/
+          if-no-files-found: ignore
+
+  extra:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.headscale != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Integration tests (headscale ${{ github.event.inputs.headscale }})
+        env:
+          HEADSCALE_IMAGE_TAG: ${{ github.event.inputs.headscale }}
+        run: make test-integration
