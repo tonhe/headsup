@@ -69,14 +69,17 @@ cd headsup
 make install    # builds and copies to ~/bin/
 ```
 
-### Homebrew, deb, rpm and apk
+### Homebrew (macOS and Linux)
 
-Coming with the first release. The release pipeline (`.goreleaser.yml`)
-builds Linux, macOS and Windows binaries for amd64 and arm64, `.deb`, `.rpm`
-and `.apk` packages, and a Homebrew formula. Once a release is tagged, the
-binaries and packages will be on the
-[releases page](https://github.com/tonhe/headsup/releases), and this section
-will get the tap command.
+```bash
+brew install tonhe/tap/headsup
+```
+
+### deb, rpm, apk and binaries
+
+The [releases page](https://github.com/tonhe/headsup/releases) has `.deb`,
+`.rpm` and `.apk` packages, and archives for Linux, macOS and Windows on
+amd64 and arm64.
 
 ---
 
