@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here.
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-02
 
 First release. headsup is a terminal UI and CLI for administering a
 headscale server. It works remotely over the REST API (headscale 0.29.x and
