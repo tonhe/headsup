@@ -53,6 +53,8 @@ brews:
       name: homebrew-tap
       # Installation token for the release GitHub App, minted in release.yml.
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    # The tap keeps every formula in Formula/.
+    directory: Formula
     homepage: https://github.com/tonhe/headsup
     description: Terminal UI for administering headscale
     license: MIT
