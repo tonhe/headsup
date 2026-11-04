@@ -40,7 +40,7 @@ jobs:
         env:
           HEADSCALE_IMAGE_TAG: ${{ matrix.headscale }}
         run: scripts/record-debug-fixtures.sh "$HEADSCALE_IMAGE_TAG" recorded-debug || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: debug-recordings-${{ matrix.headscale }}
